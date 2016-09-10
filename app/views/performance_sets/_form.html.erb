@@ -1,0 +1,32 @@
+<%= form_for(performance_set) do |f| %>
+  <% if performance_set.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(performance_set.errors.count, "error") %> prohibited this performance_set from being saved:</h2>
+
+      <ul>
+      <% performance_set.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :performance_id %>
+    <%= f.text_field :performance_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :start_date %>
+    <%= f.date_select :start_date %>
+  </div>
+
+  <div class="field">
+    <%= f.label :end_date %>
+    <%= f.date_select :end_date %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

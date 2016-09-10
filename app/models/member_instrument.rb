@@ -1,0 +1,2 @@
+class MemberInstrument < ApplicationRecord
+end

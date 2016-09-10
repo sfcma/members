@@ -1,0 +1,89 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>First name:</strong>
+  <%= @member.first_name %>
+</p>
+
+<p>
+  <strong>Last name:</strong>
+  <%= @member.last_name %>
+</p>
+
+<p>
+  <strong>Address 1:</strong>
+  <%= @member.address_1 %>
+</p>
+
+<p>
+  <strong>Address 2:</strong>
+  <%= @member.address_2 %>
+</p>
+
+<p>
+  <strong>City:</strong>
+  <%= @member.city %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @member.state %>
+</p>
+
+<p>
+  <strong>Zip:</strong>
+  <%= @member.zip %>
+</p>
+
+<p>
+  <strong>Phone 1:</strong>
+  <%= @member.phone_1 %>
+</p>
+
+<p>
+  <strong>Phone 1 type:</strong>
+  <%= @member.phone_1_type %>
+</p>
+
+<p>
+  <strong>Phone 2:</strong>
+  <%= @member.phone_2 %>
+</p>
+
+<p>
+  <strong>Phone 2 type:</strong>
+  <%= @member.phone_2_type %>
+</p>
+
+<p>
+  <strong>Email 1:</strong>
+  <%= @member.email_1 %>
+</p>
+
+<p>
+  <strong>Email 2:</strong>
+  <%= @member.email_2 %>
+</p>
+
+<p>
+  <strong>Emergency name:</strong>
+  <%= @member.emergency_name %>
+</p>
+
+<p>
+  <strong>Emergency relation:</strong>
+  <%= @member.emergency_relation %>
+</p>
+
+<p>
+  <strong>Emergency phone:</strong>
+  <%= @member.emergency_phone %>
+</p>
+
+<p>
+  <strong>Playing status:</strong>
+  <%= @member.playing_status %>
+</p>
+
+<%= link_to 'Edit', edit_member_path(@member) %> |
+<%= link_to 'Back', members_path %>

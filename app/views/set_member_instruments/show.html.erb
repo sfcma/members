@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Set:</strong>
+  <%= @set_member_instrument.set %>
+</p>
+
+<p>
+  <strong>Member instrument:</strong>
+  <%= @set_member_instrument.member_instrument %>
+</p>
+
+<%= link_to 'Edit', edit_set_member_instrument_path(@set_member_instrument) %> |
+<%= link_to 'Back', set_member_instruments_path %>

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Member:</strong>
+  <%= @absence.member %>
+</p>
+
+<p>
+  <strong>Performanceset:</strong>
+  <%= @absence.performanceset %>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @absence.date %>
+</p>
+
+<p>
+  <strong>Planned:</strong>
+  <%= @absence.planned %>
+</p>
+
+<p>
+  <strong>Sub found:</strong>
+  <%= @absence.sub_found %>
+</p>
+
+<%= link_to 'Edit', edit_absence_path(@absence) %> |
+<%= link_to 'Back', absences_path %>

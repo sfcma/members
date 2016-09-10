@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Absences</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Member</th>
+      <th>Performanceset</th>
+      <th>Date</th>
+      <th>Planned</th>
+      <th>Sub found</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @absences.each do |absence| %>
+      <tr>
+        <td><%= absence.member %></td>
+        <td><%= absence.performanceset %></td>
+        <td><%= absence.date %></td>
+        <td><%= absence.planned %></td>
+        <td><%= absence.sub_found %></td>
+        <td><%= link_to 'Show', absence %></td>
+        <td><%= link_to 'Edit', edit_absence_path(absence) %></td>
+        <td><%= link_to 'Destroy', absence, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Absence', new_absence_path %>

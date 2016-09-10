@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Set Member Instruments</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Set</th>
+      <th>Member instrument</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @set_member_instruments.each do |set_member_instrument| %>
+      <tr>
+        <td><%= set_member_instrument.set %></td>
+        <td><%= set_member_instrument.member_instrument %></td>
+        <td><%= link_to 'Show', set_member_instrument %></td>
+        <td><%= link_to 'Edit', edit_set_member_instrument_path(set_member_instrument) %></td>
+        <td><%= link_to 'Destroy', set_member_instrument, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Set Member Instrument', new_set_member_instrument_path %>

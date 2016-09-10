@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  member: one
+  performanceset: one
+  date: 2016-09-09
+  planned: false
+  sub_found: 
+
+two:
+  member: two
+  performanceset: two
+  date: 2016-09-09
+  planned: false
+  sub_found: 

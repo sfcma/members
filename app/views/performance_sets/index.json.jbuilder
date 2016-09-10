@@ -1,0 +1,1 @@
+json.array! @performance_sets, partial: 'performance_sets/performance_set', as: :performance_set

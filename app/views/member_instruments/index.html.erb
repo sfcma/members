@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Member Instruments</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Member</th>
+      <th>Instrument</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @member_instruments.each do |member_instrument| %>
+      <tr>
+        <td><%= member_instrument.member_id %></td>
+        <td><%= member_instrument.instrument %></td>
+        <td><%= link_to 'Show', member_instrument %></td>
+        <td><%= link_to 'Edit', edit_member_instrument_path(member_instrument) %></td>
+        <td><%= link_to 'Destroy', member_instrument, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Member Instrument', new_member_instrument_path %>

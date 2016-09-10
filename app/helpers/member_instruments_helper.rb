@@ -1,0 +1,2 @@
+module MemberInstrumentsHelper
+end

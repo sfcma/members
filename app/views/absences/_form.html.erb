@@ -1,0 +1,42 @@
+<%= form_for(absence) do |f| %>
+  <% if absence.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(absence.errors.count, "error") %> prohibited this absence from being saved:</h2>
+
+      <ul>
+      <% absence.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :member_id %>
+    <%= f.text_field :member_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :performanceset_id %>
+    <%= f.text_field :performanceset_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :date %>
+    <%= f.date_select :date %>
+  </div>
+
+  <div class="field">
+    <%= f.label :planned %>
+    <%= f.check_box :planned %>
+  </div>
+
+  <div class="field">
+    <%= f.label :sub_found %>
+    <%= f.text_field :sub_found %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

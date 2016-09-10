@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Performance:</strong>
+  <%= @performance_set.performance %>
+</p>
+
+<p>
+  <strong>Start date:</strong>
+  <%= @performance_set.start_date %>
+</p>
+
+<p>
+  <strong>End date:</strong>
+  <%= @performance_set.end_date %>
+</p>
+
+<%= link_to 'Edit', edit_performance_set_path(@performance_set) %> |
+<%= link_to 'Back', performance_sets_path %>
