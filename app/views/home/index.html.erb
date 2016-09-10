@@ -1,0 +1,10 @@
+
+<% if user_signed_in? %>
+  <b>Common Actions:</b>
+  <br><br>
+  <%= link_to 'Add New Member', new_member_path %><br>
+  <%= link_to 'View Member List', members_path %>
+<% else %>
+  Hello! Please <%= link_to "Log In", new_user_session_path %>
+
+<% end %>
