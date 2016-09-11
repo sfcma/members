@@ -1,3 +1,3 @@
 class Member < ApplicationRecord
-  has_many :member_instrument
+  has_many :member_instruments
 end
