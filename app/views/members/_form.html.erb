@@ -137,7 +137,7 @@
     </tr>
   </table>
 
-  <%= f.fields_for @member_instrument do |instrument_f| %>
+  <%= f.fields_for @member_instruments do |instrument_f| %>
     <div class="field inlineField">
       <%= instrument_f.label :instrument, "Instrument" %>
       <%= instrument_f.text_field :instrument %>
