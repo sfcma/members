@@ -11,7 +11,7 @@ class MembersController < ApplicationController
   # GET /members/1
   # GET /members/1.json
   def show
-    @member_instruments = @member.member_instrument
+    @member_instruments = @member.member_instruments
     @set_member_instruments = @member_instruments.map(&:set_member_instrument)
     @sets = @set_member_instruments.map(&:set)
   end
@@ -19,10 +19,14 @@ class MembersController < ApplicationController
   # GET /members/new
   def new
     @member = Member.new
+    @member_instrument = @member.member_instruments.build
+    logger.info @member.member_instruments
   end
 
   # GET /members/1/edit
   def edit
+    @member_instrument = @member.member_instruments.build
+    logger.info @member.member_instruments
   end
 
   # POST /members
