@@ -86,4 +86,6 @@ Rails.application.configure do
 
   # mail support
   config.action_mailer.default_url_options = { host: 'limitless-sierra-92168.herokuapp.com', port: 443 }
+
+  config.secret_key_base = ENV["SECRET_KEY_BASE"]
 end
