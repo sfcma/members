@@ -1,6 +1,4 @@
-<p id="notice"><%= notice %></p>
-
-<div class='pageHeader'><h2>Members</h2> &emsp; <%= link_to 'Add New Member', new_member_path %></div>
+<div class='pageHeader'><h2>Members</h2> &emsp; <%= link_to 'Add New Member', new_member_path %> &emsp; <%= select_tag "instrument_filter", options_for_select(@instruments) %></div>
 
 <table>
   <tbody>
