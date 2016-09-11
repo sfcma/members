@@ -1,6 +1,7 @@
-<h1>Editing Member</h1>
+<div class='pageHeader'><h2>Editing Member</h2></div>
 
 <%= render 'form', member: @member %>
 
-<%= link_to 'Show', @member %> |
-<%= link_to 'Back', members_path %>
+<br>
+<%= link_to 'Cancel', members_path %><br><br>
+<%= link_to 'Delete this member', @member, method: :delete, data: { confirm: 'Are you sure you want to delete this member?' } %>

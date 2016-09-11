@@ -1,11 +1,11 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Performance Sets</h1>
+<div class='pageHeader'><h2>Performance Sets</h2> &emsp; <%= link_to 'Add New Performance Set', new_performance_set_path %></div>
 
 <table>
   <thead>
     <tr>
-      <th>Performance</th>
+      <th>Ensemble</th>
       <th>Start date</th>
       <th>End date</th>
       <th colspan="3"></th>
@@ -15,7 +15,7 @@
   <tbody>
     <% @performance_sets.each do |performance_set| %>
       <tr>
-        <td><%= performance_set.performance %></td>
+        <td><%= Ensemble.find(performance_set.ensemble_id).name %></td>
         <td><%= performance_set.start_date %></td>
         <td><%= performance_set.end_date %></td>
         <td><%= link_to 'Show', performance_set %></td>
@@ -25,7 +25,3 @@
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Performance Set', new_performance_set_path %>

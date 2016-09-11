@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160909234910) do
+ActiveRecord::Schema.define(version: 20160909234940) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -32,6 +32,13 @@ ActiveRecord::Schema.define(version: 20160909234910) do
     t.datetime "updated_at", null: false
     t.index ["member_id"], name: "index_action_logs_on_member_id"
     t.index ["user_id"], name: "index_action_logs_on_user_id"
+  end
+
+  create_table "ensembles", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "member_instruments", force: :cascade do |t|
@@ -74,19 +81,12 @@ ActiveRecord::Schema.define(version: 20160909234910) do
   end
 
   create_table "performance_sets", force: :cascade do |t|
-    t.integer  "performance_id"
+    t.integer  "ensemble_id"
     t.date     "start_date"
     t.date     "end_date"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-    t.index ["performance_id"], name: "index_performance_sets_on_performance_id"
-  end
-
-  create_table "performances", force: :cascade do |t|
-    t.string   "name"
-    t.string   "description"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.index ["ensemble_id"], name: "index_performance_sets_on_ensemble_id"
   end
 
   create_table "set_member_instruments", force: :cascade do |t|

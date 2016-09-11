@@ -1,1 +1,0 @@
-json.partial! "performance_sets/performance_set", performance_set: @performance_set

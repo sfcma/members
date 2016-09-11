@@ -1,5 +1,6 @@
 class MembersController < ApplicationController
   before_action :set_member, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
 
   # GET /members
   # GET /members.json
@@ -10,6 +11,9 @@ class MembersController < ApplicationController
   # GET /members/1
   # GET /members/1.json
   def show
+    @member_instruments = @member.member_instrument
+    @set_member_instruments = @member_instruments.map(&:set_member_instrument)
+    @sets = @set_member_instruments.map(&:set)
   end
 
   # GET /members/new
@@ -28,8 +32,9 @@ class MembersController < ApplicationController
 
     respond_to do |format|
       if @member.save
-        format.html { redirect_to @member, notice: 'Member was successfully created.' }
-        format.json { render :show, status: :created, location: @member }
+        go_back = "Member was successfully created."
+        format.html { redirect_to new_member_path, notice: go_back }
+        format.json { render :new, status: :created, location: @member }
       else
         format.html { render :new }
         format.json { render json: @member.errors, status: :unprocessable_entity }

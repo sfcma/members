@@ -12,18 +12,19 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :performance_id %>
-    <%= f.text_field :performance_id %>
+    <%= f.label :ensemble_id %>
+    <%= f.collection_select :ensemble_id, @ensembles, :id, :name, { prompt: true } %>
+    <%= link_to "(Need to create new ensemble?)", new_ensemble_path %>
   </div>
 
   <div class="field">
-    <%= f.label :start_date %>
-    <%= f.date_select :start_date %>
+    <%= f.label :start_date, "Set Start Date  (Format: YYYY-MM-DD)" %>
+    <%= date_field :performance_set, :start_date %>
   </div>
 
   <div class="field">
-    <%= f.label :end_date %>
-    <%= f.date_select :end_date %>
+    <%= f.label :end_date, "Set End Date  (Format: YYYY-MM-DD)" %>
+    <%= date_field :performance_set, :end_date %>
   </div>
 
   <div class="actions">

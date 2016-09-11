@@ -1,8 +1,8 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Performance:</strong>
-  <%= @performance_set.performance %>
+  <strong>Ensemble:</strong>
+  <%= Ensemble.find(@performance_set.ensemble_id).name %>
 </p>
 
 <p>

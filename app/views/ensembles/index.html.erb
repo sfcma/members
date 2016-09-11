@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Ensembles</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @ensembles.each do |ensemble| %>
+      <tr>
+        <td><%= ensemble.name %></td>
+        <td><%= ensemble.description %></td>
+        <td><%= link_to 'Show', ensemble %></td>
+        <td><%= link_to 'Edit', edit_ensemble_path(ensemble) %></td>
+        <td><%= link_to 'Destroy', ensemble, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Ensemble', new_ensemble_path %>

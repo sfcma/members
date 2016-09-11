@@ -1,0 +1,2 @@
+class Ensemble < ApplicationRecord
+end

@@ -1,10 +1,10 @@
-<%= form_for(performance) do |f| %>
-  <% if performance.errors.any? %>
+<%= form_for(ensemble) do |f| %>
+  <% if ensemble.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(performance.errors.count, "error") %> prohibited this performance from being saved:</h2>
+      <h2><%= pluralize(performance.errors.count, "error") %> prohibited this ensemble from being saved:</h2>
 
       <ul>
-      <% performance.errors.full_messages.each do |message| %>
+      <% ensemble.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
       </ul>
