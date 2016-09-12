@@ -40,7 +40,7 @@ Rails.application.configure do
   # config.action_cable.allowed_request_origins = [ 'http://example.com', /http:\/\/example.*/ ]
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+  config.force_ssl = true
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
@@ -86,4 +86,6 @@ Rails.application.configure do
 
   # mail support
   config.action_mailer.default_url_options = { host: 'limitless-sierra-92168.herokuapp.com', port: 443 }
+
+  config.secret_key_base = ENV["SECRET_KEY_BASE"]
 end

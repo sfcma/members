@@ -5,13 +5,19 @@ class MembersController < ApplicationController
   # GET /members
   # GET /members.json
   def index
-    @members = Member.all
+    @instruments = MemberInstrument.all.map{|mi| [mi.instrument.capitalize, mi.instrument]}.uniq
+
+    if params[:instrument]
+      @members = Member.joins(:member_instruments).where('instrument = ?', params[:instrument].downcase)
+    else
+      @members = Member.includes(:member_instruments)
+    end
   end
 
   # GET /members/1
   # GET /members/1.json
   def show
-    @member_instruments = @member.member_instrument
+    @member_instruments = @member.member_instruments
     @set_member_instruments = @member_instruments.map(&:set_member_instrument)
     @sets = @set_member_instruments.map(&:set)
   end
@@ -19,17 +25,21 @@ class MembersController < ApplicationController
   # GET /members/new
   def new
     @member = Member.new
+    @member.member_instruments.build
+    #logger.info @member.member_instruments
   end
 
   # GET /members/1/edit
   def edit
+    @member.member_instruments.build
+    #logger.info @member.member_instruments
   end
 
   # POST /members
   # POST /members.json
   def create
     @member = Member.new(member_params)
-
+    logger.info @member.inspect
     respond_to do |format|
       if @member.save
         go_back = "Member was successfully created."
@@ -74,6 +84,6 @@ class MembersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def member_params
-      params.require(:member).permit(:first_name, :last_name, :address_1, :address_2, :city, :state, :zip, :phone_1, :phone_1_type, :phone_2, :phone_2_type, :email_1, :email_2, :emergency_name, :emergency_relation, :emergency_phone, :playing_status)
+      params.require(:member).permit(:first_name, :last_name, :address_1, :address_2, :city, :state, :zip, :phone_1, :phone_1_type, :phone_2, :phone_2_type, :email_1, :email_2, :emergency_name, :emergency_relation, :emergency_phone, :playing_status, member_instruments_attributes: [:id, :instrument])
     end
 end
