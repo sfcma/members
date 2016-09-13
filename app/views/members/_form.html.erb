@@ -117,6 +117,14 @@
     </tr>
     <tr>
       <td>
+        <div class="field">
+          <%= f.label :playing_status, "Overall Status" %>
+          <%= f.text_field :playing_status %>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
 
 
         <div class="field">
@@ -145,27 +153,46 @@
     </tr>
   </table>
 
-  <script>var instCount = <%= [@member.member_instruments.count - 1, 1].max %>; var setInstCount = {};</script>
+  <script>var instCount = <%= [@member.member_instruments.count - 1, 1].max %>;</script>
   <b>Instruments</b> <br>
   <% i = 0 %>
   <%= f.fields_for :member_instruments do |instrument_f| %>
     <% if i < @member.member_instruments.count || i == 0 %>
-      <script>setInstCount[i] = <%= [@member.member_instruments[i].set_member_instruments.count - 1, 1].max %>;</script>
       <div class="field">
         <%= instrument_f.text_field :instrument %> <i><a href='#' id='removeMemberInstrument<%=i%>'>Remove</a></i>
-        <%= f.fields_for :set_member_instruments do |set_instrument_f| %>
-          <div class="field">
-            <%= set_instrument_f.collection_select :set_id, @sets, :id, :id, { prompt: true } %> <i><a href='#' id='removeMemberInstrument<%=i%>'>Remove</a></i>
-          </div>
-        <% end %>
+
       </div>
     <% end %>
     <% i += 1; %>
   <% end %>
   <i><a href='#' id='addNewMemberInstrument'> + Add Instrument</a></i><br><br>
 
-  <div class='formDescription'>Instrument, playing status, and performance group participation are not set on this page ... yet</div>
-<br><br>
+
+  <script>var setCount = <%= [@member.member_sets.count - 1, 1].max %>;</script>
+  <b>Sets</b> <br>
+  <% j = 0 %>
+  <%= f.fields_for :member_sets do |set_f| %>
+    <% if j < @member.member_instruments.count || j == 0 %>
+      <div class="field">
+        <%= set_f.collection_select :set_id, @sets, :id, :name, { prompt: true, :selected => set_f.object.set_id ? set_f.object.set_id.to_i : nil } %> <i><a href='#' id='removeMemberSet<%=i%>'>Remove</a></i>
+      </div>
+    <% end %>
+  <% end %>
+  <i><a href='#' id='addNewMemberSet'> + Add Set</a></i><br><br>
+
+  <script>var notesCount = <%= [@member.member_notes.count - 1, 1].max %>;</script>
+  <b>Notes</b> <br>
+  <% k = 0 %>
+  <%= f.fields_for :member_notes do |note_f| %>
+    <% if k < @member.member_notes.count || k == 0 %>
+      <div class="field">
+        <%= note_f.text_field :note %> <i><a href='#' id='removeMemberNote<%=i%>'>Remove</a></i>
+
+      </div>
+    <% end %>
+    <% k += 1; %>
+  <% end %>
+  <i><a href='#' id='addNewMemberNote'> + Add Note</a></i><br><br>
 
   <div class="actions">
     <%= f.submit %>

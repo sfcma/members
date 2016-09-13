@@ -8,7 +8,7 @@ class MembersController < ApplicationController
     @instruments = MemberInstrument.all.map{|mi| [mi.instrument.capitalize, mi.instrument]}.uniq
 
     if params[:instrument]
-      @members = Member.joins(:member_instruments).where('instrument = ?', params[:instrument].downcase)
+      @members = Member.joins(:member_instruments).where('instrument = ?', params[:instrument].snake_case)
     else
       @members = Member.includes(:member_instruments)
     end
@@ -18,8 +18,8 @@ class MembersController < ApplicationController
   # GET /members/1.json
   def show
     @member_instruments = @member.member_instruments
-    @set_member_instruments = @member_instruments.map(&:set_member_instrument)
-    @sets = nil# @set_member_instruments.map(&:set)
+    #@set_member_instruments = @member_instruments.map(&:set_member_instrument)
+    #@sets = nil# @set_member_instruments.map(&:set)
   end
 
   # GET /members/new
@@ -27,14 +27,16 @@ class MembersController < ApplicationController
     @sets = PerformanceSet.all
     @member = Member.new
     @member.member_instruments.build
-    #logger.info @member.member_instruments
+    @member.member_sets.build
+    @member.member_notes.build
   end
 
   # GET /members/1/edit
   def edit
     @sets = PerformanceSet.all
     @member.member_instruments.build
-    #logger.info @member.member_instruments
+    @member.member_sets.build
+    @member.member_notes.build
   end
 
   # POST /members
@@ -92,6 +94,6 @@ class MembersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def member_params
-      params.require(:member).permit(:first_name, :last_name, :address_1, :address_2, :city, :state, :zip, :phone_1, :phone_1_type, :phone_2, :phone_2_type, :email_1, :email_2, :emergency_name, :emergency_relation, :emergency_phone, :playing_status, :initial_date, member_instruments_attributes: {id: id, instrument: instrument, _destroy: _destroy, set_member_instruments_attributes: [:id, :status, :rotating, :_destroy]})
+      params.require(:member).permit(:first_name, :last_name, :address_1, :address_2, :city, :state, :zip, :phone_1, :phone_1_type, :phone_2, :phone_2_type, :email_1, :email_2, :emergency_name, :emergency_relation, :emergency_phone, :playing_status, :initial_date, member_instruments_attributes: [:id, :instrument, :_destroy], member_sets_attributes: [:id, :set_id, :status, :rotating, :_destroy])
     end
 end

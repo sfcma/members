@@ -10,7 +10,7 @@
   <tbody>
     <% @performance_sets.each do |performance_set| %>
       <tr>
-        <td><%= link_to "#{Ensemble.find(performance_set.ensemble_id).name} from #{performance_set.start_date} to #{performance_set.end_date}", performance_set %></td>
+        <td><%= link_to performance_set.name, performance_set %></td>
       </tr>
     <% end %>
   </tbody>
