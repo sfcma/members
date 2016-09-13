@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160909234940) do
+ActiveRecord::Schema.define(version: 20160912234910) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -78,6 +78,15 @@ ActiveRecord::Schema.define(version: 20160909234940) do
     t.string   "playing_status"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+    t.datetime "initial_date"
+  end
+
+  create_table "old_passwords", force: :cascade do |t|
+    t.string   "encrypted_password",       null: false
+    t.string   "password_archivable_type", null: false
+    t.integer  "password_archivable_id",   null: false
+    t.datetime "created_at"
+    t.index ["password_archivable_type", "password_archivable_id"], name: "index_password_archivable"
   end
 
   create_table "performance_sets", force: :cascade do |t|
@@ -101,27 +110,38 @@ ActiveRecord::Schema.define(version: 20160909234940) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
+    t.string   "email",                                    default: "", null: false
+    t.string   "encrypted_password",                       default: "", null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer  "sign_in_count",                            default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
-    t.integer  "failed_attempts",        default: 0,  null: false
+    t.integer  "failed_attempts",                          default: 0,  null: false
     t.string   "unlock_token"
     t.datetime "locked_at"
+    t.datetime "password_changed_at"
+    t.string   "unique_session_id",             limit: 20
+    t.datetime "last_activity_at"
+    t.datetime "expired_at"
+    t.string   "paranoid_verification_code"
+    t.integer  "paranoid_verification_attempt",            default: 0
+    t.datetime "paranoid_verified_at"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["expired_at"], name: "index_users_on_expired_at"
+    t.index ["last_activity_at"], name: "index_users_on_last_activity_at"
+    t.index ["paranoid_verification_code"], name: "index_users_on_paranoid_verification_code"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index [nil], name: "index_users_on_parnaoid_verified_at"
   end
 
 end

@@ -1,5 +1,6 @@
 class SetMemberInstrumentsController < ApplicationController
   before_action :set_set_member_instrument, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
 
   # GET /set_member_instruments
   # GET /set_member_instruments.json

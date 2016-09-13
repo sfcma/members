@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  captcha_route
   resources :absences
   resources :member_notes
   resources :action_logs

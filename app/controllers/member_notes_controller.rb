@@ -1,5 +1,6 @@
 class MemberNotesController < ApplicationController
   before_action :set_member_note, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
 
   # GET /member_notes
   # GET /member_notes.json

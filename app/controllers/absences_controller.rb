@@ -1,5 +1,6 @@
 class AbsencesController < ApplicationController
   before_action :set_absence, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
 
   # GET /absences
   # GET /absences.json
