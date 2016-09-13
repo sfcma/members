@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160912234910) do
+ActiveRecord::Schema.define(version: 20160912235011) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -98,15 +98,22 @@ ActiveRecord::Schema.define(version: 20160912234910) do
     t.index ["ensemble_id"], name: "index_performance_sets_on_ensemble_id"
   end
 
-  create_table "set_member_instruments", force: :cascade do |t|
+  create_table "set_member", force: :cascade do |t|
     t.integer  "set_id"
-    t.integer  "member_instrument_id"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.integer  "member_id"
     t.string   "set_status"
+    t.string   "string"
     t.boolean  "rotating"
-    t.index ["member_instrument_id"], name: "index_set_member_instruments_on_member_instrument_id"
-    t.index ["set_id"], name: "index_set_member_instruments_on_set_id"
+    t.boolean  "boolean"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["member_id"], name: "index_set_member_on_member_id"
+    t.index ["set_id"], name: "index_set_member_on_set_id"
+  end
+
+  create_table "set_member_instruments", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
