@@ -19,7 +19,7 @@ class MembersController < ApplicationController
   def show
     @member_instruments = @member.member_instruments
     @set_member_instruments = @member_instruments.map(&:set_member_instrument)
-    @sets = @set_member_instruments.map(&:set)
+    @sets = nil# @set_member_instruments.map(&:set)
   end
 
   # GET /members/new
@@ -55,8 +55,14 @@ class MembersController < ApplicationController
   # PATCH/PUT /members/1
   # PATCH/PUT /members/1.json
   def update
+    new_member_params = member_params.dup
+    new_member_params[:member_instruments_attributes].reject! do |mik, miv|
+      miv['instrument'] && miv['instrument'].empty?
+    end
+    logger.info new_member_params[:member_instruments_attributes].length
+
     respond_to do |format|
-      if @member.update(member_params)
+      if @member.update(new_member_params)
         format.html { redirect_to @member, notice: 'Member was successfully updated.' }
         format.json { render :show, status: :ok, location: @member }
       else
@@ -84,6 +90,6 @@ class MembersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def member_params
-      params.require(:member).permit(:first_name, :last_name, :address_1, :address_2, :city, :state, :zip, :phone_1, :phone_1_type, :phone_2, :phone_2_type, :email_1, :email_2, :emergency_name, :emergency_relation, :emergency_phone, :playing_status, member_instruments_attributes: [:id, :instrument])
+      params.require(:member).permit(:first_name, :last_name, :address_1, :address_2, :city, :state, :zip, :phone_1, :phone_1_type, :phone_2, :phone_2_type, :email_1, :email_2, :emergency_name, :emergency_relation, :emergency_phone, :playing_status, :initial_date, member_instruments_attributes: [:id, :instrument, :_destroy])
     end
 end

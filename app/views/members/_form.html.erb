@@ -108,6 +108,14 @@
       </td>
     </tr>
     <tr>
+      <td colspan=2>
+        <div class="field">
+          <%= f.label :initial_date, "Initial Contact Date  (use date picker or in format YYYY-MM-DD)" %>
+          <%= date_field :member, :initial_date %>
+        </div>
+      </td>
+    </tr>
+    <tr>
       <td>
 
 
@@ -137,12 +145,18 @@
     </tr>
   </table>
 
+  <script>var instCount = <%= [@member.member_instruments.count - 1, 1].max %>;</script>
+  <b>Instruments</b> <br>
+  <% i = 0 %>
   <%= f.fields_for :member_instruments do |instrument_f| %>
-    <div class="field inlineField">
-      <%= instrument_f.label :instrument, "Instrument" %>
-      <%= instrument_f.text_field :instrument %>
-    </div>
+    <% if i < @member.member_instruments.count || i == 0 %>
+      <div class="field">
+        <%= instrument_f.text_field :instrument %> <i><a href='#' id='removeMemberInstrument<%=i%>'>Remove</a></i>
+      </div>
+    <% end %>
+    <% i += 1; %>
   <% end %>
+  <i><a href='#' id='addNewMemberInstrument'> + Add Instrument</a></i><br><br>
 
   <div class='formDescription'>Instrument, playing status, and performance group participation are not set on this page ... yet</div>
 <br><br>

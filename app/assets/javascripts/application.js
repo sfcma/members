@@ -14,3 +14,36 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+
+Turbolinks.start()
+
+
+var loadStuff = function() {
+  $('a#addNewMemberInstrument').on('click', function(e) {
+    e.preventDefault();
+    instCount++;
+    var topId = instCount - 1;
+
+    topId = 'member_member_instruments_attributes_' + topId + '_instrument';
+    var div = "<div class='field'><input type='text' name='member[member_instruments_attributes][" + instCount + "][instrument]' id='member_member_instruments_attributes_" + instCount + "_instrument'></div>";
+    console.log($('#' + topId).parent());
+    console.log($(div));
+    $(div).insertAfter($('#' + topId).parent());
+
+    return false;
+  });
+
+  $('a[id^=removeMemberInstrument]').on('click', function(e) {
+    e.preventDefault();
+    var obj = e.target;
+    var id = $(obj).attr('id').split('removeMemberInstrument')[1];
+    $('#member_member_instruments_attributes_' + id + '_instrument').attr('id', 'member_member_instruments_attributes_' + id + '__destroy');
+    $('#member_member_instruments_attributes_' + id + '__destroy').attr('name', 'member[member_instruments_attributes][' + id + '][_destroy]');
+    $('#member_member_instruments_attributes_' + id + '__destroy').attr('value', '1');
+    $('#member_member_instruments_attributes_' + id + '__destroy').attr('type', 'hidden');
+    $(obj).parent().html('Removed');
+    return false;
+  });
+};
+
+document.addEventListener('turbolinks:load', loadStuff);
