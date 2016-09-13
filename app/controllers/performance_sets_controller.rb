@@ -28,14 +28,11 @@ class PerformanceSetsController < ApplicationController
   # POST /performance_sets
   # POST /performance_sets.json
   def create
-    logger.info performance_set_params.inspect
     @performance_set = PerformanceSet.new(performance_set_params)
 
     # @performance_set.start_date = performance_set_params.start_date.to_time.to_i
     # @performance_set.end_date = performance_set_params.end_date.to_time.to_i
-    logger.info Ensemble.find(@performance_set.ensemble_id)
     @ensembles = Ensemble.all
-    logger.info @performance_set.inspect
     respond_to do |format|
       if @performance_set.save
         format.html { redirect_to @performance_set, notice: 'Performance set was successfully created.' }

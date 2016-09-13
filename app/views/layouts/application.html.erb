@@ -13,7 +13,9 @@
     <div class='bar'>
       <%= link_to 'Home Page', root_path %> &middot;
       <% if user_signed_in? %>
-        Logged in as <%= current_user.email %>
+        Logged in as <%= current_user.email %> &middot;
+        <%= link_to "Change Password", edit_user_registration_path %> &middot;
+        <%= link_to "Log Out", destroy_user_session_path, :method => :delete %>
       <% else %>
         Not logged in. <%= link_to "Log In", new_user_session_path %>
       <% end %>

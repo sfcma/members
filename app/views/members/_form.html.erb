@@ -145,13 +145,19 @@
     </tr>
   </table>
 
-  <script>var instCount = <%= [@member.member_instruments.count - 1, 1].max %>;</script>
+  <script>var instCount = <%= [@member.member_instruments.count - 1, 1].max %>; var setInstCount = {};</script>
   <b>Instruments</b> <br>
   <% i = 0 %>
   <%= f.fields_for :member_instruments do |instrument_f| %>
     <% if i < @member.member_instruments.count || i == 0 %>
+      <script>setInstCount[i] = <%= [@member.member_instruments[i].set_member_instruments.count - 1, 1].max %>;</script>
       <div class="field">
         <%= instrument_f.text_field :instrument %> <i><a href='#' id='removeMemberInstrument<%=i%>'>Remove</a></i>
+        <%= f.fields_for :set_member_instruments do |set_instrument_f| %>
+          <div class="field">
+            <%= set_instrument_f.collection_select :set_id, @sets, :id, :id, { prompt: true } %> <i><a href='#' id='removeMemberInstrument<%=i%>'>Remove</a></i>
+          </div>
+        <% end %>
       </div>
     <% end %>
     <% i += 1; %>

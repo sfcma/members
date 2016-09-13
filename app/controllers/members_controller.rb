@@ -24,6 +24,7 @@ class MembersController < ApplicationController
 
   # GET /members/new
   def new
+    @sets = PerformanceSet.all
     @member = Member.new
     @member.member_instruments.build
     #logger.info @member.member_instruments
@@ -31,6 +32,7 @@ class MembersController < ApplicationController
 
   # GET /members/1/edit
   def edit
+    @sets = PerformanceSet.all
     @member.member_instruments.build
     #logger.info @member.member_instruments
   end
@@ -90,6 +92,6 @@ class MembersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def member_params
-      params.require(:member).permit(:first_name, :last_name, :address_1, :address_2, :city, :state, :zip, :phone_1, :phone_1_type, :phone_2, :phone_2_type, :email_1, :email_2, :emergency_name, :emergency_relation, :emergency_phone, :playing_status, :initial_date, member_instruments_attributes: [:id, :instrument, :_destroy])
+      params.require(:member).permit(:first_name, :last_name, :address_1, :address_2, :city, :state, :zip, :phone_1, :phone_1_type, :phone_2, :phone_2_type, :email_1, :email_2, :emergency_name, :emergency_relation, :emergency_phone, :playing_status, :initial_date, member_instruments_attributes: {id: id, instrument: instrument, _destroy: _destroy, set_member_instruments_attributes: [:id, :status, :rotating, :_destroy]})
     end
 end
