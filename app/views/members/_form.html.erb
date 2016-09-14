@@ -171,11 +171,26 @@
   <b>Sets</b> <br>
   <% j = 0 %>
   <%= f.fields_for :member_sets do |set_f| %>
-    <% if j < @member.member_instruments.count || j == 0 %>
-      <div class="field">
-        <%= set_f.collection_select :set_id, @sets, :id, :name, { prompt: true, :selected => set_f.object.set_id ? set_f.object.set_id.to_i : nil } %> <i><a href='#' id='removeMemberSet<%=i%>'>Remove</a></i>
+    <% if j < @member.member_sets.count || j == 0 %>
+      <div class="field striped">
+        <%= set_f.collection_select :set_id, @sets, :id, :name, { prompt: true, :selected => set_f.object.set_id ? set_f.object.set_id.to_i : nil } %>
+        &emsp;
+        Status:
+        <%= set_f.text_field :set_status %>
+        &emsp;
+        Rotating this set? <%= set_f.check_box :rotating %>
+        &emsp;
+        <% x = 0 %>
+        <%= set_f.fields_for :set_member_instruments do |smi_f| %>
+          <% if x < set_f.object.set_member_instruments.count || x == 0 %>
+            <%= smi_f.collection_select :member_instrument_id, @member_instruments, :id, :instrument, { prompt: true } %>
+          <% end %>
+        <% end %>
+        &emsp;
+        <i><a href='#' id='removeMemberSet<%=j%>'>Remove</a></i>
       </div>
     <% end %>
+    <% j += 1 %>
   <% end %>
   <i><a href='#' id='addNewMemberSet'> + Add Set</a></i><br><br>
 
@@ -185,7 +200,7 @@
   <%= f.fields_for :member_notes do |note_f| %>
     <% if k < @member.member_notes.count || k == 0 %>
       <div class="field">
-        <%= note_f.text_field :note %> <i><a href='#' id='removeMemberNote<%=i%>'>Remove</a></i>
+        <%= note_f.text_field :note %> <i><a href='#' id='removeMemberNote<%=k%>'>Remove</a></i>
 
       </div>
     <% end %>

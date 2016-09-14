@@ -25,8 +25,7 @@ var loadStuff = function() {
 
     topId = 'member_member_instruments_attributes_' + topId + '_instrument';
     var div = "<div class='field'><input type='text' name='member[member_instruments_attributes][" + instCount + "][instrument]' id='member_member_instruments_attributes_" + instCount + "_instrument'></div>";
-    console.log($('#' + topId), $('#' + topId).parent());
-    console.log($(div));
+
     $(div).insertAfter($('#' + topId).parent());
     instCount++;
     return false;
@@ -40,6 +39,28 @@ var loadStuff = function() {
     $('#member_member_instruments_attributes_' + id + '__destroy').attr('name', 'member[member_instruments_attributes][' + id + '][_destroy]');
     $('#member_member_instruments_attributes_' + id + '__destroy').attr('value', '1');
     $('#member_member_instruments_attributes_' + id + '__destroy').attr('type', 'hidden');
+    $(obj).parent().html('Removed');
+    return false;
+  });
+
+  $('a#addNewMemberSet').on('click', function(e) {
+    e.preventDefault();
+    var setTopId = setCount - 1;
+
+    setTopId = 'member_member_sets_attributes_' + setTopId + '_set_id';
+    var div = "<div class='field'><input type='text' name='member[member_sets_attributes][" + setCount + "][set_id]' id='member_member_sets_attributes_" + setCount + "_set_id'></div>";
+
+    $(div).insertAfter($('#' + setTopId).parent());
+    setCount++;
+    return false;
+  });
+
+  $('a[id^=removeMemberSet]').on('click', function(e) {
+    e.preventDefault();
+    var obj = e.target;
+    var id = $(obj).attr('id').split('removeMemberSet')[1];
+    $('#member_member_sets_attributes_' + id + '_set_id').attr('id', 'member_member_sets_attributes_' + id + '__destroy');
+    $('#member_member_sets_attributes_' + id + '__destroy').replaceWith('<input type="hidden" value="1" name="member[member_sets_attributes][' + id + '][_destroy]" id="member_member_sets_attributes_' + id + '__destroy">');
     $(obj).parent().html('Removed');
     return false;
   });

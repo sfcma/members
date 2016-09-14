@@ -29,6 +29,7 @@ class MembersController < ApplicationController
     @member.member_instruments.build
     @member.member_sets.build
     @member.member_notes.build
+    @member.member_sets.set_member_instruments.build
   end
 
   # GET /members/1/edit
@@ -36,7 +37,11 @@ class MembersController < ApplicationController
     @sets = PerformanceSet.all
     @member.member_instruments.build
     @member.member_sets.build
+    @member.member_sets.each do |ms|
+      ms.set_member_instruments.build
+    end
     @member.member_notes.build
+    @member_instruments = @member.member_instruments
   end
 
   # POST /members
@@ -63,7 +68,9 @@ class MembersController < ApplicationController
     new_member_params[:member_instruments_attributes].reject! do |mik, miv|
       miv['instrument'] && miv['instrument'].empty?
     end
-    logger.info new_member_params[:member_instruments_attributes].length
+    new_member_params[:member_sets_attributes].reject! do |mik, miv|
+      miv['instrument'] && miv['set_id'].empty?
+    end
 
     respond_to do |format|
       if @member.update(new_member_params)
