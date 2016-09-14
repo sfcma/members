@@ -21,15 +21,14 @@ Turbolinks.start()
 var loadStuff = function() {
   $('a#addNewMemberInstrument').on('click', function(e) {
     e.preventDefault();
-    instCount++;
     var topId = instCount - 1;
 
     topId = 'member_member_instruments_attributes_' + topId + '_instrument';
     var div = "<div class='field'><input type='text' name='member[member_instruments_attributes][" + instCount + "][instrument]' id='member_member_instruments_attributes_" + instCount + "_instrument'></div>";
-    console.log($('#' + topId).parent());
+    console.log($('#' + topId), $('#' + topId).parent());
     console.log($(div));
     $(div).insertAfter($('#' + topId).parent());
-
+    instCount++;
     return false;
   });
 

@@ -160,7 +160,6 @@
     <% if i < @member.member_instruments.count || i == 0 %>
       <div class="field">
         <%= instrument_f.text_field :instrument %> <i><a href='#' id='removeMemberInstrument<%=i%>'>Remove</a></i>
-
       </div>
     <% end %>
     <% i += 1; %>
