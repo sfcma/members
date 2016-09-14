@@ -53,3 +53,4 @@ gem 'easy_captcha'
 gem 'rails_email_validator'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'validates_timeliness', '~> 4.0'
