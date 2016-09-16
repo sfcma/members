@@ -124,89 +124,98 @@
       </td>
     </tr>
     <tr>
-      <td>
+      <td colspan=3>
 
-
-        <div class="field">
-          <b>Emergency Contact Information</b><br>
-          <%= f.label :emergency_name, "Name" %>
-          <%= f.text_field :emergency_name %>
-        </div>
+        <b>Emergency Contact Information</b>
+        <div class="field memberInfoBlock">
+          <div class="field inlineField">
+            <%= f.label :emergency_name, "Name" %>
+            <%= f.text_field :emergency_name %>
+          </div>
+          <div class="field inlineField">
+            <%= f.label :emergency_relation, "Relationship to Member   " %>
+            <%= f.text_field :emergency_relation %>
+          </div>
+          <div class="field inlineField">
+            <%= f.label :emergency_phone, "Phone Number" %>
+            <%= f.text_field :emergency_phone %>
+          </div>
+        </div><br>
       </td>
-      <td>
-        <br>
-        <div class="field inlineField">
-          <%= f.label :emergency_relation, "Relationship to Member" %>
-          <%= f.text_field :emergency_relation %>
+    </tr>
+
+
+    <tr>
+      <td colspan=3>
+
+        <script>var instCount = <%= [@member.member_instruments.count - 1, 1].max %>;</script>
+        <b>Instruments</b>
+        <div class="memberInfoBlock">
+          <% i = 0 %>
+          <%= f.fields_for :member_instruments do |instrument_f| %>
+            <% if i < @member.member_instruments.count || i == 0 %>
+              <div class="field">
+                <%= instrument_f.text_field :instrument %> <i><a href='#' class='removeLink' id='removeMemberInstrument<%=i%>'>Remove</a></i>
+              </div>
+            <% end %>
+            <% i += 1; %>
+          <% end %>
         </div>
-        <div class="field inlineField">
-          <%= f.label :emergency_phone, "Phone Number" %>
-          <%= f.text_field :emergency_phone %>
-        </div>
+        <i class='addSet'><a href='#' id='addNewMemberInstrument'> + Add Instrument</a></i><br>
+
       </td>
     </tr>
     <tr>
-      <td>
+      <td colspan=3>
 
+        <script>var setCount = <%= [@member.member_sets.count - 1, 1].max %>;</script>
+        <b>Sets</b> <br>
+        <% j = 0 %>
+        <%= f.fields_for :member_sets do |set_f| %>
+          <% if j < @member.member_sets.count || j == 0 %>
+            <div class="field memberInfoBlock">
+              <%= set_f.collection_select :set_id, @sets, :id, :name, { prompt: true, :selected => set_f && set_f.object && set_f.object.set_id ? set_f.object.set_id.to_i : nil } %>
+              &emsp;&emsp;<i><a href='#' class='removeLink' id='removeMemberSet<%=j%>'>Remove Member from Set</a></i>
+              <br>
+              &emsp;Playing Status:
+              <%= set_f.text_field :set_status %>
+              &emsp;
+              Rotating this set? <%= set_f.check_box :rotating %>
+              <br>
+              &emsp;Instruments played this set:
+              <% x = 0 %>
+              <%= set_f.collection_select :id, @member_instruments, :id, :instrument, { prompt: true } %>
+              &emsp;
+
+            </div>
+          <% end %>
+          <% j += 1 %>
+        <% end %>
+        <i class='addSet'><a href='#' id='addNewMemberSet'> + Add Set</a></i><br>
 
       </td>
     </tr>
-  </table>
+    <tr>
+      <td colspan=3>
 
-  <script>var instCount = <%= [@member.member_instruments.count - 1, 1].max %>;</script>
-  <b>Instruments</b> <br>
-  <% i = 0 %>
-  <%= f.fields_for :member_instruments do |instrument_f| %>
-    <% if i < @member.member_instruments.count || i == 0 %>
-      <div class="field">
-        <%= instrument_f.text_field :instrument %> <i><a href='#' id='removeMemberInstrument<%=i%>'>Remove</a></i>
-      </div>
-    <% end %>
-    <% i += 1; %>
-  <% end %>
-  <i><a href='#' id='addNewMemberInstrument'> + Add Instrument</a></i><br><br>
+        <script>var notesCount = <%= [@member.member_notes.count - 1, 1].max %>;</script>
+        <b>Notes</b> <br>
+        <div class="memberInfoBlock">
+          <% k = 0 %>
+          <%= f.fields_for :member_notes do |note_f| %>
+            <% if k < @member.member_notes.count || k == 0 %>
+              <div class="field">
+                <%= note_f.text_field :note, size: 50 %> <i><a href='#' class='removeLink' id='removeMemberNote<%=k%>'>Remove</a></i>
 
-
-  <script>var setCount = <%= [@member.member_sets.count - 1, 1].max %>;</script>
-  <b>Sets</b> <br>
-  <% j = 0 %>
-  <%= f.fields_for :member_sets do |set_f| %>
-    <% if j < @member.member_sets.count || j == 0 %>
-      <div class="field striped">
-        <%= set_f.collection_select :set_id, @sets, :id, :name, { prompt: true, :selected => set_f.object.set_id ? set_f.object.set_id.to_i : nil } %>
-        &emsp;
-        Status:
-        <%= set_f.text_field :set_status %>
-        &emsp;
-        Rotating this set? <%= set_f.check_box :rotating %>
-        &emsp;
-        <% x = 0 %>
-        <%= set_f.fields_for :set_member_instruments do |smi_f| %>
-          <% if x < set_f.object.set_member_instruments.count || x == 0 %>
-            <%= smi_f.collection_select :member_instrument_id, @member_instruments, :id, :instrument, { prompt: true } %>
+              </div>
+            <% end %>
+            <% k += 1; %>
           <% end %>
-        <% end %>
-        &emsp;
-        <i><a href='#' id='removeMemberSet<%=j%>'>Remove</a></i>
-      </div>
-    <% end %>
-    <% j += 1 %>
-  <% end %>
-  <i><a href='#' id='addNewMemberSet'> + Add Set</a></i><br><br>
-
-  <script>var notesCount = <%= [@member.member_notes.count - 1, 1].max %>;</script>
-  <b>Notes</b> <br>
-  <% k = 0 %>
-  <%= f.fields_for :member_notes do |note_f| %>
-    <% if k < @member.member_notes.count || k == 0 %>
-      <div class="field">
-        <%= note_f.text_field :note %> <i><a href='#' id='removeMemberNote<%=k%>'>Remove</a></i>
-
-      </div>
-    <% end %>
-    <% k += 1; %>
-  <% end %>
-  <i><a href='#' id='addNewMemberNote'> + Add Note</a></i><br><br>
+        </div>
+        <i class='addSet'><a href='#' id='addNewMemberNote'> + Add Note</a></i><br>
+      </td>
+    </tr>
+  </table>
 
   <div class="actions">
     <%= f.submit %>

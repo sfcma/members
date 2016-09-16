@@ -40,9 +40,9 @@ class MembersController < ApplicationController
     @sets = PerformanceSet.all
     @member.member_instruments.build
     @member.member_sets.build
-    @member.member_sets.each do |ms|
-      ms.set_member_instruments.build
-    end
+    # @member.member_sets.each do |ms|
+    #   ms.set_member_instruments.build
+    # end
     @member.member_notes.build
     @member_instruments = @member.member_instruments
   end
@@ -50,8 +50,15 @@ class MembersController < ApplicationController
   # POST /members
   # POST /members.json
   def create
-    @member = Member.new(member_params)
-    logger.info @member.inspect
+    new_member_params = member_params.dup
+    new_member_params[:member_instruments_attributes].reject! do |mik, miv|
+      miv['instrument'] && miv['instrument'].empty?
+    end
+    new_member_params[:member_sets_attributes].reject! do |mik, miv|
+      miv['set_id'] && miv['set_id'].empty?
+    end
+    @member = Member.new(new_member_params)
+
     respond_to do |format|
       if @member.save
         go_back = "Member was successfully created."
@@ -72,7 +79,7 @@ class MembersController < ApplicationController
       miv['instrument'] && miv['instrument'].empty?
     end
     new_member_params[:member_sets_attributes].reject! do |mik, miv|
-      miv['instrument'] && miv['set_id'].empty?
+      miv['set_id'] && miv['set_id'].empty?
     end
 
     respond_to do |format|

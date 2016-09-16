@@ -43,6 +43,14 @@ var loadStuff = function() {
     return false;
   });
 
+  $('#new_member').on('blur', 'input[id^=member_member_instruments_attributes]', function(e) {
+    var instruments = [];
+    $.each($('input[id^=member_member_instruments_attributes]'), function(j, i) {
+      instruments.push($(i).val());
+    });
+    instruments.filter(Boolean);
+  });
+
   $('a#addNewMemberSet').on('click', function(e) {
     e.preventDefault();
     var setTopId = setCount - 1;

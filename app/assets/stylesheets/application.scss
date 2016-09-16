@@ -57,6 +57,7 @@ div.formDescription {
 
 div.inlineField {
   display: inline-block;
+  margin-right: 10px;
 }
 
 div.actions input[type=submit] {
@@ -103,6 +104,14 @@ div {
   }
 }
 
+.memberInfoBlock {
+  background: #ddeedd;
+  line-height: 2.25;
+  border: 1px solid #bbccbb;
+  padding: 10px;
+  padding-top: 5px;
+}
+
 #notice {
   color: green;
 }
@@ -111,6 +120,20 @@ div {
   padding: 2px;
   background-color: red;
   display: table;
+}
+
+.addSet {
+  display: block;
+  margin-top: 5px;
+}
+
+.removeLink {
+  color: #999;
+
+  &:hover {
+    background: darkred;
+    color: white;
+  }
 }
 
 .alert {
