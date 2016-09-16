@@ -19,6 +19,16 @@ Turbolinks.start()
 
 
 var loadStuff = function() {
+  var updateInstrumentsInDropdown = function() {
+    member_set_instrument_dropdowns = $('select[id^=member_member_sets_attributes_0_set_member_instruments_attributes]');
+    member_set_instrument_dropdowns.empty();
+    $('input[id^=member_member_instruments_attributes][type=text]').each(function(j, i) {
+      member_set_instrument_dropdowns.append( $("<option>")
+                                     .val($(i).val())
+                                     .html($(i).val()));
+    });
+  };
+
   $('a#addNewMemberInstrument').on('click', function(e) {
     e.preventDefault();
     var topId = instCount - 1;
@@ -40,16 +50,14 @@ var loadStuff = function() {
     $('#member_member_instruments_attributes_' + id + '__destroy').attr('value', '1');
     $('#member_member_instruments_attributes_' + id + '__destroy').attr('type', 'hidden');
     $(obj).parent().html('Removed');
+    updateInstrumentsInDropdown();
     return false;
   });
 
-  $('#new_member').on('blur', 'input[id^=member_member_instruments_attributes]', function(e) {
-    var instruments = [];
-    $.each($('input[id^=member_member_instruments_attributes]'), function(j, i) {
-      instruments.push($(i).val());
-    });
-    instruments.filter(Boolean);
+  $('.new_member, .edit_member').on('blur', 'input[id^=member_member_instruments]', function(e) {
+    updateInstrumentsInDropdown();
   });
+
 
   $('a#addNewMemberSet').on('click', function(e) {
     e.preventDefault();

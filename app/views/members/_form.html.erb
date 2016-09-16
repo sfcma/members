@@ -118,9 +118,9 @@
     <tr>
       <td>
         <div class="field">
-          <%= f.label :playing_status, "Overall Status" %>
-          <%= f.text_field :playing_status %>
-        </div>
+          <b><%= f.label :playing_status, "Overall Status" %></b>
+          <%= f.select :playing_status, Member.statuses.keys.map(&:humanize).to_a %>
+        </div><br>
       </td>
     </tr>
     <tr>
@@ -184,7 +184,12 @@
               <br>
               &emsp;Instruments played this set:
               <% x = 0 %>
-              <%= set_f.collection_select :id, @member_instruments, :id, :instrument, { prompt: true } %>
+              <%= set_f.fields_for :set_member_instruments do |smi_f| %>
+                <% member_instrument_list = @member_instruments.reject do |i|
+                      !i.id
+                    end %>
+                <%= smi_f.collection_select :member_instrument_id, member_instrument_list, :id, :instrument %>
+              <% end %>
               &emsp;
 
             </div>
