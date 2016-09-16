@@ -20,12 +20,19 @@ Turbolinks.start()
 
 var loadStuff = function() {
   var updateInstrumentsInDropdown = function() {
+    var selectedInstruments = {};
+    $('select[id^=member_member_sets_attributes_0_set_member_instruments_attributes]').each(function(j, i) {
+      selectedInstruments[i.id] = $(i).val();
+    });
     member_set_instrument_dropdowns = $('select[id^=member_member_sets_attributes_0_set_member_instruments_attributes]');
     member_set_instrument_dropdowns.empty();
     $('input[id^=member_member_instruments_attributes][type=text]').each(function(j, i) {
       member_set_instrument_dropdowns.append( $("<option>")
                                      .val($(i).val())
                                      .html($(i).val()));
+    });
+    $('select[id^=member_member_sets_attributes_0_set_member_instruments_attributes]').each(function(j, i) {
+      $(i).val(selectedInstruments[i.id]);
     });
   };
 
@@ -45,6 +52,13 @@ var loadStuff = function() {
     e.preventDefault();
     var obj = e.target;
     var id = $(obj).attr('id').split('removeMemberInstrument')[1];
+    var removableInstrument = $('#member_member_instruments_attributes_' + id + '_instrument').val();
+    var selectedInstrumentsInSets = $('select[id^=member_member_sets_attributes_0_set_m]').map(function () { return $(this).val(); }).get();
+    if (selectedInstrumentsInSets.indexOf(removableInstrument) > -1) {
+      alert("This instrument (" + removableInstrument + ") has been played by this member in a set! Need to change or remove set before removing it here.");
+      return false;
+    }
+
     $('#member_member_instruments_attributes_' + id + '_instrument').attr('id', 'member_member_instruments_attributes_' + id + '__destroy');
     $('#member_member_instruments_attributes_' + id + '__destroy').attr('name', 'member[member_instruments_attributes][' + id + '][_destroy]');
     $('#member_member_instruments_attributes_' + id + '__destroy').attr('value', '1');

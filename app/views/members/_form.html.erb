@@ -188,7 +188,7 @@
                 <% member_instrument_list = @member_instruments.reject do |i|
                       !i.id
                     end %>
-                <%= smi_f.collection_select :member_instrument_id, member_instrument_list, :id, :instrument %>
+                <%= smi_f.collection_select :member_instrument_id, member_instrument_list, :instrument, :instrument %>
               <% end %>
               &emsp;
 
