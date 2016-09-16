@@ -5,7 +5,7 @@ class MembersController < ApplicationController
   # GET /members
   # GET /members.json
   def index
-    @instruments = MemberInstrument.all.map{|mi| [mi.instrument.capitalize, mi.instrument]}.uniq
+    @instruments = MemberInstrument.all.map { |mi| [mi.instrument.capitalize, mi.instrument] }.uniq
 
     if params[:instrument]
       @members = Member.joins(:member_instruments).where('instrument = ?', params[:instrument].snake_case)
@@ -18,8 +18,8 @@ class MembersController < ApplicationController
   # GET /members/1.json
   def show
     @member_instruments = @member.member_instruments
-    #@set_member_instruments = @member_instruments.map(&:set_member_instrument)
-    #@sets = nil# @set_member_instruments.map(&:set)
+    # @set_member_instruments = @member_instruments.map(&:set_member_instrument)
+    # @sets = nil# @set_member_instruments.map(&:set)
   end
 
   # GET /members/new
@@ -51,17 +51,17 @@ class MembersController < ApplicationController
   # POST /members.json
   def create
     new_member_params = member_params.dup
-    new_member_params[:member_instruments_attributes].reject! do |mik, miv|
+    new_member_params[:member_instruments_attributes].reject! do |_, miv|
       miv['instrument'] && miv['instrument'].empty?
     end
-    new_member_params[:member_sets_attributes].reject! do |mik, miv|
+    new_member_params[:member_sets_attributes].reject! do |_, miv|
       miv['set_id'] && miv['set_id'].empty?
     end
     @member = Member.new(new_member_params)
 
     respond_to do |format|
       if @member.save
-        go_back = "Member was successfully created."
+        go_back = 'Member was successfully created.'
         format.html { redirect_to new_member_path, notice: go_back }
         format.json { render :new, status: :created, location: @member }
       else
@@ -74,18 +74,46 @@ class MembersController < ApplicationController
   # PATCH/PUT /members/1
   # PATCH/PUT /members/1.json
   def update
+    @sets = PerformanceSet.all
     new_member_params = member_params.dup
-    new_member_params[:member_instruments_attributes].reject! do |mik, miv|
+    new_member_params[:member_instruments_attributes].reject! do |_, miv|
       miv['instrument'] && miv['instrument'].empty?
     end
-    new_member_params[:member_sets_attributes].reject! do |mik, miv|
+    new_member_params[:member_sets_attributes].reject! do |_, miv|
       miv['set_id'] && miv['set_id'].empty?
     end
+    set_member_instruments = {}
+    member_sets = new_member_params[:member_sets_attributes]
+    member_sets.each do |_, ms|
+      puts ms.inspect
+      set_member_instruments[ms[:set_id]] = ms.delete(:set_member_instruments_attributes)
+    end
+    puts new_member_params.inspect
 
     respond_to do |format|
+      puts "---- before ----"
       if @member.update(new_member_params)
-        format.html { redirect_to @member, notice: 'Member was successfully updated.' }
-        format.json { render :show, status: :ok, location: @member }
+        puts "---- after ----"
+        @member.member_sets.each do |smi|
+          member_instrument_id = MemberInstrument.where(member_id: @member.id, instrument: set_member_instruments[smi.set_id.to_s]["0"][:member_instrument_id]).first.id
+          if SetMemberInstrument.where(member_set_id: @member.id).length > 0
+            smi = SetMemberInstrument.where(member_set_id: @member.id).first
+            smi.member_instrument_id = member_instrument_id
+            puts member_instrument_id
+            puts "updating!!"
+          else
+            puts "why not"
+            smi = SetMemberInstrument.new(member_set_id: smi.id, member_instrument_id: member_instrument_id)
+          end
+          puts smi.inspect
+          if smi.save!
+            format.html { redirect_to @member, notice: 'Member was successfully updated.' }
+            format.json { render :show, status: :ok, location: @member }
+          else
+            format.html { render :edit }
+            format.json { render json: @member.errors, status: :unprocessable_entity }
+          end
+        end
       else
         format.html { render :edit }
         format.json { render json: @member.errors, status: :unprocessable_entity }
@@ -104,13 +132,15 @@ class MembersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_member
-      @member = Member.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def member_params
-      params.require(:member).permit(:first_name, :last_name, :address_1, :address_2, :city, :state, :zip, :phone_1, :phone_1_type, :phone_2, :phone_2_type, :email_1, :email_2, :emergency_name, :emergency_relation, :emergency_phone, :playing_status, :initial_date, member_instruments_attributes: [:id, :instrument, :_destroy], member_sets_attributes: [:id, :set_id, :status, :rotating, :_destroy])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_member
+    @member = Member.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list
+  # through.
+  def member_params
+    params.require(:member).permit(:first_name, :last_name, :address_1, :address_2, :city, :state, :zip, :phone_1, :phone_1_type, :phone_2, :phone_2_type, :email_1, :email_2, :emergency_name, :emergency_relation, :emergency_phone, :playing_status, :initial_date, member_instruments_attributes: [:id, :instrument, :_destroy], member_sets_attributes: [:id, :set_id, :status, :rotating, :set_status, :_destroy, set_member_instruments_attributes: [:member_instrument_id]])
+  end
 end

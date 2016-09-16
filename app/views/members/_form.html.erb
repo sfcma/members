@@ -120,6 +120,8 @@
         <div class="field">
           <b><%= f.label :playing_status, "Overall Status" %></b>
           <%= f.select :playing_status, Member.statuses.keys.map(&:humanize).to_a %>
+          <span id="playerStatusModalOpener">?</span>
+
         </div><br>
       </td>
     </tr>
@@ -174,11 +176,12 @@
         <%= f.fields_for :member_sets do |set_f| %>
           <% if j < @member.member_sets.count || j == 0 %>
             <div class="field memberInfoBlock">
-              <%= set_f.collection_select :set_id, @sets, :id, :name, { prompt: true, :selected => set_f && set_f.object && set_f.object.set_id ? set_f.object.set_id.to_i : nil } %>
+              <%= set_f.collection_select :set_id, @sets, :id, :name, { prompt: true, :selected => set_f.object.set_id ? set_f.object.set_id.to_i : nil } %>
               &emsp;&emsp;<i><a href='#' class='removeLink' id='removeMemberSet<%=j%>'>Remove Member from Set</a></i>
               <br>
               &emsp;Playing Status:
-              <%= set_f.text_field :set_status %>
+              <%= set_f.select :set_status, MemberSet.statuses.keys.map(&:humanize).to_a %>
+              <span id="setStatusModalOpener">?</span>
               &emsp;
               Rotating this set? <%= set_f.check_box :rotating %>
               <br>
@@ -226,3 +229,62 @@
     <%= f.submit %>
   </div>
 <% end %>
+
+<div class='modal' id='setStatusModal'>
+  <h2>Definition of Set Statuses<i class='closeHelp'>Click anywhere on this box to close</i></h2>
+
+  <h3>Interested in playing this set</h3>
+    Expressed an interest in playing this set, potentially has shown up to
+    rehearsals, but has not confirmed that they are playing in the concert.
+    <br><br>
+    <i>When a member is added to a set, this is the default status.</i>
+
+  <h3>Playing</h3>
+    Member is playing this set, and has confirmed they are playing in the concert.
+
+  <h3>Stopped playing, due to member's own decision</h3>
+    Member is unable to play in this set, and made that decision on their own.
+
+  <h3>Unable to play, not due to Member's decision</h3>
+    The member was interested in playing this set, but was unable to because
+    of an administrative or musical decision, made by the Music Director,
+    Section Leader, or other individual who is not the member.
+
+  <h3>Subbing</h3>
+    This member is only subbing this set.
+
+  <h3>Rolled over from last set — Unconfirmed</h3>
+    This member has been automatically added to this set because they
+    played in this ensemble last set. They have not been confirmed to be
+    attending or not.
+
+  <h3>Not Interested in this set</h3>
+    This member is not interested in playing this set, but we still want to
+    track their involvement in this set for some reason.
+</div>
+
+<div class='modal' id='playerStatusModal'>
+  <h2>Definition of Player Statuses<i class='closeHelp'> Click anywhere on this box to close</i></h2>
+
+  <h3>Untriaged</h3>
+    This member has contacted us about playing, but has not yet joined any set.
+    <br><br>
+    <i>When a member signs up through the website, this is their default status.</i>
+
+  <h3>Placed in Group</h3>
+    This member has contacted us and been able to join a performance ensemble.
+
+  <h3>Waitlist</h3>
+    This member has contacted us and is interested in playing, but is unable to
+    join any group because of other players ahead of them in line.
+
+  <h3>Sub Only</h3>
+    This member is interested in playing, but only as a substitute.
+
+  <h3>Inactive</h3>
+    This member used to play with us, but no longer wishes to or is able to
+    participate.
+    <br><br>
+    <i>Members should never be removed from the database, as this is a permanent
+      record of who played in each concert</i>
+</div>

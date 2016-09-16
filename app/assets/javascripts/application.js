@@ -94,6 +94,22 @@ var loadStuff = function() {
     $(obj).parent().html('Removed');
     return false;
   });
+
+  $('#playerStatusModal').on('click', function(e) {
+    $('#playerStatusModal').hide();
+  });
+
+  $('#playerStatusModalOpener').on('click', function(e) {
+    $('#playerStatusModal').show();
+  });
+
+  $('#setStatusModal').on('click', function(e) {
+    $('#setStatusModal').hide();
+  });
+
+  $('#setStatusModalOpener').on('click', function(e) {
+    $('#setStatusModal').show();
+  });
 };
 
 document.addEventListener('turbolinks:load', loadStuff);
