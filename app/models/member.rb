@@ -9,8 +9,9 @@ class Member < ApplicationRecord
   def statuses
     return ["Untriaged",
             "Placed in group",
-            "Waitlist"
+            "Waitlist",
             "Sub-Only",
             "Inactive"]
+  end
 
 end

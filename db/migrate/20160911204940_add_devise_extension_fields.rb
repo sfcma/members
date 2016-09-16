@@ -17,8 +17,6 @@ class AddDeviseExtensionFields < ActiveRecord::Migration[5.0]
     add_index :old_passwords, [:password_archivable_type, :password_archivable_id], :name => :index_password_archivable
     add_index :users, :last_activity_at
     add_index :users, :expired_at
-    add_index :users, :paranoid_verification_code
-    add_index :users, :parnaoid_verified_at
   end
 
 end

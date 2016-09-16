@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160913235013) do
+ActiveRecord::Schema.define(version: 20160913204940) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -113,10 +113,8 @@ ActiveRecord::Schema.define(version: 20160913235013) do
   end
 
   create_table "set_member_instruments", force: :cascade do |t|
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-    t.integer  "member_set_id"
-    t.integer  "member_instrument_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -149,9 +147,7 @@ ActiveRecord::Schema.define(version: 20160913235013) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["expired_at"], name: "index_users_on_expired_at"
     t.index ["last_activity_at"], name: "index_users_on_last_activity_at"
-    t.index ["paranoid_verification_code"], name: "index_users_on_paranoid_verification_code"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index [nil], name: "index_users_on_parnaoid_verified_at"
   end
 
 end

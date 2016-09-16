@@ -29,7 +29,10 @@ class MembersController < ApplicationController
     @member.member_instruments.build
     @member.member_sets.build
     @member.member_notes.build
-    @member.member_sets.set_member_instruments.build
+    # @member.member_sets.each do |ms|
+    #   ms.set_member_instruments.build
+    # end
+    @member_instruments = []
   end
 
   # GET /members/1/edit
