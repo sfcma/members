@@ -59,14 +59,34 @@ class MembersController < ApplicationController
     end
     @member = Member.new(new_member_params)
 
+    set_member_instruments = {}
+    member_sets = new_member_params[:member_sets_attributes]
+    member_sets.each do |_, ms|
+      set_member_instruments[ms[:set_id]] = ms.delete(:set_member_instruments_attributes)
+    end
     respond_to do |format|
       if @member.save
-        go_back = 'Member was successfully created.'
-        format.html { redirect_to new_member_path, notice: go_back }
-        format.json { render :new, status: :created, location: @member }
+        @member.member_sets.each do |smi|
+          puts smi.set_id
+          puts set_member_instruments
+          mi = MemberInstrument.new(member_id: @member.id, instrument: set_member_instruments[smi.set_id.to_s]["0"][:member_instrument_id].underscore)
+          mi.save!
+          puts @member.id
+          puts set_member_instruments.inspect
+
+          member_instrument_id = MemberInstrument.where(member_id: @member.id, instrument: set_member_instruments[smi.set_id.to_s]["0"][:member_instrument_id].underscore).first.id
+          smix = SetMemberInstrument.where(member_set_id: smi.id).first
+          smix.member_instrument_id = member_instrument_id
+
+          if smix.save!
+            go_back = 'Member was successfully created.'
+            format.html { redirect_to new_member_path, notice: go_back }
+          else
+            format.html { render :edit }
+          end
+        end
       else
         format.html { render :new }
-        format.json { render json: @member.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -85,38 +105,31 @@ class MembersController < ApplicationController
     set_member_instruments = {}
     member_sets = new_member_params[:member_sets_attributes]
     member_sets.each do |_, ms|
-      puts ms.inspect
       set_member_instruments[ms[:set_id]] = ms.delete(:set_member_instruments_attributes)
     end
-    puts new_member_params.inspect
 
     respond_to do |format|
-      puts "---- before ----"
       if @member.update(new_member_params)
-        puts "---- after ----"
         @member.member_sets.each do |smi|
-          member_instrument_id = MemberInstrument.where(member_id: @member.id, instrument: set_member_instruments[smi.set_id.to_s]["0"][:member_instrument_id]).first.id
-          if SetMemberInstrument.where(member_set_id: @member.id).length > 0
-            smi = SetMemberInstrument.where(member_set_id: @member.id).first
-            smi.member_instrument_id = member_instrument_id
-            puts member_instrument_id
-            puts "updating!!"
-          else
-            puts "why not"
-            smi = SetMemberInstrument.new(member_set_id: smi.id, member_instrument_id: member_instrument_id)
+          if MemberInstrument.where(member_id: @member.id, instrument: set_member_instruments[smi.set_id.to_s]["0"][:member_instrument_id].underscore).count == 0
+            mi = MemberInstrument.new(member_id: @member.id, instrument: set_member_instruments[smi.set_id.to_s]["0"][:member_instrument_id].underscore)
+            mi.save!
           end
-          puts smi.inspect
-          if smi.save!
+          member_instrument_id = MemberInstrument.where(member_id: @member.id, instrument: set_member_instruments[smi.set_id.to_s]["0"][:member_instrument_id].underscore).first.id
+          if SetMemberInstrument.where(member_set_id: smi.id).length > 0
+            smix = SetMemberInstrument.where(member_set_id: smi.id).first
+            smix.member_instrument_id = member_instrument_id
+          else
+            smix = SetMemberInstrument.new(member_set_id: smi.id, member_instrument_id: member_instrument_id)
+          end
+          if smix.save!
             format.html { redirect_to @member, notice: 'Member was successfully updated.' }
-            format.json { render :show, status: :ok, location: @member }
           else
             format.html { render :edit }
-            format.json { render json: @member.errors, status: :unprocessable_entity }
           end
         end
       else
         format.html { render :edit }
-        format.json { render json: @member.errors, status: :unprocessable_entity }
       end
     end
   end

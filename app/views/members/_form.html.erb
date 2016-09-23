@@ -150,14 +150,19 @@
     <tr>
       <td colspan=3>
 
-        <script>var instCount = <%= [@member.member_instruments.count - 1, 1].max %>;</script>
+        <script>var instCount = <%= [@member.member_instruments.count, 1].max %>;
+        <% if action_name == 'new' %>
+          isNew = true;
+        <% else %>
+          isNew = false;
+        <% end %> </script>
         <b>Instruments</b>
-        <div class="memberInfoBlock">
+        <div class="memberInfoBlock" id='memberInstrumentsBlock'>
           <% i = 0 %>
           <%= f.fields_for :member_instruments do |instrument_f| %>
             <% if i < @member.member_instruments.count || i == 0 %>
               <div class="field">
-                <%= instrument_f.text_field :instrument %> <i><a href='#' class='removeLink' id='removeMemberInstrument<%=i%>'>Remove</a></i>
+                <%= instrument_f.text_field :instrument %>&emsp;<i><a href='#' class='removeLink' id='removeMemberInstrument<%=i%>'>Remove</a></i>
               </div>
             <% end %>
             <% i += 1; %>
@@ -168,9 +173,11 @@
       </td>
     </tr>
     <tr>
-      <td colspan=3>
+      <td colspan=3 id='setMaster'>
 
         <script>var setCount = <%= [@member.member_sets.count - 1, 1].max %>;</script>
+        <script>var setsForDropdown = <%= @sets.map{|set| [set.id, set.name]}.to_json.html_safe %>;</script>
+        <script>var playStatusesForDropdown = <%= MemberSet.statuses.keys.map(&:humanize).to_json.html_safe %>;</script>
         <b>Sets</b> <br>
         <% j = 0 %>
         <%= f.fields_for :member_sets do |set_f| %>
@@ -188,10 +195,13 @@
               &emsp;Instruments played this set:
               <% x = 0 %>
               <%= set_f.fields_for :set_member_instruments do |smi_f| %>
-                <% member_instrument_list = @member_instruments.reject do |i|
-                      !i.id
-                    end %>
-                <%= smi_f.collection_select :member_instrument_id, member_instrument_list, :instrument, :instrument %>
+                <% if x == 0 %>
+                  <% member_instrument_list = @member_instruments.reject do |i|
+                        !i.id
+                      end %>
+                  <%= smi_f.collection_select :member_instrument_id, member_instrument_list, :instrument, :instrument, { :selected => select_current_member_instruments(set_f.object) } %>
+                <% end %>
+                <% x += 1 %>
               <% end %>
               &emsp;
 
@@ -203,7 +213,7 @@
 
       </td>
     </tr>
-    <tr>
+    <tr style='display: none'>
       <td colspan=3>
 
         <script>var notesCount = <%= [@member.member_notes.count - 1, 1].max %>;</script>
