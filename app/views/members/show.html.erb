@@ -1,89 +1,58 @@
-<p id="notice"><%= notice %></p>
+<div class='pageHeader'><i><%= link_to '< Back to All Members', members_path %></i><br><br><h2><%= @member.first_name + " " + @member.last_name %></h2>&emsp;&emsp;<%= link_to 'Edit Member', edit_member_path(@member), class: 'buttonlike' %></div>
 
 <p>
-  <strong>First name:</strong>
-  <%= @member.first_name %>
+  <b>Address:</b><br>
+  <% if @member.address_1.present? &&
+        @member.city.present? &&
+        @member.state.present? &&
+        @member.zip.present? %>
+
+    <%= @member.address_1 %><br>
+    <%= @member.address_2 %><br>
+    <%= @member.city.strip %>, <%= @member.state %> <%= @member.zip %>
+  <% else %>
+    No Valid Address Available
+  <% end %>
 </p>
 
 <p>
-  <strong>Last name:</strong>
-  <%= @member.last_name %>
+  <strong>Phone:</strong><br>
+  <% if @member.phone_1.present? || @member.phone_2.present? %>
+    <% if @member.phone_1.present? %>
+      <%= @member.phone_1 %> (<%= @member.phone_1_type %>)<br>
+    <% end %>
+    <% if @member.phone_2.present? %>
+      <%= @member.phone_2 %> (<%= @member.phone_2_type %>)
+    <% end %>
+  <% else %>
+    No Phone Numbers Available
+  <% end %>
 </p>
 
 <p>
-  <strong>Address 1:</strong>
-  <%= @member.address_1 %>
+  <strong>Email:</strong><br>
+  <% if @member.email_1.present? || @member.email_2.present? %>
+    <%= @member.email_1 %><br>
+    <%= @member.email_2 %>
+  <% else %>
+    No Email Addresses Available
+  <% end %>
 </p>
 
 <p>
-  <strong>Address 2:</strong>
-  <%= @member.address_2 %>
-</p>
-
-<p>
-  <strong>City:</strong>
-  <%= @member.city %>
-</p>
-
-<p>
-  <strong>State:</strong>
-  <%= @member.state %>
-</p>
-
-<p>
-  <strong>Zip:</strong>
-  <%= @member.zip %>
-</p>
-
-<p>
-  <strong>Phone 1:</strong>
-  <%= @member.phone_1 %>
-</p>
-
-<p>
-  <strong>Phone 1 type:</strong>
-  <%= @member.phone_1_type %>
-</p>
-
-<p>
-  <strong>Phone 2:</strong>
-  <%= @member.phone_2 %>
-</p>
-
-<p>
-  <strong>Phone 2 type:</strong>
-  <%= @member.phone_2_type %>
-</p>
-
-<p>
-  <strong>Email 1:</strong>
-  <%= @member.email_1 %>
-</p>
-
-<p>
-  <strong>Email 2:</strong>
-  <%= @member.email_2 %>
-</p>
-
-<p>
-  <strong>Emergency name:</strong>
-  <%= @member.emergency_name %>
-</p>
-
-<p>
-  <strong>Emergency relation:</strong>
-  <%= @member.emergency_relation %>
-</p>
-
-<p>
-  <strong>Emergency phone:</strong>
-  <%= @member.emergency_phone %>
+  <strong>Emergency Contact:</strong><br>
+  <% if @member.emergency_name.present? && @member.emergency_phone.present? %>
+    <%= @member.emergency_name %>
+    <% if @member.emergency_relation.present? %>
+      (<%= @member.emergency_relation %>)
+    <% end %>
+    <%= @member.emergency_phone %>
+  <% else %>
+    No Emergency Contact Available
+  <% end %>
 </p>
 
 <p>
   <strong>Playing status:</strong>
   <%= @member.playing_status %>
 </p>
-
-<%= link_to 'Edit', edit_member_path(@member) %> |
-<%= link_to 'Back', members_path %>

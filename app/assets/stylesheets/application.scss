@@ -65,7 +65,7 @@ div.actions input[type=submit] {
   font-weight: bold;
 }
 
-p, ol, ul, td {
+p, ol, ul {
   font-family: verdana, arial, helvetica, sans-serif;
   font-size: 13px;
   line-height: 18px;
@@ -88,25 +88,17 @@ a {
   }
 }
 
-th {
-  padding-bottom: 5px;
-}
-
-td {
-  padding-bottom: 7px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
 div {
   &.field, &.actions {
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 13px;
     margin-top: 5px;
   }
 }
 
 .memberInfoBlock {
   background: #ddeedd;
-  line-height: 2.25;
+  line-height: 1.8;
   border: 1px solid #bbccbb;
   padding: 10px;
   padding-top: 5px;
@@ -201,6 +193,21 @@ div {
     background: black;
     color: white;
   }
+}
+
+.buttonlike {
+  padding: 8px;
+  background: darkgreen;
+  color: white;
+  border-radius: 5px;
+  transition: 0.5s;
+  text-decoration: none;
+}
+
+.buttonlike:hover {
+  background: green;
+  color: white;
+  transition: 0.5s;
 }
 
 #error_explanation {

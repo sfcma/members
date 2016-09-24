@@ -11,122 +11,122 @@
     </div>
   <% end %>
 
-  <table>
-    <tr>
-      <td>
-        <div class="field">
-          <%= f.label :first_name, "First Name" %>
-          <%= f.text_field :first_name %>
-        </div>
-      </td>
-      <td>
-        <div class="field">
-          <%= f.label :last_name, "Last Name" %>
-          <%= f.text_field :last_name %>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="field">
-          <%= f.label :address_1, "Address Row 1" %>
-          <%= f.text_field :address_1 %>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="field">
-          <%= f.label :address_2, "Address Row 2" %>
-          <%= f.text_field :address_2 %>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="field">
-          <%= f.label :city %>
-          <%= f.text_field :city %>
-        </div>
-      </td>
-      <td>
+<br>
 
-        <div class="field inlineField">
-          <%= f.label :state %>
-          <%= f.select :state, options_for_select(us_states, selected: 'CA') %>
-        </div>
+  <b>Name and Contact Info</b>
+  <div class="field memberInfoBlock">
+      <div class="field inlineField">
+        <%= f.label :first_name, "First Name" %>
+        <%= f.text_field :first_name %>
+      </div>
 
-        <div class="field inlineField">
-          <%= f.label :zip %>
-          <%= f.text_field :zip, size: 5 %>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="field">
-          <%= f.label :phone_1, "Primary Phone" %>
-          <%= f.text_field :phone_1 %>
-        </div>
-      </td>
-      <td>
 
-        <div class="field">
-          <%= f.label :phone_1_type, "Primary Phone Type" %>
-          <%= f.select :phone_1_type, ['', 'Cell Phone', 'Home', 'Business', 'Other'] %>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="field">
-          <%= f.label :phone_2, "Secondary Phone" %>
-          <%= f.text_field :phone_2 %>
-        </div>
-      </td>
-      <td>
-        <div class="field">
-          <%= f.label :phone_2_type, "Secondary Phone Type" %>
-          <%= f.select :phone_2_type, ['', 'Cell Phone', 'Home', 'Business', 'Other'] %>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="field">
-          <%= f.label :email_1, "Primary Email Address" %>
-          <%= f.text_field :email_1 %>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="field">
-          <%= f.label :email_2, "Secondary Email Address" %>
-          <%= f.text_field :email_2 %>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td colspan=2>
-        <div class="field">
-          <%= f.label :initial_date, "Initial Contact Date  (use date picker or in format YYYY-MM-DD)" %>
-          <%= date_field :member, :initial_date %>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="field">
-          <b><%= f.label :playing_status, "Overall Status" %></b>
-          <%= f.select :playing_status, Member.statuses.keys.map(&:humanize).to_a %>
-          <span id="playerStatusModalOpener">?</span>
+      <div class="field inlineField">
+        <%= f.label :last_name, "Last Name" %>
+        <%= f.text_field :last_name %>
+      </div>
 
-        </div><br>
-      </td>
-    </tr>
-    <tr>
-      <td colspan=3>
+
+<br>
+
+      <div class="field inlineField">
+        <%= f.label :address_1, "Address Row 1" %>
+        <%= f.text_field :address_1 %>
+      </div>
+
+
+
+
+      <div class="field inlineField">
+        <%= f.label :address_2, "Address Row 2" %>
+        <%= f.text_field :address_2 %>
+      </div>
+
+
+<br>
+
+      <div class="field inlineField">
+        <%= f.label :city %>
+        <%= f.text_field :city %>
+      </div>
+
+
+
+      <div class="field inlineField">
+        <%= f.label :state %>
+        <%= f.select :state, options_for_select(us_states, selected: 'CA') %>
+      </div>
+
+      <div class="field inlineField">
+        <%= f.label :zip %>
+        <%= f.text_field :zip, size: 5 %>
+      </div>
+
+<br>
+
+
+      <div class="field inlineField">
+        <%= f.label :phone_1, "Primary Phone" %>
+        <%= f.text_field :phone_1 %>
+      </div>
+
+
+
+      <div class="field inlineField">
+        <%= f.label :phone_1_type, "Primary Phone Type" %>
+        <%= f.select :phone_1_type, ['', 'Cell Phone', 'Home', 'Business', 'Other'] %>
+      </div>
+
+<br>
+
+
+      <div class="field inlineField">
+        <%= f.label :phone_2, "Secondary Phone" %>
+        <%= f.text_field :phone_2 %>
+      </div>
+
+
+      <div class="field inlineField">
+        <%= f.label :phone_2_type, "Secondary Phone Type" %>
+        <%= f.select :phone_2_type, ['', 'Cell Phone', 'Home', 'Business', 'Other'] %>
+      </div>
+
+
+
+
+      <div class="field">
+        <%= f.label :email_1, "Primary Email Address" %>
+        <%= f.text_field :email_1 %>
+      </div>
+
+
+
+
+      <div class="field">
+        <%= f.label :email_2, "Secondary Email Address" %>
+        <%= f.text_field :email_2 %>
+      </div>
+    </div>
+<br>
+    <b>Orchestra Details</b>
+    <div class="field memberInfoBlock">
+      <div class="field">
+        <%= f.label :initial_date, "Initial Contact Date  (use date picker or in format YYYY-MM-DD)" %>
+        <%= date_field :member, :initial_date %>
+      </div>
+
+
+
+
+      <div class="field">
+        <b><%= f.label :playing_status, "Overall Status" %></b>
+        <%= f.select :playing_status, Member.statuses.keys.map(&:humanize).to_a %>
+        <span id="playerStatusModalOpener">?</span>
+
+      </div>
+    </div>
+
+<br>
 
         <b>Emergency Contact Information</b>
         <div class="field memberInfoBlock">
@@ -143,12 +143,12 @@
             <%= f.text_field :emergency_phone %>
           </div>
         </div><br>
-      </td>
-    </tr>
 
 
-    <tr>
-      <td colspan=3>
+
+
+
+
 
         <script>var instCount = <%= [@member.member_instruments.count, 1].max %>;
         <% if action_name == 'new' %>
@@ -157,7 +157,7 @@
           isNew = false;
         <% end %> </script>
         <b>Instruments</b>
-        <div class="memberInfoBlock" id='memberInstrumentsBlock'>
+        <div class="field memberInfoBlock" id='memberInstrumentsBlock'>
           <% i = 0 %>
           <%= f.fields_for :member_instruments do |instrument_f| %>
             <% if i < @member.member_instruments.count || i == 0 %>
@@ -170,10 +170,10 @@
         </div>
         <i class='addSet'><a href='#' id='addNewMemberInstrument'> + Add Instrument</a></i><br>
 
-      </td>
-    </tr>
-    <tr>
-      <td colspan=3 id='setMaster'>
+
+
+
+
 
         <script>var setCount = <%= [@member.member_sets.count - 1, 1].max %>;</script>
         <script>var setsForDropdown = <%= @sets.map{|set| [set.id, set.name]}.to_json.html_safe %>;</script>
@@ -211,10 +211,10 @@
         <% end %>
         <i class='addSet'><a href='#' id='addNewMemberSet'> + Add Set</a></i><br>
 
-      </td>
-    </tr>
-    <tr style='display: none'>
-      <td colspan=3>
+
+
+    <!--
+
 
         <script>var notesCount = <%= [@member.member_notes.count - 1, 1].max %>;</script>
         <b>Notes</b> <br>
@@ -231,9 +231,9 @@
           <% end %>
         </div>
         <i class='addSet'><a href='#' id='addNewMemberNote'> + Add Note</a></i><br>
-      </td>
-    </tr>
-  </table>
+
+    -->
+
 
   <div class="actions">
     <%= f.submit %>

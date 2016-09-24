@@ -1,4 +1,4 @@
-<div class='pageHeader'><h2>Editing Member</h2></div>
+<div class='pageHeader'><i><%= link_to '< Back to All Members', members_path %></i><br><br><h2>Editing <%= @member.first_name + " " + @member.last_name %>'s Membership</h2></div>
 
 <%= render 'form', member: @member %>
 
