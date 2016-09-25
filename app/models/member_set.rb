@@ -1,5 +1,5 @@
 class MemberSet < ApplicationRecord
-  audited
+  audited associated_with: [:member, :performance_set]
   has_many :set_member_instruments
   belongs_to :member
   belongs_to :performance_set, class_name: 'PerformanceSet', foreign_key: 'set_id'
