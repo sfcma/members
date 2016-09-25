@@ -1,58 +1,81 @@
 <div class='pageHeader'><i><%= link_to '< Back to All Members', members_path %></i><br><br><h2><%= @member.first_name + " " + @member.last_name %></h2>&emsp;&emsp;<%= link_to 'Edit Member', edit_member_path(@member), class: 'buttonlike' %></div>
 
-<p>
-  <b>Address:</b><br>
-  <% if @member.address_1.present? &&
-        @member.city.present? &&
-        @member.state.present? &&
-        @member.zip.present? %>
+<table>
+  <tr>
+    <td style='width: 500px'>
+      <br>
+      <h2>Member Information</h2><br><br>
+        <b>Address:</b><br>
+        <% if @member.address_1.present? &&
+              @member.city.present? &&
+              @member.state.present? &&
+              @member.zip.present? %>
 
-    <%= @member.address_1 %><br>
-    <%= @member.address_2 %><br>
-    <%= @member.city.strip %>, <%= @member.state %> <%= @member.zip %>
-  <% else %>
-    No Valid Address Available
-  <% end %>
-</p>
+          <%= @member.address_1 %><br>
+          <% if @member.address_2 %>
+            <br>
+          <% end %>
+          <%= @member.address_2 %>
+          <%= @member.city.strip %>, <%= @member.state %> <%= @member.zip %>
+        <% else %>
+          No Valid Address Available
+        <% end %>
 
-<p>
-  <strong>Phone:</strong><br>
-  <% if @member.phone_1.present? || @member.phone_2.present? %>
-    <% if @member.phone_1.present? %>
-      <%= @member.phone_1 %> (<%= @member.phone_1_type %>)<br>
-    <% end %>
-    <% if @member.phone_2.present? %>
-      <%= @member.phone_2 %> (<%= @member.phone_2_type %>)
-    <% end %>
-  <% else %>
-    No Phone Numbers Available
-  <% end %>
-</p>
 
-<p>
-  <strong>Email:</strong><br>
-  <% if @member.email_1.present? || @member.email_2.present? %>
-    <%= @member.email_1 %><br>
-    <%= @member.email_2 %>
-  <% else %>
-    No Email Addresses Available
-  <% end %>
-</p>
-
-<p>
-  <strong>Emergency Contact:</strong><br>
-  <% if @member.emergency_name.present? && @member.emergency_phone.present? %>
-    <%= @member.emergency_name %>
-    <% if @member.emergency_relation.present? %>
-      (<%= @member.emergency_relation %>)
-    <% end %>
-    <%= @member.emergency_phone %>
-  <% else %>
-    No Emergency Contact Available
-  <% end %>
-</p>
-
-<p>
-  <strong>Playing status:</strong>
-  <%= @member.playing_status %>
-</p>
+      <br><br>
+        <strong>Phone:</strong><br>
+        <% if @member.phone_1.present? || @member.phone_2.present? %>
+          <% if @member.phone_1.present? %>
+            <%= @member.phone_1 %> (<%= @member.phone_1_type %>)<br>
+          <% end %>
+          <% if @member.phone_2.present? %>
+            <%= @member.phone_2 %> (<%= @member.phone_2_type %>)
+          <% end %>
+        <% else %>
+          No Phone Numbers Available
+        <% end %>
+      <br>
+        <strong>Email:</strong><br>
+        <% if @member.email_1.present? || @member.email_2.present? %>
+          <%= @member.email_1 %><br>
+          <%= @member.email_2 %>
+        <% else %>
+          No Email Addresses Available
+        <% end %>
+      <br>
+        <strong>Emergency Contact:</strong><br>
+        <% if @member.emergency_name.present? && @member.emergency_phone.present? %>
+          <%= @member.emergency_name %>
+          <% if @member.emergency_relation.present? %>
+            (<%= @member.emergency_relation %>)
+          <% end %>
+          <%= @member.emergency_phone %>
+        <% else %>
+          No Emergency Contact Available
+        <% end %>
+      <br><br>
+        <strong>Overall Membership Status:</strong>
+        <%= @member.playing_status %><br>
+        <strong>Waiver Signed Date:</strong>
+        <%= @member.waiver_signed %><br>
+        <strong>Initial Contact Date:</strong>
+        <%= @member.initial_date %>
+      </p>
+    </td>
+    <td valign=top>
+      <br>
+      <h2>Performance Sets</h2><br><br>
+      <% @member.member_sets.sort_by { |v| v.performance_set.start_date }.reverse.each do |ms| %>
+        <b><%= ms.performance_set.name %></b>&emsp;
+        <span class='grays'>(<%= ms.performance_set.start_date.to_datetime.strftime('%B %e, %Y') %> – <%= ms.performance_set.end_date.to_datetime.strftime('%B %e, %Y')  %>)</span><br>
+        <i><%= ms.set_status %></i><br>
+        <% if ms.rotating %>
+          <b>Rotating</b>
+        <% else %>
+          Not rotating
+        <% end %>
+        <br><%= ms.set_member_instruments[0].member_instrument.instrument.capitalize %><br><br>
+      <% end %>
+    </td>
+  </tr>
+</table>

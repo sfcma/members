@@ -30,7 +30,7 @@
 <br>
 
       <div class="field inlineField">
-        <%= f.label :address_1, "Address Row 1" %>
+        <%= f.label :address_1, "Address Line 1" %>
         <%= f.text_field :address_1 %>
       </div>
 
@@ -38,7 +38,7 @@
 
 
       <div class="field inlineField">
-        <%= f.label :address_2, "Address Row 2" %>
+        <%= f.label :address_2, "Address Line 2" %>
         <%= f.text_field :address_2 %>
       </div>
 
@@ -108,15 +108,17 @@
       </div>
     </div>
 <br>
-    <b>Orchestra Details</b>
+    <b>Membership Details</b>
     <div class="field memberInfoBlock">
       <div class="field">
         <%= f.label :initial_date, "Initial Contact Date  (use date picker or in format YYYY-MM-DD)" %>
         <%= date_field :member, :initial_date %>
       </div>
 
-
-
+      <div class="field">
+        <%= f.label :waiver_signed, "Waiver Signed Date  (use date picker or in format YYYY-MM-DD)" %>
+        <%= date_field :member, :waiver_signed %>
+      </div>
 
       <div class="field">
         <b><%= f.label :playing_status, "Overall Status" %></b>
@@ -173,7 +175,7 @@
 
 
 
-
+      <div id="setMaster">
 
         <script>var setCount = <%= [@member.member_sets.count - 1, 1].max %>;</script>
         <script>var setsForDropdown = <%= @sets.map{|set| [set.id, set.name]}.to_json.html_safe %>;</script>
@@ -209,9 +211,9 @@
           <% end %>
           <% j += 1 %>
         <% end %>
-        <i class='addSet'><a href='#' id='addNewMemberSet'> + Add Set</a></i><br>
 
-
+      </div>
+      <i class='addSet'><a href='#' id='addNewMemberSet'> + Add Set</a></i><br>
 
     <!--
 

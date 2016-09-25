@@ -105,7 +105,7 @@ var loadStuff = function() {
             </select> \
           </div>";
 
-    $(div).insertAfter($('#setMaster div:last-of-type'));
+    $('#setMaster').append(div);
     updateInstrumentsInDropdown();
     setCount++;
     return false;

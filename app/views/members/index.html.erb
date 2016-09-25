@@ -1,6 +1,22 @@
+<%= stylesheet_link_tag    '//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css', media: 'all' %>
+<%= javascript_include_tag '//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js' %>
+<script>
+$(document).ready(function() {
+    $('#members').DataTable();
+} );
+</script>
+
 <div class='pageHeader'><h2>Members</h2> &emsp; <%= link_to 'Add New Member', new_member_path %> &emsp; <%= select_tag "instrument_filter", options_for_select(@instruments) %></div>
 
-<table>
+<table id="members">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Instrument</th>
+      <th>Set</th>
+      <th>Links</th>
+    </tr>
+  </thead>
   <tbody>
     <% @members.each do |member| %>
       <tr>

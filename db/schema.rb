@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160913235013) do
+ActiveRecord::Schema.define(version: 20160924060910) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(version: 20160913235013) do
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.datetime "initial_date"
+    t.datetime "waiver_signed"
   end
 
   create_table "old_passwords", force: :cascade do |t|

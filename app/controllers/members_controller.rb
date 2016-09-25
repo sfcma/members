@@ -67,12 +67,9 @@ class MembersController < ApplicationController
     respond_to do |format|
       if @member.save
         @member.member_sets.each do |smi|
-          puts smi.set_id
-          puts set_member_instruments
+          next unless smi.set_id && smi.set_id > 0
           mi = MemberInstrument.new(member_id: @member.id, instrument: set_member_instruments[smi.set_id.to_s]["0"][:member_instrument_id].underscore)
           mi.save!
-          puts @member.id
-          puts set_member_instruments.inspect
 
           member_instrument_id = MemberInstrument.where(member_id: @member.id, instrument: set_member_instruments[smi.set_id.to_s]["0"][:member_instrument_id].underscore).first.id
           smix = SetMemberInstrument.where(member_set_id: smi.id).first
@@ -85,6 +82,7 @@ class MembersController < ApplicationController
             format.html { render :edit }
           end
         end
+        format.html { render :edit, notice: 'OH NO'}
       else
         format.html { render :new }
       end
@@ -111,6 +109,7 @@ class MembersController < ApplicationController
     respond_to do |format|
       if @member.update(new_member_params)
         @member.member_sets.each do |smi|
+          next unless smi.set_id && smi.set_id > 0
           if MemberInstrument.where(member_id: @member.id, instrument: set_member_instruments[smi.set_id.to_s]["0"][:member_instrument_id].underscore).count == 0
             mi = MemberInstrument.new(member_id: @member.id, instrument: set_member_instruments[smi.set_id.to_s]["0"][:member_instrument_id].underscore)
             mi.save!
@@ -128,6 +127,7 @@ class MembersController < ApplicationController
             format.html { render :edit }
           end
         end
+        format.html { render :edit, notice: 'OH NO'}
       else
         format.html { render :edit }
       end
@@ -154,6 +154,6 @@ class MembersController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list
   # through.
   def member_params
-    params.require(:member).permit(:first_name, :last_name, :address_1, :address_2, :city, :state, :zip, :phone_1, :phone_1_type, :phone_2, :phone_2_type, :email_1, :email_2, :emergency_name, :emergency_relation, :emergency_phone, :playing_status, :initial_date, member_instruments_attributes: [:id, :instrument, :_destroy], member_sets_attributes: [:id, :set_id, :status, :rotating, :set_status, :_destroy, set_member_instruments_attributes: [:member_instrument_id]])
+    params.require(:member).permit(:first_name, :last_name, :address_1, :address_2, :city, :state, :zip, :phone_1, :phone_1_type, :phone_2, :phone_2_type, :email_1, :email_2, :emergency_name, :emergency_relation, :emergency_phone, :playing_status, :initial_date, :waiver_signed, member_instruments_attributes: [:id, :instrument, :_destroy], member_sets_attributes: [:id, :set_id, :status, :rotating, :set_status, :_destroy, set_member_instruments_attributes: [:member_instrument_id]])
   end
 end
