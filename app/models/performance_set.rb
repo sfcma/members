@@ -1,4 +1,5 @@
 class PerformanceSet < ApplicationRecord
+  audited
   has_many :member_sets
   belongs_to :ensemble
   validates :ensemble_id, presence: true

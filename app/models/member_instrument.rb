@@ -1,4 +1,5 @@
 class MemberInstrument < ApplicationRecord
+  audited
   belongs_to :member
   has_many :set_member_instruments
   accepts_nested_attributes_for :set_member_instruments, allow_destroy: true

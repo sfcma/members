@@ -1,4 +1,5 @@
 class Member < ApplicationRecord
+  audited
   has_many :member_instruments
   has_many :member_sets
   has_many :member_notes
