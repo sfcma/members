@@ -8,7 +8,7 @@ class MembersController < ApplicationController
     @instruments = MemberInstrument.all.map { |mi| [mi.instrument.capitalize, mi.instrument] }.uniq
 
     if params[:instrument]
-      @members = Member.joins(:member_instruments).where('instrument = ?', params[:instrument].snake_case)
+      @members = Member.joins(:member_instruments).where('instrument = ?', params[:instrument].underscore)
     else
       @members = Member.includes(:member_instruments)
     end
@@ -19,6 +19,11 @@ class MembersController < ApplicationController
   def show
     @member_instruments = @member.member_instruments
     @audit_string = helpers.generate_audit_array(@member)
+    @audit_string += helpers.generate_audit_array(@member.member_instruments.all.to_a)
+    @audit_string += helpers.generate_audit_array(@member.member_sets.all.to_a)
+    @audit_string.sort_by do |as|
+      #as.created_at
+    end
   end
 
   # GET /members/new
@@ -49,6 +54,7 @@ class MembersController < ApplicationController
   # POST /members
   # POST /members.json
   def create
+    @sets = PerformanceSet.all
     new_member_params = member_params.dup
     new_member_params[:member_instruments_attributes].reject! do |_, miv|
       miv['instrument'] && miv['instrument'].empty?

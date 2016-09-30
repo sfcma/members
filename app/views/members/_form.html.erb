@@ -13,7 +13,7 @@
 
 <br>
 
-  <b>Name and Contact Info</b>
+  <h3 class="formHeader">Personal and Contact Details</h3>
   <div class="field memberInfoBlock">
       <div class="field inlineField">
         <%= f.label :first_name, "First Name" %>
@@ -31,7 +31,7 @@
 
       <div class="field inlineField">
         <%= f.label :address_1, "Address Line 1" %>
-        <%= f.text_field :address_1 %>
+        <%= f.text_field :address_1, size: 40 %>
       </div>
 
 
@@ -39,7 +39,7 @@
 
       <div class="field inlineField">
         <%= f.label :address_2, "Address Line 2" %>
-        <%= f.text_field :address_2 %>
+        <%= f.text_field :address_2, size: 40 %>
       </div>
 
 
@@ -96,7 +96,7 @@
 
       <div class="field">
         <%= f.label :email_1, "Primary Email Address" %>
-        <%= f.text_field :email_1 %>
+        <%= f.text_field :email_1, size: 30 %>
       </div>
 
 
@@ -104,11 +104,11 @@
 
       <div class="field">
         <%= f.label :email_2, "Secondary Email Address" %>
-        <%= f.text_field :email_2 %>
+        <%= f.text_field :email_2, size: 30 %>
       </div>
     </div>
 <br>
-    <b>Membership Details</b>
+    <h3 class="formHeader">Membership Details</h3>
     <div class="field memberInfoBlock">
       <div class="field">
         <%= f.label :initial_date, "Initial Contact Date  (use date picker or in format YYYY-MM-DD)" %>
@@ -123,14 +123,14 @@
       <div class="field">
         <b><%= f.label :playing_status, "Overall Status" %></b>
         <%= f.select :playing_status, Member.statuses.keys.map(&:humanize).to_a %>
-        <span id="playerStatusModalOpener">?</span>
+        <span id="playerStatusModalOpener" class='button'>What Does This Mean?</span>
 
       </div>
     </div>
 
 <br>
 
-        <b>Emergency Contact Information</b>
+        <h3 class="formHeader">Emergency Contact Information</h3>
         <div class="field memberInfoBlock">
           <div class="field inlineField">
             <%= f.label :emergency_name, "Name" %>
@@ -158,7 +158,7 @@
         <% else %>
           isNew = false;
         <% end %> </script>
-        <b>Instruments</b>
+        <h3 class="formHeader">Instruments</h3>
         <div class="field memberInfoBlock" id='memberInstrumentsBlock'>
           <% i = 0 %>
           <%= f.fields_for :member_instruments do |instrument_f| %>
@@ -180,7 +180,7 @@
         <script>var setCount = <%= [@member.member_sets.count - 1, 1].max %>;</script>
         <script>var setsForDropdown = <%= @sets.map{|set| [set.id, set.name]}.to_json.html_safe %>;</script>
         <script>var playStatusesForDropdown = <%= MemberSet.statuses.keys.map(&:humanize).to_json.html_safe %>;</script>
-        <b>Sets</b> <br>
+        <h3 class="formHeader">Sets</h3>
         <% j = 0 %>
         <%= f.fields_for :member_sets do |set_f| %>
           <% if j < @member.member_sets.count || j == 0 %>
@@ -236,9 +236,13 @@
 
     -->
 
-
+<% if params[:action] == 'new'
+     actionText = 'Create New Membership'
+   else
+     actionText = 'Update Membership'
+   end %>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit "#{actionText}", class: 'button' %>
   </div>
 <% end %>
 

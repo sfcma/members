@@ -6,7 +6,7 @@ $(document).ready(function() {
 } );
 </script>
 
-<div class='pageHeader'><h2>Members</h2> &emsp; <%= link_to 'Add New Member', new_member_path %> &emsp; <%= select_tag "instrument_filter", options_for_select(@instruments) %></div>
+<div class='pageHeader'><h2>Members</h2> &emsp; <%= link_to 'Add New Member', new_member_path, class: 'button' %> &emsp; <%= select_tag "instrument_filter", options_for_select(@instruments) %></div>
 
 <table id="members">
   <thead>
@@ -19,8 +19,12 @@ $(document).ready(function() {
   </thead>
   <tbody>
     <% @members.each do |member| %>
+      <% inst_list = member.member_instruments.map(&:instrument) %>
+      <% inst_stuff = inst_list.map { |il| link_to(il, members_url(:instrument=>il)) }.join(" ") %>
       <tr>
         <td><%= link_to "#{member.first_name} #{member.last_name}", member %></td>
+        <td><%= inst_stuff.html_safe %></td>
+        <td><%= member.member_sets.map(&:performance_set).map(&:name).join(", ") %></td>
         <td><%= link_to 'Edit', edit_member_path(member) %></td>
       </tr>
     <% end %>

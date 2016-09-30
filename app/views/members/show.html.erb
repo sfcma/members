@@ -1,8 +1,8 @@
-<div class='pageHeader'><i><%= link_to '< Back to All Members', members_path %></i><br><br><h2><%= @member.first_name + " " + @member.last_name %></h2>&emsp;&emsp;<%= link_to 'Edit Member', edit_member_path(@member), class: 'buttonlike' %></div>
+<div class='pageHeader'><i><%= link_to '< Back to All Members', members_path %></i><br><br><h2><%= @member.first_name + " " + @member.last_name %></h2>&emsp;&emsp;<%= link_to 'Edit Member', edit_member_path(@member), class: 'button' %></div>
 
-<table>
+<table class="memberTable">
   <tr>
-    <td style='width: 500px'>
+    <td style='width: 500px' valign=top>
       <br>
       <h2>Member Information</h2><br><br>
         <b>Address:</b><br>
@@ -79,8 +79,8 @@
 
       <h2>Audit Logs</h2>
         <ul>
-        <% @member.audits.each_with_index do |member_audit, i| %>
-          <li><b><%= User.find(member_audit.user_id).email %></b> changed <%= @audit_string[i] %> on <%= member_audit.created_at.in_time_zone("Pacific Time (US & Canada)") %><br><br>
+        <% @audit_string.each_with_index do |member_audit, i| %>
+          <li><%= @audit_string[i].html_safe %><br><br>
         <% end %>
       </ul>
     </td>

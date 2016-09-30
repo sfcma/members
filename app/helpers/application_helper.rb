@@ -57,15 +57,39 @@ module ApplicationHelper
       ]
   end
 
-  def generate_audit_array(obj)
-    @audit_string = []
-    obj.audits.each do |obj_audit|
-      audit_chg_string = ''
-      obj_audit.audited_changes.each do |field, change|
-        audit_chg_string += " #{field} from #{change[0]} to #{change[1]}"
+  SKIP_FIELDS = {
+    "MemberInstrument" => ["Member"]
+  }
+
+  def generate_audit_string(audit)
+    audit_string = ""
+    audit.audited_changes.each do |field, change|
+      if change.is_a?(Array)
+        change_text = "from <b>#{change[0]}</b> to <b>#{change[1]}</b>"
+        verb = "changed"
+      else
+        change_text = "to <b>#{change}</b>"
+        verb = "added"
       end
-      @audit_string << audit_chg_string
+      if SKIP_FIELDS.keys.include?(audit.auditable_type) && SKIP_FIELDS[audit.auditable_type] && SKIP_FIELDS[audit.auditable_type].include?(field.humanize)
+        next
+      end
+      audit_string << "#{User.find(audit.user_id).email} #{verb} <b>#{field.humanize.capitalize}</b> on <b>#{audit.auditable_type.underscore.humanize}</b> #{change_text} on #{audit.created_at.in_time_zone("Pacific Time (US & Canada)").strftime('%F %I:%M %p (Pacific Time)')}".html_safe
     end
-    @audit_string
+    audit_string
+  end
+
+  def generate_audit_array(obj)
+    audit_string = []
+    if obj.is_a?(Array)
+      obj.each do |inner_obj|
+        audit_string += generate_audit_array(inner_obj)
+      end
+    else
+      obj.audits.each do |obj_audit|
+        audit_string << generate_audit_string(obj_audit)
+      end
+    end
+    audit_string
   end
 end
