@@ -11,6 +11,7 @@ class MemberInstrumentsController < ApplicationController
   # GET /member_instruments/1
   # GET /member_instruments/1.json
   def show
+    @audit_string = helpers.generate_audit_array(@member_instrument)
   end
 
   # GET /member_instruments/new

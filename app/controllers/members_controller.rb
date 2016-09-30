@@ -18,8 +18,7 @@ class MembersController < ApplicationController
   # GET /members/1.json
   def show
     @member_instruments = @member.member_instruments
-    # @set_member_instruments = @member_instruments.map(&:set_member_instrument)
-    # @sets = nil# @set_member_instruments.map(&:set)
+    @audit_string = helpers.generate_audit_array(@member)
   end
 
   # GET /members/new
@@ -107,6 +106,8 @@ class MembersController < ApplicationController
     end
 
     respond_to do |format|
+      puts new_member_params.inspect
+      puts @member.inspect
       if @member.update(new_member_params)
         @member.member_sets.each do |smi|
           next unless smi.set_id && smi.set_id > 0

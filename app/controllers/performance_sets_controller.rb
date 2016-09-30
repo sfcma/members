@@ -12,6 +12,7 @@ class PerformanceSetsController < ApplicationController
   # GET /performance_sets/1
   # GET /performance_sets/1.json
   def show
+    @audit_string = helpers.generate_audit_array(@performance_set)
   end
 
   # GET /performance_sets/new

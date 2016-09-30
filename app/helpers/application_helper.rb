@@ -56,4 +56,16 @@ module ApplicationHelper
         ['Wyoming', 'WY']
       ]
   end
+
+  def generate_audit_array(obj)
+    @audit_string = []
+    obj.audits.each do |obj_audit|
+      audit_chg_string = ''
+      obj_audit.audited_changes.each do |field, change|
+        audit_chg_string += " #{field} from #{change[0]} to #{change[1]}"
+      end
+      @audit_string << audit_chg_string
+    end
+    @audit_string
+  end
 end

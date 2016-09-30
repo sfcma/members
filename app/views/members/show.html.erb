@@ -76,6 +76,13 @@
         <% end %>
         <br><%= ms.set_member_instruments[0].member_instrument.instrument.capitalize %><br><br>
       <% end %>
+
+      <h2>Audit Logs</h2>
+        <ul>
+        <% @member.audits.each_with_index do |member_audit, i| %>
+          <li><b><%= User.find(member_audit.user_id).email %></b> changed <%= @audit_string[i] %> on <%= member_audit.created_at.in_time_zone("Pacific Time (US & Canada)") %><br><br>
+        <% end %>
+      </ul>
     </td>
   </tr>
 </table>
