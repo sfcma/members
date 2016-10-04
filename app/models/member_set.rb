@@ -1,5 +1,7 @@
 class MemberSet < ApplicationRecord
   audited associated_with: :member
+  acts_as_paranoid
+
   has_many :set_member_instruments
   belongs_to :member
   belongs_to :performance_set, class_name: 'PerformanceSet', foreign_key: 'set_id'

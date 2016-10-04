@@ -1,5 +1,6 @@
 class PerformanceSet < ApplicationRecord
   audited associated_with: :ensemble
+  acts_as_paranoid
   has_many :member_sets
   belongs_to :ensemble
   validates :ensemble_id, presence: true

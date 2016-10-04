@@ -11,6 +11,7 @@
     </div>
   <% end %>
 
+
 <br>
 
   <h3 class="formHeader">Personal and Contact Details</h3>
@@ -148,23 +149,21 @@
 
 
 
-
-
-
-
-        <script>var instCount = <%= [@member.member_instruments.count, 1].max %>;
+        <script>var instCount = <%= @member.member_instruments.count %>;
         <% if action_name == 'new' %>
           isNew = true;
         <% else %>
           isNew = false;
         <% end %> </script>
         <h3 class="formHeader">Instruments</h3>
-        <div class="field memberInfoBlock" id='memberInstrumentsBlock'>
+        <div class="field memberInfoBlock<%= ' hideInstruments' if @member.member_instruments.count == 0 %>" id='memberInstrumentsBlock'>
           <% i = 0 %>
           <%= f.fields_for :member_instruments do |instrument_f| %>
-            <% if i < @member.member_instruments.count || i == 0 %>
+            <% if i < @member.member_instruments.count %>
               <div class="field">
-                <%= instrument_f.text_field :instrument %>&emsp;<i><a href='#' class='removeLink' id='removeMemberInstrument<%=i%>'>Remove</a></i>
+                <%= instrument_f.text_field :instrument %>&emsp;<i><a href='#' class='removeLink' id='removeMemberInstrument<%=i%>'>Remove</a>
+                <b id='instErr_<%=i%>' class="instErr"></b></i>
+                <script>$(document).on('ready', function() { attachAC("#member_member_instruments_attributes_<%=i%>_instrument"); });</script>
               </div>
             <% end %>
             <% i += 1; %>
@@ -176,23 +175,21 @@
 
 
       <div id="setMaster">
-
-        <script>var setCount = <%= [@member.member_sets.count - 1, 1].max %>;</script>
+        <script>var setCount = <%= @member.member_sets.count %>;</script>
         <script>var setsForDropdown = <%= @sets.map{|set| [set.id, set.name]}.to_json.html_safe %>;</script>
         <script>var playStatusesForDropdown = <%= MemberSet.statuses.keys.map(&:humanize).to_json.html_safe %>;</script>
         <h3 class="formHeader">Sets</h3>
         <% j = 0 %>
         <%= f.fields_for :member_sets do |set_f| %>
-          <% if j < @member.member_sets.count || j == 0 %>
+          <% if j < @member.member_sets.count %>
             <div class="field memberInfoBlock">
               <%= set_f.collection_select :set_id, @sets, :id, :name, { prompt: true, :selected => set_f.object.set_id ? set_f.object.set_id.to_i : nil } %>
               &emsp;&emsp;<i><a href='#' class='removeLink' id='removeMemberSet<%=j%>'>Remove Member from Set</a></i>
               <br>
               &emsp;Playing Status:
               <%= set_f.select :set_status, MemberSet.statuses.keys.map(&:humanize).to_a %>
-              <span id="setStatusModalOpener">?</span>
-              &emsp;
-              Rotating this set? <%= set_f.check_box :rotating %>
+              <span id="setStatusModalOpener" class="button">What Does This Mean?</span><br>
+              &emsp;Rotating this set? <%= set_f.check_box :rotating %>
               <br>
               &emsp;Instruments played this set:
               <% x = 0 %>
@@ -236,13 +233,15 @@
 
     -->
 
+<div class="errZone"></div>
+
 <% if params[:action] == 'new'
      actionText = 'Create New Membership'
    else
      actionText = 'Update Membership'
    end %>
   <div class="actions">
-    <%= f.submit "#{actionText}", class: 'button' %>
+    <%= f.submit "#{actionText}", class: 'button', id: 'memberSubmissionForm' %>
   </div>
 <% end %>
 

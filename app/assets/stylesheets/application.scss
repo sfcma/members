@@ -1,3 +1,6 @@
+//= require jquery.auto-complete
+//= require datatable
+
 $header-green: #006644;
 $secondary-header-green: #ccddcc;
 $button-dark-blue: #113377;
@@ -32,14 +35,23 @@ h1 {
 div.pageHeader {
   border-bottom: 2px solid $header-green;
   margin: 0;
-  padding: 0px 0px;
-  text-transform: uppercase;
+  padding: 0;
+  vertical-align: top;
+  padding-bottom: 5px;
 
   h2 {
     margin: 0;
     padding: 0;
     text-shadow: 3px 3px 0px #ddd;
     font-size: 30px;
+    text-transform: uppercase;
+    vertical-align: bottom;
+    padding-bottom: 10px;
+  }
+
+  .button {
+    display: inline-block;
+    margin-bottom: -5px;
   }
 }
 
@@ -176,6 +188,12 @@ div {
     text-decoration: none;
     color: white;
   }
+
+  &:disabled {
+    background: #666;
+    color: #aaa;
+    cursor: not-allowed;
+  }
 }
 
 .secondaryButton {
@@ -214,6 +232,13 @@ div {
   color: green;
 }
 
+.errZone {
+  display: none;
+  border: 3px solid red;
+  padding: 10px;
+  font-size: 16px;
+}
+
 .field_with_errors {
   padding: 2px;
   background-color: red;
@@ -222,7 +247,18 @@ div {
 
 .addSet {
   display: block;
-  margin-top: 5px;
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+.restOfSet {
+  display: none;
+}
+
+.hideInstruments {
+  display: none;
 }
 
 .removeLink {
@@ -270,6 +306,10 @@ div {
 
 .dataTable tr:hover {
   background: $light-gray;
+}
+
+.instErr {
+  display: none;
 }
 
 #error_explanation {
