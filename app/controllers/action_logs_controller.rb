@@ -2,8 +2,6 @@ class ActionLogsController < ApplicationController
   before_action :set_action_log, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!
 
-  require "#{Rails.root}/lib/audit_logger"
-  
   # GET /action_logs
   # GET /action_logs.json
   def index
