@@ -11,143 +11,295 @@
     </div>
   <% end %>
 
-  <table>
-    <tr>
-      <td>
-        <div class="field">
-          <%= f.label :first_name, "First Name" %>
-          <%= f.text_field :first_name %>
-        </div>
-      </td>
-      <td>
-        <div class="field">
-          <%= f.label :last_name, "Last Name" %>
-          <%= f.text_field :last_name %>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="field">
-          <%= f.label :address_1, "Address Row 1" %>
-          <%= f.text_field :address_1 %>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="field">
-          <%= f.label :address_2, "Address Row 2" %>
-          <%= f.text_field :address_2 %>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="field">
-          <%= f.label :city %>
-          <%= f.text_field :city %>
-        </div>
-      </td>
-      <td>
 
-        <div class="field inlineField">
-          <%= f.label :state %>
-          <%= f.select :state, options_for_select(us_states, selected: 'CA') %>
-        </div>
+<br>
 
-        <div class="field inlineField">
-          <%= f.label :zip %>
-          <%= f.text_field :zip, size: 5 %>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="field">
-          <%= f.label :phone_1, "Primary Phone" %>
-          <%= f.text_field :phone_1 %>
-        </div>
-      </td>
-      <td>
-
-        <div class="field">
-          <%= f.label :phone_1_type, "Primary Phone Type" %>
-          <%= f.select :phone_1_type, ['', 'Cell Phone', 'Home', 'Business', 'Other'] %>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="field">
-          <%= f.label :phone_2, "Secondary Phone" %>
-          <%= f.text_field :phone_2 %>
-        </div>
-      </td>
-      <td>
-        <div class="field">
-          <%= f.label :phone_2_type, "Secondary Phone Type" %>
-          <%= f.select :phone_2_type, ['', 'Cell Phone', 'Home', 'Business', 'Other'] %>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="field">
-          <%= f.label :email_1, "Primary Email Address" %>
-          <%= f.text_field :email_1 %>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="field">
-          <%= f.label :email_2, "Secondary Email Address" %>
-          <%= f.text_field :email_2 %>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
+  <h3 class="formHeader">Personal and Contact Details</h3>
+  <div class="field memberInfoBlock">
+      <div class="field inlineField">
+        <%= f.label :first_name, "First Name" %>
+        <%= f.text_field :first_name %>
+      </div>
 
 
-        <div class="field">
-          <b>Emergency Contact Information</b><br>
-          <%= f.label :emergency_name, "Name" %>
-          <%= f.text_field :emergency_name %>
-        </div>
-      </td>
-      <td>
-        <br>
-        <div class="field inlineField">
-          <%= f.label :emergency_relation, "Relationship to Member" %>
-          <%= f.text_field :emergency_relation %>
-        </div>
-        <div class="field inlineField">
-          <%= f.label :emergency_phone, "Phone Number" %>
-          <%= f.text_field :emergency_phone %>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
+      <div class="field inlineField">
+        <%= f.label :last_name, "Last Name" %>
+        <%= f.text_field :last_name %>
+      </div>
 
 
-      </td>
-    </tr>
-  </table>
+<br>
 
-  <%= f.fields_for :member_instruments do |instrument_f| %>
-    <div class="field inlineField">
-      <%= instrument_f.label :instrument, "Instrument" %>
-      <%= instrument_f.text_field :instrument %>
+      <div class="field inlineField">
+        <%= f.label :address_1, "Address Line 1" %>
+        <%= f.text_field :address_1, size: 40 %>
+      </div>
+
+
+
+
+      <div class="field inlineField">
+        <%= f.label :address_2, "Address Line 2" %>
+        <%= f.text_field :address_2, size: 40 %>
+      </div>
+
+
+<br>
+
+      <div class="field inlineField">
+        <%= f.label :city %>
+        <%= f.text_field :city %>
+      </div>
+
+
+
+      <div class="field inlineField">
+        <%= f.label :state %>
+        <%= f.select :state, options_for_select(us_states, selected: 'CA') %>
+      </div>
+
+      <div class="field inlineField">
+        <%= f.label :zip %>
+        <%= f.text_field :zip, size: 5 %>
+      </div>
+
+<br>
+
+
+      <div class="field inlineField">
+        <%= f.label :phone_1, "Primary Phone" %>
+        <%= f.text_field :phone_1 %>
+      </div>
+
+
+
+      <div class="field inlineField">
+        <%= f.label :phone_1_type, "Primary Phone Type" %>
+        <%= f.select :phone_1_type, ['', 'Cell Phone', 'Home', 'Business', 'Other'] %>
+      </div>
+
+<br>
+
+
+      <div class="field inlineField">
+        <%= f.label :phone_2, "Secondary Phone" %>
+        <%= f.text_field :phone_2 %>
+      </div>
+
+
+      <div class="field inlineField">
+        <%= f.label :phone_2_type, "Secondary Phone Type" %>
+        <%= f.select :phone_2_type, ['', 'Cell Phone', 'Home', 'Business', 'Other'] %>
+      </div>
+
+
+
+
+      <div class="field">
+        <%= f.label :email_1, "Primary Email Address" %>
+        <%= f.text_field :email_1, size: 30 %>
+      </div>
+
+
+
+
+      <div class="field">
+        <%= f.label :email_2, "Secondary Email Address" %>
+        <%= f.text_field :email_2, size: 30 %>
+      </div>
     </div>
-  <% end %>
+<br>
+    <h3 class="formHeader">Membership Details</h3>
+    <div class="field memberInfoBlock">
+      <div class="field">
+        <%= f.label :initial_date, "Initial Contact Date  (use date picker or in format YYYY-MM-DD)" %>
+        <%= date_field :member, :initial_date %>
+      </div>
 
-  <div class='formDescription'>Instrument, playing status, and performance group participation are not set on this page ... yet</div>
-<br><br>
+      <div class="field">
+        <%= f.label :waiver_signed, "Waiver Signed Date  (use date picker or in format YYYY-MM-DD)" %>
+        <%= date_field :member, :waiver_signed %>
+      </div>
 
+      <div class="field">
+        <b><%= f.label :playing_status, "Overall Status" %></b>
+        <%= f.select :playing_status, Member.statuses.keys.map(&:humanize).to_a %>
+        <span id="playerStatusModalOpener" class='button'>What Does This Mean?</span>
+
+      </div>
+    </div>
+
+<br>
+
+        <h3 class="formHeader">Emergency Contact Information</h3>
+        <div class="field memberInfoBlock">
+          <div class="field inlineField">
+            <%= f.label :emergency_name, "Name" %>
+            <%= f.text_field :emergency_name %>
+          </div>
+          <div class="field inlineField">
+            <%= f.label :emergency_relation, "Relationship to Member   " %>
+            <%= f.text_field :emergency_relation %>
+          </div>
+          <div class="field inlineField">
+            <%= f.label :emergency_phone, "Phone Number" %>
+            <%= f.text_field :emergency_phone %>
+          </div>
+        </div><br>
+
+
+
+        <script>var instCount = <%= @member.member_instruments.count %>;
+        <% if action_name == 'new' %>
+          isNew = true;
+        <% else %>
+          isNew = false;
+        <% end %> </script>
+        <h3 class="formHeader">Instruments</h3>
+        <div class="field memberInfoBlock<%= ' hideInstruments' if @member.member_instruments.count == 0 %>" id='memberInstrumentsBlock'>
+          <% i = 0 %>
+          <%= f.fields_for :member_instruments do |instrument_f| %>
+            <% if i < @member.member_instruments.count %>
+              <div class="field">
+                <%= instrument_f.text_field :instrument %>&emsp;<i><a href='#' class='removeLink' id='removeMemberInstrument<%=i%>'>Remove</a>
+                <b id='instErr_<%=i%>' class="instErr"></b></i>
+                <script>$(document).on('ready', function() { attachAC("#member_member_instruments_attributes_<%=i%>_instrument"); });</script>
+              </div>
+            <% end %>
+            <% i += 1; %>
+          <% end %>
+        </div>
+        <i class='addSet'><a href='#' id='addNewMemberInstrument'> + Add Instrument</a></i><br>
+
+
+
+
+      <div id="setMaster">
+        <script>var setCount = <%= @member.member_sets.count %>;</script>
+        <script>var setsForDropdown = <%= @sets.map{|set| [set.id, set.name]}.to_json.html_safe %>;</script>
+        <script>var playStatusesForDropdown = <%= MemberSet.statuses.keys.map(&:humanize).to_json.html_safe %>;</script>
+        <h3 class="formHeader">Sets</h3>
+        <% j = 0 %>
+        <%= f.fields_for :member_sets do |set_f| %>
+          <% if j < @member.member_sets.count %>
+            <div class="field memberInfoBlock">
+              <%= set_f.collection_select :set_id, @sets, :id, :name, { prompt: true, :selected => set_f.object.set_id ? set_f.object.set_id.to_i : nil } %>
+              &emsp;&emsp;<i><a href='#' class='removeLink' id='removeMemberSet<%=j%>'>Remove Member from Set</a></i>
+              <br>
+              &emsp;Playing Status:
+              <%= set_f.select :set_status, MemberSet.statuses.keys.map(&:humanize).to_a %>
+              <span id="setStatusModalOpener" class="button">What Does This Mean?</span><br>
+              &emsp;Rotating this set? <%= set_f.check_box :rotating %>
+              <br>
+              &emsp;Instruments played this set:
+              <% x = 0 %>
+              <%= set_f.fields_for :set_member_instruments do |smi_f| %>
+                <% if x == 0 %>
+                  <% member_instrument_list = @member_instruments.reject do |i|
+                        !i.id
+                      end %>
+                  <%= smi_f.collection_select :member_instrument_id, member_instrument_list, :instrument, :instrument, { :selected => select_current_member_instruments(set_f.object) } %>
+                <% end %>
+                <% x += 1 %>
+              <% end %>
+              &emsp;
+
+            </div>
+          <% end %>
+          <% j += 1 %>
+        <% end %>
+
+      </div>
+      <i class='addSet'><a href='#' id='addNewMemberSet'> + Add Set</a></i><br>
+
+    <!--
+
+
+        <script>var notesCount = <%= [@member.member_notes.count - 1, 1].max %>;</script>
+        <b>Notes</b> <br>
+        <div class="memberInfoBlock">
+          <% k = 0 %>
+          <%= f.fields_for :member_notes do |note_f| %>
+            <% if k < @member.member_notes.count || k == 0 %>
+              <div class="field">
+                <%= note_f.text_field :note, size: 50 %> <i><a href='#' class='removeLink' id='removeMemberNote<%=k%>'>Remove</a></i>
+
+              </div>
+            <% end %>
+            <% k += 1; %>
+          <% end %>
+        </div>
+        <i class='addSet'><a href='#' id='addNewMemberNote'> + Add Note</a></i><br>
+
+    -->
+
+<div class="errZone"></div>
+
+<% if params[:action] == 'new'
+     actionText = 'Create New Membership'
+   else
+     actionText = 'Update Membership'
+   end %>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit "#{actionText}", class: 'button', id: 'memberSubmissionForm' %>
   </div>
 <% end %>
+
+<div class='modal' id='setStatusModal'>
+  <h2>Definition of Set Statuses<i class='closeHelp'>Click anywhere on this box to close</i></h2>
+
+  <h3>Interested in playing this set</h3>
+    Expressed an interest in playing this set, potentially has shown up to
+    rehearsals, but has not confirmed that they are playing in the concert.
+    <br><br>
+    <i>When a member is added to a set, this is the default status.</i>
+
+  <h3>Playing</h3>
+    Member is playing this set, and has confirmed they are playing in the concert.
+
+  <h3>Stopped playing, due to member's own decision</h3>
+    Member is unable to play in this set, and made that decision on their own.
+
+  <h3>Unable to play, not due to Member's decision</h3>
+    The member was interested in playing this set, but was unable to because
+    of an administrative or musical decision, made by the Music Director,
+    Section Leader, or other individual who is not the member.
+
+  <h3>Subbing</h3>
+    This member is only subbing this set.
+
+  <h3>Rolled over from last set — Unconfirmed</h3>
+    This member has been automatically added to this set because they
+    played in this ensemble last set. They have not been confirmed to be
+    attending or not.
+
+  <h3>Not Interested in this set</h3>
+    This member is not interested in playing this set, but we still want to
+    track their involvement in this set for some reason.
+</div>
+
+<div class='modal' id='playerStatusModal'>
+  <h2>Definition of Player Statuses<i class='closeHelp'> Click anywhere on this box to close</i></h2>
+
+  <h3>Untriaged</h3>
+    This member has contacted us about playing, but has not yet joined any set.
+    <br><br>
+    <i>When a member signs up through the website, this is their default status.</i>
+
+  <h3>Placed in Group</h3>
+    This member has contacted us and been able to join a performance ensemble.
+
+  <h3>Waitlist</h3>
+    This member has contacted us and is interested in playing, but is unable to
+    join any group because of other players ahead of them in line.
+
+  <h3>Sub Only</h3>
+    This member is interested in playing, but only as a substitute.
+
+  <h3>Inactive</h3>
+    This member used to play with us, but no longer wishes to or is able to
+    participate.
+    <br><br>
+    <i>Members should never be removed from the database, as this is a permanent
+      record of who played in each concert</i>
+</div>

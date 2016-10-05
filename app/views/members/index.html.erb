@@ -1,10 +1,38 @@
-<div class='pageHeader'><h2>Members</h2> &emsp; <%= link_to 'Add New Member', new_member_path %> &emsp; <%= select_tag "instrument_filter", options_for_select(@instruments) %></div>
+<script>
+document.addEventListener('load', function() {
+  var datatable = new DataTable(document.getElementById('members'), {
+      pageSize: 3,
+      sort: [true, false, false, false],
+      filters: [true, false, false, false]
+  });
 
-<table>
+  datatable.loadPage(1);
+  var data = datatable.all();
+  datatable.deleteAll(function (e) {
+      return e.title.trim().length > 0;
+  });
+});
+</script>
+
+<div class='pageHeader'><h2>Membership Roster</h2> &emsp; <%= link_to 'Add New Member', new_member_path, class: 'button' %></div>
+
+<table id="members">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Instrument</th>
+      <th>Set</th>
+      <th>Links</th>
+    </tr>
+  </thead>
   <tbody>
     <% @members.each do |member| %>
+      <% inst_list = member.member_instruments.map(&:instrument) %>
+      <% inst_stuff = inst_list.map { |il| link_to(il.capitalize, members_url(:instrument=>il)) }.join(", ") %>
       <tr>
         <td><%= link_to "#{member.first_name} #{member.last_name}", member %></td>
+        <td><%= inst_stuff.html_safe %></td>
+        <td><%= member.member_sets.map(&:performance_set).map(&:name).join(", ") %></td>
         <td><%= link_to 'Edit', edit_member_path(member) %></td>
       </tr>
     <% end %>

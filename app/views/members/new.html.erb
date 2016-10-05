@@ -1,7 +1,7 @@
-<div class='pageHeader'><h2>New Member</h2></div>
+<div class='pageHeader'><h2>Add New Member</h2></div>
 
-<div class='formDescription'>Add a new member. This member may or not be performing with any groups at this time; this can be changed later.</div>
+<div class='formDescription'>A member doesn't need to be playing in a group to be added</div>
 
-<%= render 'form', member: @member %>
+<%= render 'form', member: @member %><br>
 
-<%= link_to 'Cancel', members_path %>
+<%= link_to 'Cancel', members_path, class: 'secondaryButton' %>

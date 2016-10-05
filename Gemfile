@@ -16,8 +16,6 @@ gem 'coffee-rails', '~> 4.2'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
-# Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
-gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
@@ -44,9 +42,20 @@ group :development do
 end
 
 group :production do
-  gem 'mysql2'
+  gem 'pg'
 end
 
+gem "paranoia", "~> 2.2.0.pre"
+
+gem "audited", "~> 4.3"
+
+gem "impressionist"
 gem 'devise'
+gem 'devise_security_extension', git: 'https://github.com/phatworx/devise_security_extension.git'
+gem 'easy_captcha'
+gem 'rails_email_validator'
+gem "rails-observers", github: 'rails/rails-observers'
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'validates_timeliness', '~> 4.0'

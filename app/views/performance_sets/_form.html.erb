@@ -18,6 +18,11 @@
   </div>
 
   <div class="field">
+    <%= f.label :name, "Name of Set (Must contain a year to disambiguate from other sets)" %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
     <%= f.label :start_date, "Set Start Date  (Format: YYYY-MM-DD)" %>
     <%= date_field :performance_set, :start_date %>
   </div>
