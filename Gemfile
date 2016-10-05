@@ -49,6 +49,7 @@ gem "paranoia", "~> 2.2.0.pre"
 
 gem "audited", "~> 4.3"
 
+gem "impressionist"
 gem 'devise'
 gem 'devise_security_extension', git: 'https://github.com/phatworx/devise_security_extension.git'
 gem 'easy_captcha'
