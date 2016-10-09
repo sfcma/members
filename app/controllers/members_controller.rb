@@ -8,23 +8,40 @@ class MembersController < ApplicationController
   # GET /members.json
   def index
     @instruments = MemberInstrument.all.map { |mi| [mi.instrument.capitalize, mi.instrument] }.uniq
+    @instruments = @instruments.unshift(['All Instruments', 0])
+    @sets = PerformanceSet.all.map { |ps| [ps.name, ps.id] }
+    @sets = @sets.unshift(['All Sets', 0])
+
+    @instrument_label = 0
+    @set_label = 0
+
     joins = []
 
     if params[:instrument]
-      joins << :member_instruments
+      if MemberInstrument.where('instrument = ?', params[:instrument]).count > 0
+        @instrument = params[:instrument]
+        @instrument_label = @instrument
+        joins << :member_instruments
+      end
     end
     if params[:set]
-      joins << :member_sets
+      if PerformanceSet.where('id = ?', params[:set]).count > 0
+        @set = params[:set]
+        @set_label = @set
+        joins << :member_sets
+      end
     end
 
     @members = Member.joins(joins)
 
-    if params[:instrument]
-      @members.where("instrument = ?", params[:instrument])
+    if @instrument
+      @members = @members.where("member_instruments.instrument = ?", @instrument.humanize.downcase)
     end
-    if params[:set]
-      @members.where("set_id = ?", params[:set])
+    if @set
+      @members = @members.where("member_sets.set_id = ?", params[:set])
     end
+
+    @members = @members.order("members.last_name ASC")
   end
 
   # GET /members/1
@@ -34,7 +51,9 @@ class MembersController < ApplicationController
     @audit_string += helpers.generate_audit_array(@member.member_instruments.with_deleted.all.to_a)
     @audit_string += helpers.generate_audit_array(@member.member_sets.with_deleted.all.to_a)
     @audit_string.sort_by do |as|
-      #as.created_at
+
+    # Impression.where(:controller_name => 'members', :impressionable_id => 30).map{|s| User.find(s.user_id).email + " " + s.created_at.to_s }
+
     end
   end
 
@@ -68,28 +87,21 @@ class MembersController < ApplicationController
     @member = Member.new(new_member_params)
     respond_to do |format|
       if @member.save
-        @member.member_sets.each do |smi|
-          unless smi.set_id && smi.set_id > 0 && smi.set_member_instrument_ids.length > 0
-            smi.destroy
-            next
-          end
-          mi = MemberInstrument.new(member_id: @member.id, instrument: set_member_instruments[smi.set_id.to_s]["0"][:member_instrument_id].underscore)
-          mi.save!
+        @member.member_sets.each do |member_set|
+          next if destroy_empty_member_sets(member_set)
 
-          member_instrument_id = MemberInstrument.where(member_id: @member.id, instrument: set_member_instruments[smi.set_id.to_s]["0"][:member_instrument_id].underscore).first.id
-          smix = SetMemberInstrument.where(member_set_id: smi.id).first
-          smix.member_instrument_id = member_instrument_id
+          member_instrument_id = get_member_instrument_id(set_member_instruments, member_set)
+          set_member_instrument = get_set_member_instrument(member_instrument_id, member_set)
 
-          if smix.save!
-            go_back = 'Member was successfully created.'
-            format.html { redirect_to @member, notice: go_back }
+          if set_member_instrument.save
+            format.html { render :show, notice: 'Member was successfully created.' }
           else
-            format.html { render :show }
+            format.html { render :new, notice: 'Error saving set member instrument' }
           end
         end
-        format.html { render :show, notice: 'OH NO'}
+        format.html { render :show, notice: 'Member was successfully updated.' }
       else
-        format.html { render :new }
+        format.html { render :new, notice: 'OH NO' }
       end
     end
   end
@@ -100,32 +112,20 @@ class MembersController < ApplicationController
     new_member_params, set_member_instruments = manipulate_member_params(member_params)
 
     respond_to do |format|
-      puts new_member_params.inspect
-      puts @member.inspect
       if @member.update(new_member_params)
-        @member.member_sets.each do |smi|
-          unless smi.set_id && smi.set_id > 0 && smi.set_member_instrument_ids.length > 0
-            smi.destroy
-            next
-          end
-          if MemberInstrument.where(member_id: @member.id, instrument: set_member_instruments[smi.set_id.to_s]["0"][:member_instrument_id].underscore).count == 0
-            mi = MemberInstrument.new(member_id: @member.id, instrument: set_member_instruments[smi.set_id.to_s]["0"][:member_instrument_id].underscore)
-            mi.save!
-          end
-          member_instrument_id = MemberInstrument.where(member_id: @member.id, instrument: set_member_instruments[smi.set_id.to_s]["0"][:member_instrument_id].underscore).first.id
-          if SetMemberInstrument.where(member_set_id: smi.id).length > 0
-            smix = SetMemberInstrument.where(member_set_id: smi.id).first
-            smix.member_instrument_id = member_instrument_id
-          else
-            smix = SetMemberInstrument.new(member_set_id: smi.id, member_instrument_id: member_instrument_id)
-          end
-          if smix.save
-            format.html { redirect_to @member, notice: 'Member was successfully updated.' }
+        @member.member_sets.each do |member_set|
+          next if destroy_empty_member_sets(member_set)
+
+          member_instrument_id = get_member_instrument_id(set_member_instruments, member_set)
+          set_member_instrument = get_set_member_instrument(member_instrument_id, member_set)
+
+          if set_member_instrument.save
+            format.html { render :show, notice: 'Member was successfully updated.' }
           else
             format.html { render :edit, notice: 'Error saving set member instrument' }
           end
         end
-        format.html { redirect_to @member, notice: 'Member was successfully updated.' }
+        format.html { render :show, notice: 'Member was successfully updated.' }
       else
         format.html { render :edit, notice: 'OH NO' }
       end
@@ -173,6 +173,33 @@ class MembersController < ApplicationController
     end
 
     [member_params, set_member_instruments]
+  end
+
+  def get_member_instrument_id(set_member_instruments, member_set)
+    instrument_name = set_member_instruments[member_set.set_id.to_s]["0"][:member_instrument_id].underscore
+    if MemberInstrument.where(member_id: @member.id, instrument: instrument_name).count == 0
+      mi = MemberInstrument.new(member_id: @member.id, instrument: instrument_name)
+      mi.save!
+    end
+    MemberInstrument.where(member_id: @member.id, instrument: instrument_name).first.id
+  end
+
+  def get_set_member_instrument(member_instrument_id, member_set)
+    if SetMemberInstrument.where(member_set_id: member_set.id).length > 0
+      smix = SetMemberInstrument.where(member_set_id: member_set.id).first
+      smix.member_instrument_id = member_instrument_id
+    else
+      smix = SetMemberInstrument.new(member_set_id: member_set.id, member_instrument_id: member_instrument_id)
+    end
+    smix
+  end
+
+  def destroy_empty_member_sets(member_set)
+    unless member_set.set_id && member_set.set_id > 0
+      member_set.destroy
+      true
+    end
+    false
   end
 
   def load_sets

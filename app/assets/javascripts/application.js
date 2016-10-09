@@ -101,7 +101,7 @@ var loadStuff = function() {
            &emsp;Playing Status: \
             <select name='member[member_sets_attributes][" + setCount +"][set_status]' id='member_member_sets_attributes_" + setCount +"_set_status'> \
             " + playStatuses + "</select> \
-            <span id='setStatusModalOpener' class='button'>What Does This Mean?</span><br> \
+            <span class='setStatusModalOpener button'>What Does This Mean?</span><br> \
             &emsp;Rotating this set? \
             <input name='member[member_sets_attributes][" + setCount +"][rotating]' value='0' type='hidden'> \
             <input value='1' name='member[member_sets_attributes][" + setCount +"][rotating]' id='member_member_sets_attributes_" + setCount +"_rotating' type='checkbox'> \
@@ -129,7 +129,7 @@ var loadStuff = function() {
     return false;
   });
 
-  $('#playerStatusModal').on('click', function(e) {
+  $('.closeHelp').on('click', function(e) {
     $('#playerStatusModal').hide();
   });
 
@@ -137,11 +137,11 @@ var loadStuff = function() {
     $('#playerStatusModal').show();
   });
 
-  $('#setStatusModal').on('click', function(e) {
+  $('.closeHelp').on('click', function(e) {
     $('#setStatusModal').hide();
   });
 
-  $('#setStatusModalOpener').on('click', function(e) {
+  $('.setStatusModalOpener').on('click', function(e) {
     $('#setStatusModal').show();
   });
 
@@ -192,7 +192,7 @@ var loadStuff = function() {
 
     // Check missing instruments
     $('select[id^=member_member_sets_attributes_]:visible').each(function() {
-      if ($(this).val() == null) {
+      if ($(this).val() == "" || $(this).val() == null) {
         $('.errZone').show().html($('.errZone').html() + 'Not all sets have instruments specified. Please specify instrument played in each set and try again.');
         ev.preventDefault();
         return false;
@@ -242,6 +242,14 @@ var loadStuff = function() {
     } else {
       $(e.target).next('i').find('a[id^=removeMemberInstrument]').show();
     }
+  });
+
+  $('#setSelector').on('change', function(e) {
+    window.location.href = window.location.href.split('members')[0] + 'members?set=' + e.target.value;
+  });
+
+  $('#instrumentSelector').on('change', function(e) {
+    window.location.href = window.location.href.split('members')[0] + 'members?instrument=' + e.target.value;
   });
 
   if (isNew) {

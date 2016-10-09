@@ -6,30 +6,34 @@
   <%= link_to 'View Member List', members_path %>
 
   <br><br>
-  <b>Ensembles</b>
-  <br><br>
-  <%= link_to 'View Ensemble List', ensembles_path %>
-
-  <br><br>
   <b>Sets</b>
   <br><br>
   <%= link_to 'Add New Performance Set', new_performance_set_path %><br>
   <%= link_to 'View Performance Set List', performance_sets_path %>
 
   <br><br>
-  <b>Absences</b>
+  <b>Ensembles</b>
   <br><br>
-  <%= link_to 'Add New Absence', new_absence_path %><br>
-  <%= link_to 'View Absences List', absences_path %>
+  <%= link_to 'View Ensemble List', ensembles_path %>
+
+
+  <br><br>
+  <hr>
+  <i>Coming Soon!</i><br><br>
+  <b>Absences / Attendance</b>
+  <br><br>
+  Add New Absence<br>
+  View Absences List
 
   <br><br>
   <b>Audit Trail</b>
   <br><br>
-  <%= link_to 'View Action Log List', action_logs_path %>
+  View Action Log List
 
   <br><br>
   <b>Users</b>
   <br><br>
+  View Users
 
 <% else %>
   Hello! Please <%= link_to "Log In", new_user_session_path %>

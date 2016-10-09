@@ -161,7 +161,7 @@
           <%= f.fields_for :member_instruments do |instrument_f| %>
             <% if i < @member.member_instruments.count %>
               <div class="field">
-                <%= instrument_f.text_field :instrument %>&emsp;<i><a href='#' class='removeLink' id='removeMemberInstrument<%=i%>'>Remove</a>
+                <%= instrument_f.text_field :instrument, disabled: true, class: 'savedInstrument' %>&emsp;<i><a href='#' class='removeLink' id='removeMemberInstrument<%=i%>'>Remove</a>
                 <b id='instErr_<%=i%>' class="instErr"></b></i>
                 <script>$(document).on('ready', function() { attachAC("#member_member_instruments_attributes_<%=i%>_instrument"); });</script>
               </div>
@@ -188,7 +188,7 @@
               <br>
               &emsp;Playing Status:
               <%= set_f.select :set_status, MemberSet.statuses.keys.map(&:humanize).to_a %>
-              <span id="setStatusModalOpener" class="button">What Does This Mean?</span><br>
+              <span class="setStatusModalOpener button">What Does This Mean?</span><br>
               &emsp;Rotating this set? <%= set_f.check_box :rotating %>
               <br>
               &emsp;Instruments played this set:
@@ -246,7 +246,7 @@
 <% end %>
 
 <div class='modal' id='setStatusModal'>
-  <h2>Definition of Set Statuses<i class='closeHelp'>Click anywhere on this box to close</i></h2>
+  <h2>Definition of Set Statuses</h2>
 
   <h3>Interested in playing this set</h3>
     Expressed an interest in playing this set, potentially has shown up to
@@ -276,10 +276,13 @@
   <h3>Not Interested in this set</h3>
     This member is not interested in playing this set, but we still want to
     track their involvement in this set for some reason.
+  <br><br>
+  <button class='closeHelp'>Close</button>
+
 </div>
 
 <div class='modal' id='playerStatusModal'>
-  <h2>Definition of Player Statuses<i class='closeHelp'> Click anywhere on this box to close</i></h2>
+  <h2>Definition of Player Statuses</h2>
 
   <h3>Untriaged</h3>
     This member has contacted us about playing, but has not yet joined any set.
@@ -302,4 +305,6 @@
     <br><br>
     <i>Members should never be removed from the database, as this is a permanent
       record of who played in each concert</i>
+  <br><br>
+  <button class='closeHelp'>Close</button>
 </div>
