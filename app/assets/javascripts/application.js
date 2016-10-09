@@ -245,11 +245,11 @@ var loadStuff = function() {
   });
 
   $('#setSelector').on('change', function(e) {
-    window.location.href = window.location.href.split('members')[0] + 'members?set=' + e.target.value;
+    window.location.href = window.location.href.split('/members')[0] + '/members?set=' + e.target.value;
   });
 
   $('#instrumentSelector').on('change', function(e) {
-    window.location.href = window.location.href.split('members')[0] + 'members?instrument=' + e.target.value;
+    window.location.href = window.location.href.split('/members')[0] + '/members?instrument=' + e.target.value;
   });
 
   if (isNew) {
