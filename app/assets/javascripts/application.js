@@ -87,10 +87,9 @@ var loadStuff = function() {
     for (set in setsForDropdown) {
       setOptions += "<option value='" + setsForDropdown[set][0] + "'>" + setsForDropdown[set][1] + "</option>";
     }
-
     playStatuses = "";
     for (ps in playStatusesForDropdown) {
-      playStatuses += "<option value='" + playStatusesForDropdown[ps].replace("'", "\'") + "'>" + playStatusesForDropdown[ps] + "</option>";
+      playStatuses += "<option value='" + playStatusesForDropdown[ps].replace("'", "&apos;") + "'>" + playStatusesForDropdown[ps] + "</option>";
     }
     var div = "<div class='field memberInfoBlock'> \
            <select name='member[member_sets_attributes][" + setCount +"][set_id]' id='member_member_sets_attributes_" + setCount +"_set_id'> \
