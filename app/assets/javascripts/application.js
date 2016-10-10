@@ -141,7 +141,7 @@ var loadStuff = function() {
     $('#setStatusModal').hide();
   });
 
-  $('.setStatusModalOpener').on('click', function(e) {
+  $(document).on('click', '.setStatusModalOpener', function(e) {
     $('#setStatusModal').show();
   });
 
