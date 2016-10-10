@@ -85,6 +85,8 @@ class MembersController < ApplicationController
     new_member_params, set_member_instruments = manipulate_member_params(member_params)
 
     @member = Member.new(new_member_params)
+    Rails.logger.info @member.inspect
+    Rails.logger.info new_member_params.inspect
     respond_to do |format|
       if @member.save
         @member.member_sets.each do |member_set|
