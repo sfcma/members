@@ -14,16 +14,16 @@ ActiveRecord::Schema.define(version: 20161005071454) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
-    t.integer  "performanceset_id"
+    t.integer  "performance_set_id"
     t.date     "date"
     t.boolean  "planned"
     t.boolean  "sub_found"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_absences_on_deleted_at"
     t.index ["member_id"], name: "index_absences_on_member_id"
-    t.index ["performanceset_id"], name: "index_absences_on_performanceset_id"
+    t.index ["performance_set_id"], name: "index_absences_on_performance_set_id"
   end
 
   create_table "action_logs", force: :cascade do |t|
@@ -115,18 +115,18 @@ ActiveRecord::Schema.define(version: 20161005071454) do
   end
 
   create_table "member_sets", force: :cascade do |t|
-    t.integer  "set_id"
+    t.integer  "performance_set_id"
     t.integer  "member_id"
     t.string   "set_status"
     t.string   "string"
     t.boolean  "rotating"
     t.boolean  "boolean"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_member_sets_on_deleted_at"
     t.index ["member_id"], name: "index_member_sets_on_member_id"
-    t.index ["set_id"], name: "index_member_sets_on_set_id"
+    t.index ["performance_set_id"], name: "index_member_sets_on_performance_set_id"
   end
 
   create_table "members", force: :cascade do |t|
@@ -176,12 +176,14 @@ ActiveRecord::Schema.define(version: 20161005071454) do
   end
 
   create_table "set_member_instruments", force: :cascade do |t|
+    t.integer  "performance_set_id"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
     t.integer  "member_set_id"
     t.integer  "member_instrument_id"
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_set_member_instruments_on_deleted_at"
+    t.index ["performance_set_id"], name: "index_set_member_instruments_on_performance_set_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -216,9 +218,7 @@ ActiveRecord::Schema.define(version: 20161005071454) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["expired_at"], name: "index_users_on_expired_at"
     t.index ["last_activity_at"], name: "index_users_on_last_activity_at"
-    t.index ["paranoid_verification_code"], name: "index_users_on_paranoid_verification_code"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index [nil], name: "index_users_on_parnaoid_verified_at"
   end
 
 end
