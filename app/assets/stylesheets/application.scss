@@ -1,7 +1,18 @@
+//= require jquery.auto-complete
+//= require datatable
+
+$header-green: #006644;
+$secondary-header-green: #ccddcc;
+$button-dark-blue: #113377;
+$button-hover-blue: #225599;
+$light-gray: #ddd;
+$delete-dark-red: #771111;
+$delete-hover-red: #992222;
+
 body {
   background-color: #fff;
   color: #333;
-  font-family: verdana, arial, helvetica, sans-serif;
+  font-family: helvetica, arial, sans-serif;
   font-size: 13px;
   line-height: 18px;
   margin: 0;
@@ -14,21 +25,39 @@ html {
 }
 
 h1 {
-  background: #ddccdd;
+  background: $header-green;
+  color: #ddd;
   margin-top: 0;
   margin-bottom: 0;
   padding: 25px;
 }
 
-h1 a {
-  color: black;
+div.pageHeader {
+  border-bottom: 2px solid $header-green;
+  margin: 0;
+  padding: 0;
+  vertical-align: top;
+  padding-bottom: 5px;
+
+  h2 {
+    margin: 0;
+    padding: 0;
+    text-shadow: 3px 3px 0px #ddd;
+    font-size: 30px;
+    text-transform: uppercase;
+    vertical-align: bottom;
+    padding-bottom: 10px;
+  }
+
+  .button {
+    display: inline-block;
+    margin-bottom: -5px;
+  }
 }
 
-div.pageHeader {
-  background: #ccbbcc;
-  margin-top: 0;
-  margin-bottom: 10px;
-  padding: 15px 10px;
+div.loginInfo {
+  float: right;
+  padding-right: 20px;
 }
 
 h2 {
@@ -37,7 +66,7 @@ h2 {
 }
 
 div.bar {
-  background: #ccddcc;
+  background: $secondary-header-green;
   padding: 5px;
   margin-bottom: 10px;
   margin-top: 0;
@@ -49,14 +78,28 @@ div.body {
 }
 
 div.formDescription {
-  background: #bbccbb;
   margin: 0;
-  padding: 12px 10px;
+  padding: 10px 10px 6px 10px;
   font-style: italic;
+  border-bottom: 1px solid #ddd;
+  color: #888;
+}
+
+div.listDescription {
+  margin: 0;
+  padding: 10px 10px 6px 10px;
+  border-bottom: 1px solid #ddd;
+  color: #666;
+}
+
+h3.formHeader {
+  font-size: 18px;
+  margin-bottom: -8px;
 }
 
 div.inlineField {
   display: inline-block;
+  margin-right: 10px;
 }
 
 div.actions input[type=submit] {
@@ -64,7 +107,7 @@ div.actions input[type=submit] {
   font-weight: bold;
 }
 
-p, ol, ul, td {
+p, ol {
   font-family: verdana, arial, helvetica, sans-serif;
   font-size: 13px;
   line-height: 18px;
@@ -87,19 +130,107 @@ a {
   }
 }
 
-th {
-  padding-bottom: 5px;
-}
-
-td {
-  padding-bottom: 7px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
 div {
   &.field, &.actions {
-    margin-top: 5px;
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 13px;
+    margin-top: 8px;
+  }
+}
+
+.memberInfoBlock {
+  background: #ddeedd;
+  line-height: 1.4;
+  border: 1px solid #bbccbb;
+  padding: 10px;
+  padding-top: 5px;
+
+  .button {
+    font-size: 12px;
+  }
+}
+
+.modal {
+  position: fixed;
+  top: 0px;
+  margin-left: 20%;
+  width: 60%;
+  background: #ffffee;
+  padding: 20px;
+  margin-top: 30px;
+  box-shadow: 1px 1px 3px black;
+  border-radius: 5px;
+  border: 1px solid #999;
+  display: none;
+  padding-left: 40px;
+}
+
+.modal h3, .modal h2 {
+  margin-left: -20px;
+}
+
+.modal h2 {
+  text-decoration: underline;
+}
+
+.modal .closeHelp {
+  display: inline-block;
+  margin-left: 25px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.button {
+  padding: 5px;
+  background: $button-dark-blue;
+  color: white;
+  cursor: pointer;
+  border-radius: 3px;
+  box-shadow: 1px 1px 2px #999;
+  font-size: 14px;
+
+  &:hover {
+    background: $button-hover-blue;
+    text-decoration: none;
+    color: white;
+  }
+
+  &:disabled {
+    background: #666;
+    color: #aaa;
+    cursor: not-allowed;
+  }
+}
+
+.secondaryButton {
+  padding: 5px;
+  border: 1px solid $button-dark-blue;
+  color: $button-hover-blue;
+  cursor: pointer;
+  border-radius: 3px;
+  box-shadow: 1px 1px 2px #999;
+  font-size: 14px;
+
+  &:hover {
+    background: $light-gray;
+    text-decoration: none;
+    color: $button-hover-blue;
+  }
+}
+
+.deleteButton {
+  padding: 5px;
+  background: $delete-dark-red;
+  color: white;
+  cursor: pointer;
+  border-radius: 3px;
+  box-shadow: 1px 1px 2px #999;
+  font-size: 14px;
+
+  &:hover {
+    background: $delete-hover-red;
+    text-decoration: none;
+    color: white;
   }
 }
 
@@ -107,10 +238,193 @@ div {
   color: green;
 }
 
+#members th {
+  background: #ddd;
+  border-bottom: 2px solid #999;
+  padding: 10px;
+}
+
+#members td {
+  padding: 10px;
+}
+
+#members tbody tr {
+  &:hover {
+    background: #ccc;
+    box-shadow: 0 -2px 0 #000 inset;
+
+    .arrow {
+      visibility: visible;
+    }
+  }
+}
+
+#members .arrow {
+  visibility: hidden;
+}
+
+#members tr:nth-child(even) {
+  background: #ddd;
+}
+
+.member-set-pill {
+  padding: 3px;
+  border: 1px solid #ccc;
+  margin-right: 3px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 1px #ccc;
+  display: inline-block;
+
+  &.interested {
+    &::before {
+      content: "?";
+      font-weight: bold;
+      font-size: 17px;
+      display: inline-block;
+      margin-bottom: -3px;
+      vertical-align: top;
+    }
+    background: lightblue;
+  }
+
+  &.playing {
+    &::before {
+      content: "✓";
+      font-weight: bold;
+      font-size: 17px;
+      display: inline-block;
+      margin-bottom: -3px;
+      vertical-align: top;
+    }
+    background: lightgreen;
+  }
+
+  &.not-playing-own {
+    &::before {
+      content: "✗";
+      font-weight: bold;
+      font-size: 17px;
+      display: inline-block;
+      margin-bottom: -3px;
+      vertical-align: top;
+    }
+    background: lightyellow;
+  }
+
+  &.not-playing-not-own {
+    &::before {
+      content: "⛔";
+      font-weight: bold;
+      font-size: 17px;
+      display: inline-block;
+      margin-bottom: -3px;
+      vertical-align: top;
+    }
+    background: #ffa879;
+  }
+
+  &.subbing {
+    &::before {
+      content: "🙋";
+      font-weight: bold;
+      font-size: 17px;
+      display: inline-block;
+      margin-bottom: -3px;
+      vertical-align: top;
+    }
+    background: #ead8f3;
+  }
+
+  &.not-interested {
+    &::before {
+      content: "X";
+      font-weight: bold;
+      font-size: 17px;
+      display: inline-block;
+      margin-bottom: -3px;
+      vertical-align: top;
+    }
+    background: lightgray;
+  }
+
+  &.rotating {
+    &::after {
+      background: red;
+      color: white;
+      content: "\00a0R\00a0";
+      font-weight: bold;
+      font-size: 17px;
+      display: inline-block;
+      margin-bottom: -3px;
+      vertical-align: top;
+    }
+  }
+
+  &:hover .member-set-pill-tooltip {
+    display: block;
+  }
+}
+
+.member-set-pill-tooltip {
+  display: none;
+  position: absolute;
+  width: 400px;
+  height: 80px;
+  background: white;
+  box-shadow: 2px 2px 2px black;
+  border: 1px solid black;
+  padding: 8px;
+  margin-top: 6px;
+  margin-left: 10px;
+}
+
+.nowaiver {
+  background: red;
+  color: white;
+  padding: 2px;
+  font-weight: bold;
+}
+
+.errZone {
+  display: none;
+  border: 3px solid red;
+  padding: 10px;
+  font-size: 16px;
+}
+
 .field_with_errors {
   padding: 2px;
   background-color: red;
   display: table;
+}
+
+.addSet {
+  display: block;
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+.restOfSet {
+  display: none;
+}
+
+.hideInstruments {
+  display: none;
+}
+
+.savedInstrument {
+  color: black;
+}
+
+.removeLink {
+  color: #999;
+
+  &:hover {
+    background: darkred;
+    color: white;
+  }
 }
 
 .alert {
@@ -138,12 +452,30 @@ div {
   }
 }
 
+#setMaster {
+  margin: 0;
+  padding: 0;
+}
+
+.grays {
+  color: #999;
+}
+
+.dataTable tr:hover {
+  background: $light-gray;
+}
+
+.instErr {
+  display: none;
+}
+
 #error_explanation {
   width: 450px;
   border: 2px solid red;
   padding: 7px;
   padding-bottom: 0;
-  margin-bottom: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   background-color: #f0f0f0;
 
   h2 {

@@ -1,10 +1,47 @@
-<div class='pageHeader'><h2>Members</h2> &emsp; <%= link_to 'Add New Member', new_member_path %> &emsp; <%= select_tag "instrument_filter", options_for_select(@instruments) %></div>
+<div class='pageHeader'><h2>Membership Roster</h2> &emsp; <%= link_to 'Add New Member', new_member_path, class: 'button' %></div>
 
-<table>
+<div class='listDescription'>
+  <%= select_tag :instruments, options_for_select(@instruments, selected: @instrument), id: 'instrumentSelector' %>
+  <%= select_tag :sets, options_for_select(@sets, selected: @set), id: 'setSelector' %>
+  <br>
+  <% if @set || @instrument %>
+    <% if @set %>
+      <i>Showing only members playing in <b><%= PerformanceSet.find_by_id(params[:set]).name %></b></i>
+    <% end %>
+    <% if @instrument %>
+      <i>Showing only members who play the <b><%= params[:instrument].humanize.capitalize %></b></i>
+    <% end %><br>
+    <b><%= link_to 'Clear All Filters', members_url %></b>
+    <br><br>
+  <% end %>
+
+</div>
+
+<table id="members" cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Name</th>
+      <th></th>
+      <th>Instrument</th>
+      <th>Set</th>
+      <th>Links</th>
+    </tr>
+  </thead>
   <tbody>
     <% @members.each do |member| %>
+      <% inst_list = member.member_instruments.map(&:instrument)
+         inst_stuff = inst_list.map { |il| link_to(il.capitalize, members_url(:instrument=>il)) }.join(", ")
+          %>
       <tr>
+        <td class="arrow">	▶</td>
         <td><%= link_to "#{member.first_name} #{member.last_name}", member %></td>
+        <td><% if !member.waiver_signed %>
+           <span class="nowaiver" title="Waiver not signed and returned"> W </span>
+         <% end %></td>
+        <td><%= inst_stuff.html_safe %></td>
+        <td><%= render 'members/partials/member_set_pill',
+                        member_sets: member.member_sets %></td>
         <td><%= link_to 'Edit', edit_member_path(member) %></td>
       </tr>
     <% end %>

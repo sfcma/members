@@ -1,5 +1,6 @@
 class MemberInstrumentsController < ApplicationController
   before_action :set_member_instrument, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
 
   # GET /member_instruments
   # GET /member_instruments.json
@@ -10,6 +11,7 @@ class MemberInstrumentsController < ApplicationController
   # GET /member_instruments/1
   # GET /member_instruments/1.json
   def show
+    @audit_string = helpers.generate_audit_array(@member_instrument)
   end
 
   # GET /member_instruments/new

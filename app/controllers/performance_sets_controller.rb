@@ -1,5 +1,6 @@
 class PerformanceSetsController < ApplicationController
   before_action :set_performance_set, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
 
 
   # GET /performance_sets
@@ -11,6 +12,7 @@ class PerformanceSetsController < ApplicationController
   # GET /performance_sets/1
   # GET /performance_sets/1.json
   def show
+    @audit_string = helpers.generate_audit_array(@performance_set)
   end
 
   # GET /performance_sets/new
@@ -27,14 +29,11 @@ class PerformanceSetsController < ApplicationController
   # POST /performance_sets
   # POST /performance_sets.json
   def create
-    logger.info performance_set_params.inspect
     @performance_set = PerformanceSet.new(performance_set_params)
 
     # @performance_set.start_date = performance_set_params.start_date.to_time.to_i
     # @performance_set.end_date = performance_set_params.end_date.to_time.to_i
-    logger.info Ensemble.find(@performance_set.ensemble_id)
     @ensembles = Ensemble.all
-    logger.info @performance_set.inspect
     respond_to do |format|
       if @performance_set.save
         format.html { redirect_to @performance_set, notice: 'Performance set was successfully created.' }
@@ -79,6 +78,6 @@ class PerformanceSetsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def performance_set_params
-      params.require(:performance_set).permit(:ensemble_id, :start_date, :end_date)
+      params.require(:performance_set).permit(:ensemble_id, :start_date, :end_date, :name)
     end
 end

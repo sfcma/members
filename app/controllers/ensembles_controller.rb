@@ -10,6 +10,7 @@ class EnsemblesController < ApplicationController
   # GET /performances/1
   # GET /performances/1.json
   def show
+    @audit_string = helpers.generate_audit_array(@ensemble)
   end
 
   # GET /ensembles/new

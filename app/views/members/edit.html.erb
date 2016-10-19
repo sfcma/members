@@ -1,7 +1,8 @@
-<div class='pageHeader'><h2>Editing Member</h2></div>
+
+<div class='pageHeader'><i><%= link_to '< Back to All Members', members_path %></i><br><br><h2>Editing <%= @member.first_name + " " + @member.last_name %>'s Membership</h2></div>
 
 <%= render 'form', member: @member %>
 
 <br>
-<%= link_to 'Cancel', members_path %><br><br>
-<%= link_to 'Delete this member', @member, method: :delete, data: { confirm: 'Are you sure you want to delete this member?' } %>
+<%= link_to 'Cancel', members_path, class: 'secondaryButton' %><br><br>
+<%= link_to 'Delete this member', @member, class: 'deleteButton', method: :delete, data: { confirm: 'Are you sure you want to delete this member?' } %>

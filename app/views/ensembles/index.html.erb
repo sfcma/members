@@ -1,29 +1,21 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Ensembles</h1>
+<div class='pageHeader'><h2>Ensembles</h2> &emsp; <%= link_to 'Add New Ensemble', new_ensemble_path %></div>
 
 <table>
   <thead>
     <tr>
       <th>Name</th>
       <th>Description</th>
-      <th colspan="3"></th>
+      <th></th>
     </tr>
   </thead>
 
   <tbody>
     <% @ensembles.each do |ensemble| %>
       <tr>
-        <td><%= ensemble.name %></td>
+        <td><%= link_to ensemble.name, ensemble %></td>
         <td><%= ensemble.description %></td>
-        <td><%= link_to 'Show', ensemble %></td>
         <td><%= link_to 'Edit', edit_ensemble_path(ensemble) %></td>
-        <td><%= link_to 'Destroy', ensemble, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Ensemble', new_ensemble_path %>

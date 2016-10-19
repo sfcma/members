@@ -1,0 +1,41 @@
+<%
+
+   member_sets.map do |member_set|
+     if @set && member_set.performance_set.id.to_s != @set
+       next
+     end
+
+     if member_set.set_status == 'Interested in playing this set'
+       class_name = 'interested'
+     elsif member_set.set_status == 'Playing'
+       class_name = 'playing'
+     elsif member_set.set_status == 'Stopped playing, due to member\'s own decision'
+       class_name = 'not-playing-own'
+     elsif member_set.set_status == 'Unable to play, not due to member\'s decision'
+       class_name = 'not-playing-not-own'
+     elsif member_set.set_status == 'Subbing'
+       class_name = 'subbing'
+     elsif member_set.set_status == 'Not interested in this set'
+       class_name = 'not-interested'
+     end
+
+     if member_set.rotating
+       rotating_class = ' rotating'
+     end
+%>
+
+  <span id='member-set-pill-<%=member_set.id%>' class="member-set-pill <%=class_name%><%= rotating_class %>">
+    <%= member_set.performance_set.name %>
+    <div class='member-set-pill-tooltip'>
+      <b><%= member_set.member.first_name %> <%= member_set.member.last_name %><br></b>
+      in <%= member_set.performance_set.name %> &emsp; <i>(<%= member_set.performance_set.start_date %> - <%= member_set.performance_set.end_date %>)</i><br>
+      has status <b><%= member_set.set_status %></b><br>
+      <% if member_set.rotating %>
+        <b>ROTATING</b>
+      <% end %>
+    </div>
+  </span>
+
+
+
+<% end %>
