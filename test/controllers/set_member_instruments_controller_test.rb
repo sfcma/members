@@ -17,7 +17,12 @@ class SetMemberInstrumentsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create set_member_instrument" do
     assert_difference('SetMemberInstrument.count') do
-      post set_member_instruments_url, params: { set_member_instrument: { member_instrument_id: @set_member_instrument.member_instrument_id, set_id: @set_member_instrument.set_id } }
+      post set_member_instruments_url, params: {
+        set_member_instrument: {
+          member_instrument_id: @set_member_instrument.member_instrument_id,
+          member_set_id: @set_member_instrument.member_set_id,
+        },
+      }
     end
 
     assert_redirected_to set_member_instrument_url(SetMemberInstrument.last)
@@ -34,7 +39,12 @@ class SetMemberInstrumentsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update set_member_instrument" do
-    patch set_member_instrument_url(@set_member_instrument), params: { set_member_instrument: { member_instrument_id: @set_member_instrument.member_instrument_id, set_id: @set_member_instrument.set_id } }
+    patch set_member_instrument_url(@set_member_instrument), params: {
+      set_member_instrument: {
+        member_instrument_id: @set_member_instrument.member_instrument_id,
+        member_set_id: @set_member_instrument.member_set_id,
+      },
+    }
     assert_redirected_to set_member_instrument_url(@set_member_instrument)
   end
 

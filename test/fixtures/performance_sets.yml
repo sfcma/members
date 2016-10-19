@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  performance: one
+  ensemble: one
   start_date: 2016-09-09
   end_date: 2016-09-09
 
 two:
-  performance: two
+  ensemble: two
   start_date: 2016-09-09
   end_date: 2016-09-09

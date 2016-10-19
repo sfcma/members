@@ -2,14 +2,14 @@
 
 one:
   member: one
-  performanceset: one
+  performance_set: one
   date: 2016-09-09
   planned: false
   sub_found: 
 
 two:
   member: two
-  performanceset: two
+  performance_set: two
   date: 2016-09-09
   planned: false
   sub_found: 

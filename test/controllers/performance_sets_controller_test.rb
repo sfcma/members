@@ -17,7 +17,13 @@ class PerformanceSetsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create performance_set" do
     assert_difference('PerformanceSet.count') do
-      post performance_sets_url, params: { performance_set: { end_date: @performance_set.end_date, performance_id: @performance_set.performance_id, start_date: @performance_set.start_date } }
+      post performance_sets_url, params: {
+        performance_set: {
+          end_date: @performance_set.end_date,
+          ensemble_id: @performance_set.ensemble_id,
+          start_date: @performance_set.start_date,
+        },
+      }
     end
 
     assert_redirected_to performance_set_url(PerformanceSet.last)
@@ -34,7 +40,13 @@ class PerformanceSetsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update performance_set" do
-    patch performance_set_url(@performance_set), params: { performance_set: { end_date: @performance_set.end_date, performance_id: @performance_set.performance_id, start_date: @performance_set.start_date } }
+    patch performance_set_url(@performance_set), params: {
+      performance_set: {
+        end_date: @performance_set.end_date,
+        ensemble_id: @performance_set.ensemble_id,
+        start_date: @performance_set.start_date,
+      },
+    }
     assert_redirected_to performance_set_url(@performance_set)
   end
 

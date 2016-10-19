@@ -1,9 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  set: one
+  member_set: one
   member_instrument: one
 
 two:
-  set: two
+  member_set: two
   member_instrument: two
