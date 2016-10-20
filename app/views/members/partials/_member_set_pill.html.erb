@@ -1,7 +1,7 @@
 <%
 
    member_sets.map do |member_set|
-     if @set && member_set.performance_set.id.to_s != @set
+     if @performance_sets && member_set.performance_set.id.to_s != @performance_sets
        next
      end
 
