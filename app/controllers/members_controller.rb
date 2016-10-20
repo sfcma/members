@@ -157,7 +157,7 @@ class MembersController < ApplicationController
     if member_params[:member_sets_attributes]
       # Remove any empty sets
       member_params[:member_sets_attributes].reject! do |_, member_sets_fields|
-        member_sets_fields['set_id'] && member_sets_fields['set_id'].empty?
+        member_sets_fields['performance_set_id'] && member_sets_fields['performance_set_id'].empty?
       end
 
       # Create a new hash of {performance set id => set member instrument attributes}
@@ -166,9 +166,9 @@ class MembersController < ApplicationController
       # Go through each set
       member_params[:member_sets_attributes].each do |_, member_sets_fields|
         # Remove the set_member_instrument from the main member hash, and attach
-        # by set_id key to a separate hash
+        # by performance_set_id key to a separate hash
         # Each set only is allowed to have one instrument (set_member_instrument) attached right now
-        set_member_instruments[member_sets_fields[:set_id]] = member_sets_fields.delete(:set_member_instruments_attributes)
+        set_member_instruments[member_sets_fields[:performance_set_id]] = member_sets_fields.delete(:set_member_instruments_attributes)
       end
     end
 
@@ -176,7 +176,7 @@ class MembersController < ApplicationController
   end
 
   def get_member_instrument_id(set_member_instruments, member_set)
-    instrument_name = set_member_instruments[member_set.set_id.to_s]["0"][:member_instrument_id].underscore
+    instrument_name = set_member_instruments[member_set.performance_set_id.to_s]["0"][:member_instrument_id].underscore
     if MemberInstrument.where(member_id: @member.id, instrument: instrument_name).count == 0
       mi = MemberInstrument.new(member_id: @member.id, instrument: instrument_name)
       mi.save!
@@ -195,7 +195,7 @@ class MembersController < ApplicationController
   end
 
   def destroy_empty_member_sets(member_set)
-    unless member_set.set_id && member_set.set_id > 0
+    unless member_set.performance_set_id && member_set.performance_set_id > 0
       member_set.destroy
       true
     end
@@ -203,7 +203,7 @@ class MembersController < ApplicationController
   end
 
   def load_sets
-    @sets = PerformanceSet.all
+    @performance_sets = PerformanceSet.all
     if @member
       @member_instruments = @member.member_instruments
     end
@@ -217,6 +217,6 @@ class MembersController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list
   # through.
   def member_params
-    params.require(:member).permit(:first_name, :last_name, :address_1, :address_2, :city, :state, :zip, :phone_1, :phone_1_type, :phone_2, :phone_2_type, :email_1, :email_2, :emergency_name, :emergency_relation, :emergency_phone, :playing_status, :initial_date, :waiver_signed, member_instruments_attributes: [:id, :instrument, :_destroy], member_sets_attributes: [:id, :set_id, :status, :rotating, :set_status, :_destroy, set_member_instruments_attributes: [:member_instrument_id]])
+    params.require(:member).permit(:first_name, :last_name, :address_1, :address_2, :city, :state, :zip, :phone_1, :phone_1_type, :phone_2, :phone_2_type, :email_1, :email_2, :emergency_name, :emergency_relation, :emergency_phone, :playing_status, :initial_date, :waiver_signed, member_instruments_attributes: [:id, :instrument, :_destroy], member_sets_attributes: [:id, :performance_set_id, :status, :rotating, :set_status, :_destroy, set_member_instruments_attributes: [:member_instrument_id]])
   end
 end

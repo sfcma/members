@@ -92,7 +92,7 @@ var loadStuff = function() {
       playStatuses += "<option value='" + playStatusesForDropdown[ps].replace("'", "&apos;") + "'>" + playStatusesForDropdown[ps] + "</option>";
     }
     var div = "<div class='field memberInfoBlock'> \
-           <select name='member[member_sets_attributes][" + setCount +"][set_id]' id='member_member_sets_attributes_" + setCount +"_set_id'> \
+           <select name='member[member_sets_attributes][" + setCount +"][performance_set_id]' id='member_member_sets_attributes_" + setCount +"_performance_set_id'> \
              <option value=''>Please select set name</option>" + setOptions + " \
            </select> \
            &emsp;<i><a style='display: none;' href='#' class='removeLink' id='removeMemberSet" + setCount +"'>Remove Member from Set</a></i><br> \
@@ -121,7 +121,7 @@ var loadStuff = function() {
     ev.preventDefault();
     var obj = ev.target;
     var id = $(obj).attr('id').split('removeMemberSet')[1];
-    $('#member_member_sets_attributes_' + id + '_set_id').attr('id', 'member_member_sets_attributes_' + id + '__destroy');
+    $('#member_member_sets_attributes_' + id + '_performance_set_id').attr('id', 'member_member_sets_attributes_' + id + '__destroy');
     $('#member_member_sets_attributes_' + id + '__destroy').replaceWith('<input type="hidden" value="1" name="member[member_sets_attributes][' + id + '][_destroy]" id="member_member_sets_attributes_' + id + '__destroy">');
     $(obj).parent().html('Removed');
     $('#restOfSet' + id).detach();
@@ -180,7 +180,7 @@ var loadStuff = function() {
 
     // Check duplicate sets
     var setNames = [];
-    $('select[id^=member_member_sets_attributes_][id$=set_id]').each(function() {
+    $('select[id^=member_member_sets_attributes_][id$=performance_set_id]').each(function() {
       setNames.push($(this).val());
     });
     if(findIfDuplicates(setNames) == true) {

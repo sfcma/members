@@ -183,7 +183,7 @@
         <%= f.fields_for :member_sets do |set_f| %>
           <% if j < @member.member_sets.count %>
             <div class="field memberInfoBlock">
-              <%= set_f.collection_select :set_id, @sets, :id, :name, { prompt: true, :selected => set_f.object.set_id ? set_f.object.set_id.to_i : nil } %>
+              <%= set_f.collection_select :performance_set_id, @sets, :id, :name, { prompt: true, :selected => set_f.object.performance_set_id ? set_f.object.performance_set_id.to_i : nil } %>
               &emsp;&emsp;<i><a href='#' class='removeLink' id='removeMemberSet<%=j%>'>Remove Member from Set</a></i>
               <br>
               &emsp;Playing Status:
