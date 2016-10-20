@@ -64,13 +64,14 @@ class MemberInstrumentsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_member_instrument
-      @member_instrument = MemberInstrument.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def member_instrument_params
-      params.require(:member_instrument).permit(:member_id, :instrument)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_member_instrument
+    @member_instrument = MemberInstrument.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def member_instrument_params
+    params.require(:member_instrument).permit(:member_id, :instrument)
+  end
 end

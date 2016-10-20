@@ -2,6 +2,7 @@ require 'test_helper'
 
 class MemberInstrumentsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    with_logged_in_user
     @member_instrument = member_instruments(:one)
   end
 
@@ -17,7 +18,12 @@ class MemberInstrumentsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create member_instrument" do
     assert_difference('MemberInstrument.count') do
-      post member_instruments_url, params: { member_instrument: { instrument: @member_instrument.instrument, member_id: @member_instrument.member_id } }
+      post member_instruments_url, params: {
+        member_instrument: {
+          instrument: 'OtherInstrument',
+          member_id: @member_instrument.member_id,
+        },
+      }
     end
 
     assert_redirected_to member_instrument_url(MemberInstrument.last)
@@ -34,7 +40,12 @@ class MemberInstrumentsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update member_instrument" do
-    patch member_instrument_url(@member_instrument), params: { member_instrument: { instrument: @member_instrument.instrument, member_id: @member_instrument.member_id } }
+    patch member_instrument_url(@member_instrument), params: {
+      member_instrument: {
+        instrument: 'NewInstrument',
+        member_id: @member_instrument.member_id,
+      },
+    }
     assert_redirected_to member_instrument_url(@member_instrument)
   end
 
