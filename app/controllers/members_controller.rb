@@ -99,7 +99,7 @@ class MembersController < ApplicationController
             format.html { render :new, notice: 'Error saving set member instrument' }
           end
         end
-        format.html { render :show, notice: 'Member was successfully updated.' }
+        format.html { redirect_to(@member, notice: 'Member was successfully updated.') }
       else
         format.html { render :new, notice: 'OH NO' }
       end
@@ -125,7 +125,7 @@ class MembersController < ApplicationController
             format.html { render :edit, notice: 'Error saving set member instrument' }
           end
         end
-        format.html { render :show, notice: 'Member was successfully updated.' }
+        format.html { redirect_to(@member, notice: 'Member was successfully updated.') }
       else
         format.html { render :edit, notice: 'OH NO' }
       end

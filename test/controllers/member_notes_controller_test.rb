@@ -2,6 +2,7 @@ require 'test_helper'
 
 class MemberNotesControllerTest < ActionDispatch::IntegrationTest
   setup do
+    with_logged_in_user
     @member_note = member_notes(:one)
   end
 

@@ -1,11 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  name: 'FirstEnsemble 2016'
   ensemble: one
   start_date: 2016-09-09
   end_date: 2016-09-09
 
 two:
+  name: 'SecondEnsemble 2016'
   ensemble: two
   start_date: 2016-09-09
   end_date: 2016-09-09
