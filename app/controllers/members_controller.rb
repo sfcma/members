@@ -9,11 +9,11 @@ class MembersController < ApplicationController
   def index
     @instruments = MemberInstrument.all.map { |mi| [mi.instrument.capitalize, mi.instrument] }.uniq
     @instruments = @instruments.unshift(['All Instruments', 0])
-    @sets = PerformanceSet.all.map { |ps| [ps.name, ps.id] }
-    @sets = @sets.unshift(['All Sets', 0])
+    @performance_sets = PerformanceSet.all.map { |ps| [ps.name, ps.id] }
+    @performance_sets = @performance_sets.unshift(['All Sets', 0])
 
     @instrument_label = 0
-    @set_label = 0
+    @performance_set_label = 0
 
     joins = []
 
@@ -26,8 +26,8 @@ class MembersController < ApplicationController
     end
     if params[:set]
       if PerformanceSet.where('id = ?', params[:set]).count > 0
-        @set = params[:set]
-        @set_label = @set
+        @performance_set = params[:set]
+        @performance_set_label = @performance_set
         joins << :member_sets
       end
     end
@@ -37,8 +37,8 @@ class MembersController < ApplicationController
     if @instrument
       @members = @members.where("member_instruments.instrument = ?", @instrument.humanize.downcase)
     end
-    if @set
-      @members = @members.where("member_sets.set_id = ?", params[:set])
+    if @performance_set
+      @members = @members.where("member_sets.performance_set_id = ?", params[:set])
     end
 
     @members = @members.order("members.last_name ASC")
