@@ -176,14 +176,14 @@
 
       <div id="setMaster">
         <script>var setCount = <%= @member.member_sets.count %>;</script>
-        <script>var setsForDropdown = <%= @sets.map{|set| [set.id, set.name]}.to_json.html_safe %>;</script>
+        <script>var setsForDropdown = <%= @performance_sets.map{|set| [set.id, set.name]}.to_json.html_safe %>;</script>
         <script>var playStatusesForDropdown = <%= MemberSet.statuses.keys.map(&:humanize).to_json.html_safe %>;</script>
         <h3 class="formHeader">Sets</h3>
         <% j = 0 %>
         <%= f.fields_for :member_sets do |set_f| %>
           <% if j < @member.member_sets.count %>
             <div class="field memberInfoBlock">
-              <%= set_f.collection_select :performance_set_id, @sets, :id, :name, { prompt: true, :selected => set_f.object.performance_set_id ? set_f.object.performance_set_id.to_i : nil } %>
+              <%= set_f.collection_select :performance_set_id, @performance_sets, :id, :name, { prompt: true, :selected => set_f.object.performance_set_id ? set_f.object.performance_set_id.to_i : nil } %>
               &emsp;&emsp;<i><a href='#' class='removeLink' id='removeMemberSet<%=j%>'>Remove Member from Set</a></i>
               <br>
               &emsp;Playing Status:
