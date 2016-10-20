@@ -203,7 +203,7 @@ class MembersController < ApplicationController
   end
 
   def load_sets
-    @sets = PerformanceSet.all
+    @performance_sets = PerformanceSet.all
     if @member
       @member_instruments = @member.member_instruments
     end
