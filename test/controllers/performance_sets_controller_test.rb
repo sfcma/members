@@ -2,6 +2,7 @@ require 'test_helper'
 
 class PerformanceSetsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    with_logged_in_user
     @performance_set = performance_sets(:one)
   end
 
@@ -19,9 +20,10 @@ class PerformanceSetsControllerTest < ActionDispatch::IntegrationTest
     assert_difference('PerformanceSet.count') do
       post performance_sets_url, params: {
         performance_set: {
-          end_date: @performance_set.end_date,
+          name: @performance_set.name,
           ensemble_id: @performance_set.ensemble_id,
-          start_date: @performance_set.start_date,
+          start_date: @performance_set.end_date,
+          end_date: @performance_set.end_date + 1.month,
         },
       }
     end
@@ -42,9 +44,10 @@ class PerformanceSetsControllerTest < ActionDispatch::IntegrationTest
   test "should update performance_set" do
     patch performance_set_url(@performance_set), params: {
       performance_set: {
-        end_date: @performance_set.end_date,
+        name: @performance_set.name,
         ensemble_id: @performance_set.ensemble_id,
         start_date: @performance_set.start_date,
+        end_date: @performance_set.end_date + 1.day,
       },
     }
     assert_redirected_to performance_set_url(@performance_set)

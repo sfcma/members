@@ -2,6 +2,7 @@ require 'test_helper'
 
 class MembersControllerTest < ActionDispatch::IntegrationTest
   setup do
+    with_logged_in_user
     @member = members(:one)
   end
 
@@ -17,7 +18,27 @@ class MembersControllerTest < ActionDispatch::IntegrationTest
 
   test "should create member" do
     assert_difference('Member.count') do
-      post members_url, params: { member: { address_1: @member.address_1, address_2: @member.address_2, city: @member.city, email_1: @member.email_1, email_2: @member.email_2, emergency_name: @member.emergency_name, emergency_phone: @member.emergency_phone, emergency_relation: @member.emergency_relation, first_name: @member.first_name, last_name: @member.last_name, phone_1: @member.phone_1, phone_1_type: @member.phone_1_type, phone_2: @member.phone_2, phone_2_type: @member.phone_2_type, playing_status: @member.playing_status, state: @member.state, zip: @member.zip } }
+      post members_url, params: {
+        member: {
+          address_1: @member.address_1,
+          address_2: @member.address_2,
+          city: @member.city,
+          email_1: @member.email_1,
+          email_2: @member.email_2,
+          emergency_name: @member.emergency_name,
+          emergency_phone: @member.emergency_phone,
+          emergency_relation: @member.emergency_relation,
+          first_name: 'NewFirstName',
+          last_name: @member.last_name,
+          phone_1: @member.phone_1,
+          phone_1_type: @member.phone_1_type,
+          phone_2: @member.phone_2,
+          phone_2_type: @member.phone_2_type,
+          playing_status: @member.playing_status,
+          state: @member.state,
+          zip: @member.zip,
+        },
+      }
     end
 
     assert_redirected_to member_url(Member.last)
@@ -34,7 +55,27 @@ class MembersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update member" do
-    patch member_url(@member), params: { member: { address_1: @member.address_1, address_2: @member.address_2, city: @member.city, email_1: @member.email_1, email_2: @member.email_2, emergency_name: @member.emergency_name, emergency_phone: @member.emergency_phone, emergency_relation: @member.emergency_relation, first_name: @member.first_name, last_name: @member.last_name, phone_1: @member.phone_1, phone_1_type: @member.phone_1_type, phone_2: @member.phone_2, phone_2_type: @member.phone_2_type, playing_status: @member.playing_status, state: @member.state, zip: @member.zip } }
+    patch member_url(@member), params: {
+      member: {
+        address_1: @member.address_1,
+        address_2: @member.address_2,
+        city: @member.city,
+        email_1: @member.email_1,
+        email_2: @member.email_2,
+        emergency_name: @member.emergency_name,
+        emergency_phone: @member.emergency_phone,
+        emergency_relation: @member.emergency_relation,
+        first_name: 'NewFirstName',
+        last_name: @member.last_name,
+        phone_1: @member.phone_1,
+        phone_1_type: @member.phone_1_type,
+        phone_2: @member.phone_2,
+        phone_2_type: @member.phone_2_type,
+        playing_status: @member.playing_status,
+        state: @member.state,
+        zip: @member.zip,
+      },
+    }
     assert_redirected_to member_url(@member)
   end
 
