@@ -2,6 +2,7 @@ require 'test_helper'
 
 class SetMemberInstrumentsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    with_logged_in_user
     @set_member_instrument = set_member_instruments(:one)
   end
 

@@ -4,7 +4,7 @@ class MemberSet < ApplicationRecord
 
   has_many :set_member_instruments
   belongs_to :member
-  belongs_to :performance_set, class_name: 'PerformanceSet', foreign_key: 'set_id'
+  belongs_to :performance_set, class_name: 'PerformanceSet'
   accepts_nested_attributes_for :set_member_instruments, allow_destroy: true
   validates :performance_set, presence: true
 
