@@ -2,6 +2,7 @@ require 'test_helper'
 
 class AbsencesControllerTest < ActionDispatch::IntegrationTest
   setup do
+    with_logged_in_user
     @absence = absences(:one)
   end
 

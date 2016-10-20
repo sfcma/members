@@ -6,5 +6,10 @@ class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
-  # Add more helper methods to be used by all tests here...
+  # This should actually be done via a method stub rather than redefining the method
+  def with_logged_in_user
+    ApplicationController.send(:define_method, :authenticate_user!) do
+      nil
+    end
+  end
 end
