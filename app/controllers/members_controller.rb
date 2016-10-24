@@ -35,13 +35,13 @@ class MembersController < ApplicationController
     @members = Member.joins(joins)
 
     if @instrument
-      @members = @members.where("member_instruments.instrument = ?", @instrument.humanize.downcase)
+      @members = @members.where('member_instruments.instrument = ?', @instrument.humanize.downcase)
     end
     if @performance_set
-      @members = @members.where("member_sets.performance_set_id = ?", params[:set])
+      @members = @members.where('member_sets.performance_set_id = ?', params[:set])
     end
 
-    @members = @members.order("members.last_name ASC")
+    @members = @members.order(:last_name)
   end
 
   # GET /members/1
@@ -50,10 +50,8 @@ class MembersController < ApplicationController
     @audit_string = helpers.generate_audit_array(@member)
     @audit_string += helpers.generate_audit_array(@member.member_instruments.with_deleted.all.to_a)
     @audit_string += helpers.generate_audit_array(@member.member_sets.with_deleted.all.to_a)
-    @audit_string.sort_by do |as|
-
-    # Impression.where(:controller_name => 'members', :impressionable_id => 30).map{|s| User.find(s.user_id).email + " " + s.created_at.to_s }
-
+    @audit_string.sort_by do |_as|
+      # Impression.where(:controller_name => 'members', :impressionable_id => 30).map{|s| User.find(s.user_id).email + " " + s.created_at.to_s }
     end
   end
 
@@ -176,16 +174,12 @@ class MembersController < ApplicationController
   end
 
   def get_member_instrument_id(set_member_instruments, member_set)
-    instrument_name = set_member_instruments[member_set.performance_set_id.to_s]["0"][:member_instrument_id].underscore
-    if MemberInstrument.where(member_id: @member.id, instrument: instrument_name).count == 0
-      mi = MemberInstrument.new(member_id: @member.id, instrument: instrument_name)
-      mi.save!
-    end
-    MemberInstrument.where(member_id: @member.id, instrument: instrument_name).first.id
+    instrument_name = set_member_instruments[member_set.performance_set_id.to_s]['0'][:member_instrument_id].underscore
+    MemberInstrument.find_or_create_by!(member_id: @member.id, instrument: instrument_name).id
   end
 
   def get_set_member_instrument(member_instrument_id, member_set)
-    if SetMemberInstrument.where(member_set_id: member_set.id).length > 0
+    if !SetMemberInstrument.where(member_set_id: member_set.id).empty?
       smix = SetMemberInstrument.where(member_set_id: member_set.id).first
       smix.member_instrument_id = member_instrument_id
     else
@@ -204,9 +198,7 @@ class MembersController < ApplicationController
 
   def load_sets
     @performance_sets = PerformanceSet.all
-    if @member
-      @member_instruments = @member.member_instruments
-    end
+    @member_instruments = @member.member_instruments if @member
   end
 
   # Use callbacks to share common setup or constraints between actions.
@@ -217,6 +209,40 @@ class MembersController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list
   # through.
   def member_params
-    params.require(:member).permit(:first_name, :last_name, :address_1, :address_2, :city, :state, :zip, :phone_1, :phone_1_type, :phone_2, :phone_2_type, :email_1, :email_2, :emergency_name, :emergency_relation, :emergency_phone, :playing_status, :initial_date, :waiver_signed, member_instruments_attributes: [:id, :instrument, :_destroy], member_sets_attributes: [:id, :performance_set_id, :status, :rotating, :set_status, :_destroy, set_member_instruments_attributes: [:member_instrument_id]])
+    params.require(:member).permit(
+      :first_name,
+      :last_name,
+      :address_1,
+      :address_2,
+      :city,
+      :state,
+      :zip,
+      :phone_1,
+      :phone_1_type,
+      :phone_2,
+      :phone_2_type,
+      :email_1,
+      :email_2,
+      :emergency_name,
+      :emergency_relation,
+      :emergency_phone,
+      :playing_status,
+      :initial_date,
+      :waiver_signed,
+      member_instruments_attribute: [
+        :id,
+        :instrument,
+        :_destroy,
+      ],
+      member_sets_attribute: [
+        :id,
+        :performance_set_id,
+        :status,
+        :rotating,
+        :set_status,
+        :_destroy,
+        set_member_instruments_attributes: [:member_instrument_id],
+      ]
+    )
   end
 end

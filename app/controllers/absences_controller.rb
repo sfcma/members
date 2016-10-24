@@ -63,13 +63,14 @@ class AbsencesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_absence
-      @absence = Absence.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def absence_params
-      params.require(:absence).permit(:member_id, :performanceset_id, :date, :planned, :sub_found)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_absence
+    @absence = Absence.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def absence_params
+    params.require(:absence).permit(:member_id, :performanceset_id, :date, :planned, :sub_found)
+  end
 end

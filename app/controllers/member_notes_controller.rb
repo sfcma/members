@@ -63,13 +63,14 @@ class MemberNotesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_member_note
-      @member_note = MemberNote.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def member_note_params
-      params.require(:member_note).permit(:member_id, :user_id, :note)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_member_note
+    @member_note = MemberNote.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def member_note_params
+    params.require(:member_note).permit(:member_id, :user_id, :note)
+  end
 end
