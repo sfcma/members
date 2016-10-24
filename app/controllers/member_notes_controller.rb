@@ -71,6 +71,10 @@ class MemberNotesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def member_note_params
-    params.require(:member_note).permit(:member_id, :user_id, :note)
+    params.require(:member_note).permit(
+      :member_id,
+      :user_id,
+      :note,
+    )
   end
 end

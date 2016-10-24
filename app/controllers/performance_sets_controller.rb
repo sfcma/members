@@ -79,6 +79,11 @@ class PerformanceSetsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def performance_set_params
-    params.require(:performance_set).permit(:ensemble_id, :start_date, :end_date, :name)
+    params.require(:performance_set).permit(
+      :ensemble_id,
+      :start_date,
+      :end_date,
+      :name,
+    )
   end
 end
