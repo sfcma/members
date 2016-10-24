@@ -73,7 +73,7 @@ class EnsemblesController < ApplicationController
   def ensemble_params
     params.require(:ensemble).permit(
       :name,
-      :description,
+      :description
     )
   end
 end

@@ -2,7 +2,6 @@ class PerformanceSetsController < ApplicationController
   before_action :set_performance_set, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!
 
-
   # GET /performance_sets
   # GET /performance_sets.json
   def index
@@ -83,7 +82,7 @@ class PerformanceSetsController < ApplicationController
       :ensemble_id,
       :start_date,
       :end_date,
-      :name,
+      :name
     )
   end
 end

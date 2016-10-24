@@ -73,7 +73,7 @@ class SetMemberInstrumentsController < ApplicationController
   def set_member_instrument_params
     params.require(:set_member_instrument).permit(
       :member_set_id,
-      :member_instrument_id,
+      :member_instrument_id
     )
   end
 end
