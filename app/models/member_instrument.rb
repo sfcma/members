@@ -4,6 +4,6 @@ class MemberInstrument < ApplicationRecord
   belongs_to :member
   has_many :set_member_instruments
   accepts_nested_attributes_for :set_member_instruments, allow_destroy: true
-  validates :instrument, presence: true, uniqueness: { scope: :member_id, message: "each member can only have each instrument listed once" }
+  validates :instrument, presence: true, uniqueness: { scope: :member_id, message: 'each member can only have each instrument listed once' }
   before_save { |mi| mi.instrument = mi.instrument.underscore }
 end
