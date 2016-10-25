@@ -232,7 +232,7 @@ class MembersController < ApplicationController
       member_instruments_attribute: [
         :id,
         :instrument,
-        :_destroy,
+        :_destroy
       ],
       member_sets_attribute: [
         :id,
@@ -242,7 +242,7 @@ class MembersController < ApplicationController
         :set_status,
         :_destroy,
         set_member_instruments_attributes: [:member_instrument_id],
-      ]
+      ],
     )
   end
 end

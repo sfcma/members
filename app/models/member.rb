@@ -10,8 +10,8 @@ class Member < ApplicationRecord
   accepts_nested_attributes_for :member_notes, allow_destroy: true
 
   validates :first_name, presence: true
-  validates_associated :member_sets, { message: -> (obj, data) { "Please include an instrument and set name on each set added." } }
-  validates_associated :member_instruments, { message: -> (obj, data) { "uh oh" } }
+  validates_associated :member_sets, message: -> (_obj, _data) { 'Please include an instrument and set name on each set added.' }
+  validates_associated :member_instruments, message: -> (_obj, _data) { 'uh oh' }
   validates_date :initial_date, allow_blank: true
   validates_date :waiver_signed, allow_blank: true
 

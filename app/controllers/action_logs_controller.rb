@@ -75,7 +75,7 @@ class ActionLogsController < ApplicationController
     params.require(:action_log).permit(
       :member_id,
       :user_id,
-      :action,
+      :action
     )
   end
 end

@@ -76,7 +76,7 @@ class AbsencesController < ApplicationController
       :performance_set_id,
       :date,
       :planned,
-      :sub_found,
+      :sub_found
     )
   end
 end

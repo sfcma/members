@@ -74,7 +74,7 @@ class MemberNotesController < ApplicationController
     params.require(:member_note).permit(
       :member_id,
       :user_id,
-      :note,
+      :note
     )
   end
 end
