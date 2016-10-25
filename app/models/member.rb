@@ -5,6 +5,10 @@ class Member < ApplicationRecord
   has_many :member_instruments
   has_many :member_sets
   has_many :member_notes
+
+  # This maybe should be a has_and_belongs_to_many
+  has_many :performance_sets, through: :member_sets
+
   accepts_nested_attributes_for :member_instruments, allow_destroy: true
   accepts_nested_attributes_for :member_sets, allow_destroy: true
   accepts_nested_attributes_for :member_notes, allow_destroy: true

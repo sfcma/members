@@ -2,6 +2,9 @@ class PerformanceSet < ApplicationRecord
   audited associated_with: :ensemble
   acts_as_paranoid
   has_many :member_sets
+
+  # This maybe should be a has_and_belongs_to_many association
+  has_many :members, through: :member_sets
   belongs_to :ensemble
   validates :ensemble_id, presence: true
   validates :name, presence: true, format: { with: /.*[0-9]{4}.*/,
