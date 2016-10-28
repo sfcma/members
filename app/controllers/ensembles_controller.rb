@@ -7,8 +7,8 @@ class EnsemblesController < ApplicationController
     @ensembles = Ensemble.all
   end
 
-  # GET /performances/1
-  # GET /performances/1.json
+  # GET /ensembles/1
+  # GET /ensembles/1.json
   def show
     @audit_string = helpers.generate_audit_array(@ensemble)
   end
@@ -42,12 +42,12 @@ class EnsemblesController < ApplicationController
   # PATCH/PUT /ensembles/1.json
   def update
     respond_to do |format|
-      if @performance.update(performance_params)
-        format.html { redirect_to @performance, notice: 'Ensemble was successfully updated.' }
-        format.json { render :show, status: :ok, location: @performance }
+      if @ensemble.update(ensemble_params)
+        format.html { redirect_to @ensemble, notice: 'Ensemble was successfully updated.' }
+        format.json { render :show, status: :ok, location: @ensemble }
       else
         format.html { render :edit }
-        format.json { render json: @performance.errors, status: :unprocessable_entity }
+        format.json { render json: @ensemble.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -63,13 +63,17 @@ class EnsemblesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_ensemble
-      @ensemble = Ensemble.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def ensemble_params
-      params.require(:ensemble).permit(:name, :description)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_ensemble
+    @ensemble = Ensemble.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def ensemble_params
+    params.require(:ensemble).permit(
+      :name,
+      :description
+    )
+  end
 end

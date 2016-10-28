@@ -9,11 +9,11 @@ class MembersController < ApplicationController
   def index
     @instruments = MemberInstrument.all.map { |mi| [mi.instrument.capitalize, mi.instrument] }.uniq
     @instruments = @instruments.unshift(['All Instruments', 0])
-    @sets = PerformanceSet.all.map { |ps| [ps.name, ps.id] }
-    @sets = @sets.unshift(['All Sets', 0])
+    @performance_sets = PerformanceSet.all.map { |ps| [ps.name, ps.id] }
+    @performance_sets = @performance_sets.unshift(['All Sets', 0])
 
     @instrument_label = 0
-    @set_label = 0
+    @performance_set_label = 0
 
     joins = []
 
@@ -26,8 +26,8 @@ class MembersController < ApplicationController
     end
     if params[:set]
       if PerformanceSet.where('id = ?', params[:set]).count > 0
-        @set = params[:set]
-        @set_label = @set
+        @performance_set = params[:set]
+        @performance_set_label = @performance_set
         joins << :member_sets
       end
     end
@@ -35,13 +35,13 @@ class MembersController < ApplicationController
     @members = Member.joins(joins)
 
     if @instrument
-      @members = @members.where("member_instruments.instrument = ?", @instrument.humanize.downcase)
+      @members = @members.where('member_instruments.instrument = ?', @instrument.humanize.downcase)
     end
-    if @set
-      @members = @members.where("member_sets.set_id = ?", params[:set])
+    if @performance_set
+      @members = @members.where('member_sets.performance_set_id = ?', params[:set])
     end
 
-    @members = @members.order("members.last_name ASC")
+    @members = @members.order(:last_name)
   end
 
   # GET /members/1
@@ -50,10 +50,8 @@ class MembersController < ApplicationController
     @audit_string = helpers.generate_audit_array(@member)
     @audit_string += helpers.generate_audit_array(@member.member_instruments.with_deleted.all.to_a)
     @audit_string += helpers.generate_audit_array(@member.member_sets.with_deleted.all.to_a)
-    @audit_string.sort_by do |as|
-
-    # Impression.where(:controller_name => 'members', :impressionable_id => 30).map{|s| User.find(s.user_id).email + " " + s.created_at.to_s }
-
+    @audit_string.sort_by do |_as|
+      # Impression.where(:controller_name => 'members', :impressionable_id => 30).map{|s| User.find(s.user_id).email + " " + s.created_at.to_s }
     end
   end
 
@@ -99,7 +97,7 @@ class MembersController < ApplicationController
             format.html { render :new, notice: 'Error saving set member instrument' }
           end
         end
-        format.html { render :show, notice: 'Member was successfully updated.' }
+        format.html { redirect_to(@member, notice: 'Member was successfully updated.') }
       else
         format.html { render :new, notice: 'OH NO' }
       end
@@ -125,7 +123,7 @@ class MembersController < ApplicationController
             format.html { render :edit, notice: 'Error saving set member instrument' }
           end
         end
-        format.html { render :show, notice: 'Member was successfully updated.' }
+        format.html { redirect_to(@member, notice: 'Member was successfully updated.') }
       else
         format.html { render :edit, notice: 'OH NO' }
       end
@@ -157,7 +155,7 @@ class MembersController < ApplicationController
     if member_params[:member_sets_attributes]
       # Remove any empty sets
       member_params[:member_sets_attributes].reject! do |_, member_sets_fields|
-        member_sets_fields['set_id'] && member_sets_fields['set_id'].empty?
+        member_sets_fields['performance_set_id'] && member_sets_fields['performance_set_id'].empty?
       end
 
       # Create a new hash of {performance set id => set member instrument attributes}
@@ -166,9 +164,9 @@ class MembersController < ApplicationController
       # Go through each set
       member_params[:member_sets_attributes].each do |_, member_sets_fields|
         # Remove the set_member_instrument from the main member hash, and attach
-        # by set_id key to a separate hash
+        # by performance_set_id key to a separate hash
         # Each set only is allowed to have one instrument (set_member_instrument) attached right now
-        set_member_instruments[member_sets_fields[:set_id]] = member_sets_fields.delete(:set_member_instruments_attributes)
+        set_member_instruments[member_sets_fields[:performance_set_id]] = member_sets_fields.delete(:set_member_instruments_attributes)
       end
     end
 
@@ -176,16 +174,12 @@ class MembersController < ApplicationController
   end
 
   def get_member_instrument_id(set_member_instruments, member_set)
-    instrument_name = set_member_instruments[member_set.set_id.to_s]["0"][:member_instrument_id].underscore
-    if MemberInstrument.where(member_id: @member.id, instrument: instrument_name).count == 0
-      mi = MemberInstrument.new(member_id: @member.id, instrument: instrument_name)
-      mi.save!
-    end
-    MemberInstrument.where(member_id: @member.id, instrument: instrument_name).first.id
+    instrument_name = set_member_instruments[member_set.performance_set_id.to_s]['0'][:member_instrument_id].underscore
+    MemberInstrument.find_or_create_by!(member_id: @member.id, instrument: instrument_name).id
   end
 
   def get_set_member_instrument(member_instrument_id, member_set)
-    if SetMemberInstrument.where(member_set_id: member_set.id).length > 0
+    if !SetMemberInstrument.where(member_set_id: member_set.id).empty?
       smix = SetMemberInstrument.where(member_set_id: member_set.id).first
       smix.member_instrument_id = member_instrument_id
     else
@@ -195,7 +189,7 @@ class MembersController < ApplicationController
   end
 
   def destroy_empty_member_sets(member_set)
-    unless member_set.set_id && member_set.set_id > 0
+    unless member_set.performance_set_id && member_set.performance_set_id > 0
       member_set.destroy
       true
     end
@@ -203,10 +197,8 @@ class MembersController < ApplicationController
   end
 
   def load_sets
-    @sets = PerformanceSet.all
-    if @member
-      @member_instruments = @member.member_instruments
-    end
+    @performance_sets = PerformanceSet.all
+    @member_instruments = @member.member_instruments if @member
   end
 
   # Use callbacks to share common setup or constraints between actions.
@@ -217,6 +209,40 @@ class MembersController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list
   # through.
   def member_params
-    params.require(:member).permit(:first_name, :last_name, :address_1, :address_2, :city, :state, :zip, :phone_1, :phone_1_type, :phone_2, :phone_2_type, :email_1, :email_2, :emergency_name, :emergency_relation, :emergency_phone, :playing_status, :initial_date, :waiver_signed, member_instruments_attributes: [:id, :instrument, :_destroy], member_sets_attributes: [:id, :set_id, :status, :rotating, :set_status, :_destroy, set_member_instruments_attributes: [:member_instrument_id]])
+    params.require(:member).permit(
+      :first_name,
+      :last_name,
+      :address_1,
+      :address_2,
+      :city,
+      :state,
+      :zip,
+      :phone_1,
+      :phone_1_type,
+      :phone_2,
+      :phone_2_type,
+      :email_1,
+      :email_2,
+      :emergency_name,
+      :emergency_relation,
+      :emergency_phone,
+      :playing_status,
+      :initial_date,
+      :waiver_signed,
+      member_instruments_attribute: [
+        :id,
+        :instrument,
+        :_destroy
+      ],
+      member_sets_attribute: [
+        :id,
+        :performance_set_id,
+        :status,
+        :rotating,
+        :set_status,
+        :_destroy,
+        set_member_instruments_attributes: [:member_instrument_id],
+      ],
+    )
   end
 end

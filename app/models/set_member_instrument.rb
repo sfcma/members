@@ -5,5 +5,5 @@ class SetMemberInstrument < ApplicationRecord
   belongs_to :member_instrument
 
   validates_associated :member_instrument
-  validates :member_set, presence: { message: -> (obj, data) { "Please include an instrument and set name on each set added." } }
+  validates :member_set, presence: { message: -> (_obj, _data) { 'Please include an instrument and set name on each set added.' } }
 end

@@ -2,6 +2,7 @@ require 'test_helper'
 
 class AbsencesControllerTest < ActionDispatch::IntegrationTest
   setup do
+    with_logged_in_user
     @absence = absences(:one)
   end
 
@@ -17,7 +18,15 @@ class AbsencesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create absence" do
     assert_difference('Absence.count') do
-      post absences_url, params: { absence: { date: @absence.date, member_id: @absence.member_id, performanceset_id: @absence.performanceset_id, planned: @absence.planned, sub_found: @absence.sub_found } }
+      post absences_url, params: {
+        absence: {
+          date: @absence.date,
+          member_id: @absence.member_id,
+          performance_set_id: @absence.performance_set_id,
+          planned: @absence.planned,
+          sub_found: @absence.sub_found,
+        },
+      }
     end
 
     assert_redirected_to absence_url(Absence.last)
@@ -34,7 +43,15 @@ class AbsencesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update absence" do
-    patch absence_url(@absence), params: { absence: { date: @absence.date, member_id: @absence.member_id, performanceset_id: @absence.performanceset_id, planned: @absence.planned, sub_found: @absence.sub_found } }
+    patch absence_url(@absence), params: {
+      absence: {
+        date: @absence.date,
+        member_id: @absence.member_id,
+        performance_set_id: @absence.performance_set_id,
+        planned: @absence.planned,
+        sub_found: @absence.sub_found,
+      },
+    }
     assert_redirected_to absence_url(@absence)
   end
 

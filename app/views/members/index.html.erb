@@ -2,10 +2,10 @@
 
 <div class='listDescription'>
   <%= select_tag :instruments, options_for_select(@instruments, selected: @instrument), id: 'instrumentSelector' %>
-  <%= select_tag :sets, options_for_select(@sets, selected: @set), id: 'setSelector' %>
+  <%= select_tag :sets, options_for_select(@performance_sets, selected: @performance_sets), id: 'setSelector' %>
   <br>
-  <% if @set || @instrument %>
-    <% if @set %>
+  <% if @performance_set || @instrument %>
+    <% if @performance_set %>
       <i>Showing only members playing in <b><%= PerformanceSet.find_by_id(params[:set]).name %></b></i>
     <% end %>
     <% if @instrument %>
