@@ -229,12 +229,12 @@ class MembersController < ApplicationController
       :playing_status,
       :initial_date,
       :waiver_signed,
-      member_instruments_attribute: [
+      member_instruments_attributes: [
         :id,
         :instrument,
         :_destroy
       ],
-      member_sets_attribute: [
+      member_sets_attributes: [
         :id,
         :performance_set_id,
         :status,
