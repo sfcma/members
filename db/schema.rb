@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161005071454) do
+ActiveRecord::Schema.define(version: 20161025064001) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -125,6 +125,7 @@ ActiveRecord::Schema.define(version: 20161005071454) do
     t.datetime "updated_at",         null: false
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_member_sets_on_deleted_at"
+    t.index ["member_id", "performance_set_id"], name: "index_member_sets_on_member_id_and_performance_set_id", unique: true
     t.index ["member_id"], name: "index_member_sets_on_member_id"
     t.index ["performance_set_id"], name: "index_member_sets_on_performance_set_id"
   end
@@ -176,7 +177,7 @@ ActiveRecord::Schema.define(version: 20161005071454) do
   end
 
   create_table "set_member_instruments", force: :cascade do |t|
-    t.integer  "performance_set_id"
+    t.integer  "performance_set_id" # This should be killed
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
     t.integer  "member_set_id"

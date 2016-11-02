@@ -2,7 +2,6 @@ class PerformanceSetsController < ApplicationController
   before_action :set_performance_set, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!
 
-
   # GET /performance_sets
   # GET /performance_sets.json
   def index
@@ -71,13 +70,19 @@ class PerformanceSetsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_performance_set
-      @performance_set = PerformanceSet.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def performance_set_params
-      params.require(:performance_set).permit(:ensemble_id, :start_date, :end_date, :name)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_performance_set
+    @performance_set = PerformanceSet.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def performance_set_params
+    params.require(:performance_set).permit(
+      :ensemble_id,
+      :start_date,
+      :end_date,
+      :name
+    )
+  end
 end

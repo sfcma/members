@@ -64,13 +64,18 @@ class ActionLogsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_action_log
-      @action_log = ActionLog.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def action_log_params
-      params.require(:action_log).permit(:member_id, :user_id, :action)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_action_log
+    @action_log = ActionLog.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def action_log_params
+    params.require(:action_log).permit(
+      :member_id,
+      :user_id,
+      :action
+    )
+  end
 end
