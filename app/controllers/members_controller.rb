@@ -19,19 +19,19 @@ class MembersController < ApplicationController
 
     @member_instruments = {}
     MemberInstrument.all.map do |m|
-      if @member_instruments[m.id]
-        @member_instruments[m.id].push(m)
-      else
-        @member_instruments[m.id] = [m]
+      if m.member && @member_instruments[m.member.id]
+        @member_instruments[m.member.id].push(m)
+      elsif m.member
+        @member_instruments[m.member.id] = [m]
       end
     end
 
     @member_sets = {}
     MemberSet.all.map do |m|
-      if @member_sets[m.id]
-        @member_sets[m.id].push(m)
-      else
-        @member_sets[m.id] = [m]
+      if m.member && @member_sets[m.member.id]
+        @member_sets[m.member.id].push(m)
+      elsif m.member
+        @member_sets[m.member.id] = [m]
       end
     end
 
