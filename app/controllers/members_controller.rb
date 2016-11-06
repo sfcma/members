@@ -17,6 +17,24 @@ class MembersController < ApplicationController
 
     joins = []
 
+    @member_instruments = {}
+    MemberInstrument.all.map do |m|
+      if @member_instruments[m.id]
+        @member_instruments[m.id].push(m)
+      else
+        @member_instruments[m.id] = [m]
+      end
+    end
+
+    @member_sets = {}
+    MemberSet.all.map do |m|
+      if @member_sets[m.id]
+        @member_sets[m.id].push(m)
+      else
+        @member_sets[m.id] = [m]
+      end
+    end
+
     if params[:instrument]
       if MemberInstrument.where('instrument = ?', params[:instrument]).count > 0
         @instrument = params[:instrument]
