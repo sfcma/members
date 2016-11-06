@@ -177,7 +177,7 @@ ActiveRecord::Schema.define(version: 20161025064001) do
   end
 
   create_table "set_member_instruments", force: :cascade do |t|
-    t.integer  "performance_set_id"
+    t.integer  "performance_set_id" # This should be killed
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
     t.integer  "member_set_id"
