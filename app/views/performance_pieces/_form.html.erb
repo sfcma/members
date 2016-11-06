@@ -1,0 +1,33 @@
+<%= form_for(performance_piece) do |f| %>
+  <% if performance_piece.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(performance_piece.errors.count, "error") %> prohibited this performance_piece from being saved:</h2>
+
+      <ul>
+      <% performance_piece.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :performance_set_id %>
+    <%= f.collection_select :performance_set_id, @performance_sets, :id, :name, { prompt: true } %>
+    <%= link_to "(Need to create new performance set?)", new_performance_set_path %>
+  </div>
+
+  <div class="field">
+    <%= f.label :title, "Title of Piece" %>
+    <%= f.text_field :title %>
+  </div>
+
+  <div class="field">
+    <%= f.label :composer, "Composer of Piece" %>
+    <%= f.text_field :composer %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

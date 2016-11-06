@@ -1,0 +1,7 @@
+<h1>Editing Performance Piece</h1>
+
+<%= render 'form', performance_piece: @performance_piece %>
+
+<%= link_to 'Cancel', performance_pieces_path %>
+<br><br>
+<%= link_to 'Delete Performance Piece', @performance_piece, method: :delete, data: { confirm: 'Are you sure you want to delete this piece?' } %>
