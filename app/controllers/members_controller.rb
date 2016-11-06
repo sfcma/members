@@ -226,6 +226,7 @@ class MembersController < ApplicationController
       :email_2,
       :emergency_name,
       :emergency_relation,
+      :program_name,
       :emergency_phone,
       :playing_status,
       :initial_date,
