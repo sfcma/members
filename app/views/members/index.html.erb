@@ -30,8 +30,8 @@
   </thead>
   <tbody>
     <% @members.each do |member| %>
-      <% inst_list = @member_instruments[member.id].map(&:instrument)
-         inst_stuff = inst_list.map { |il| link_to(il.capitalize, members_url(:instrument=>il)) }.join(", ")
+      <% inst_list = @member_instruments[member.id]&.map(&:instrument)
+         inst_stuff = inst_list&.map { |il| link_to(il.capitalize, members_url(:instrument=>il)) }&.join(", ")
           %>
       <tr>
         <td class="arrow">	▶</td>
@@ -39,7 +39,7 @@
         <td><% if !member.waiver_signed %>
            <span class="nowaiver" title="Waiver not signed and returned"> W </span>
          <% end %></td>
-        <td><%= inst_stuff.html_safe %></td>
+        <td><%= inst_stuff&.html_safe %></td>
         <td><%= render 'members/partials/member_set_pill',
                         member_sets: @member_sets[member.id] %></td>
         <td><%= link_to 'Edit', edit_member_path(member) %></td>
