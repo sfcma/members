@@ -1,7 +1,7 @@
 <%
 
    member_sets.map do |member_set|
-     if !member_set || !member_set.member || (@performance_set && member_set.performance_set.id.to_s != @performance_set)
+     if !member_set || !member_set.member || (@performance_set && member_set.performance_set_id.to_s != @performance_set)
        next
      end
 
@@ -25,10 +25,10 @@
 %>
 
   <span id='member-set-pill-<%=member_set.id%>' class="member-set-pill <%=class_name%><%= rotating_class %>">
-    <%= member_set.performance_set.name %>
+    <%= @performance_sets[member_set.performance_set_id].name %>
     <div class='member-set-pill-tooltip'>
       <b><%= member_set.member.first_name %> <%= member_set.member.last_name %><br></b>
-      in <%= member_set.performance_set.name %> &emsp; <i>(<%= member_set.performance_set.start_date %> - <%= member_set.performance_set.end_date %>)</i><br>
+      in <%= @performance_sets[member_set.performance_set_id].name %> &emsp; <i>(<%= @performance_sets[member_set.performance_set_id].start_date %> - <%= @performance_sets[member_set.performance_set_id].end_date %>)</i><br>
       has status <b><%= member_set.set_status %></b><br>
       <% if member_set.rotating %>
         <b>ROTATING</b>
