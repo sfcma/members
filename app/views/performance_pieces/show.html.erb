@@ -1,0 +1,18 @@
+<p>
+  <strong>Performance Set:</strong>
+  <%= PerformanceSet.find(@performance_piece.performance_set_id).name %>
+</p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @performance_piece.title %>
+</p>
+
+<p>
+  <strong>Composer:</strong>
+  <%= @performance_piece.composer %>
+</p>
+
+<%= link_to 'Edit', edit_performance_piece_path(@performance_piece) %>
+<br><br>
+<%= link_to 'View All Performance Pieces', performance_pieces_path %>

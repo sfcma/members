@@ -1,0 +1,17 @@
+<div class='pageHeader'><h2>Performance Pieces</h2> &emsp; <%= link_to 'Add New Performance Piece', new_performance_piece_path, class: 'button' %></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Piece</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @performance_pieces.each do |performance_piece| %>
+      <tr>
+        <td><%= link_to performance_piece.title, performance_piece %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
