@@ -2,7 +2,7 @@
 
 <div class='listDescription'>
   <%= select_tag :instruments, options_for_select(@instruments, selected: @instrument), id: 'instrumentSelector' %>
-  <%= select_tag :sets, options_for_select(@performance_sets, selected: @performance_sets), id: 'setSelector' %>
+  <%= select_tag :sets, options_for_select(@performance_sets_for_filter, selected: @performance_sets_for_filter), id: 'setSelector' %>
   <br>
   <% if @performance_set || @instrument %>
     <% if @performance_set %>
@@ -30,9 +30,12 @@
   </thead>
   <tbody>
     <% @members.each do |member| %>
-      <% inst_list = @member_instruments[member.id]&.map(&:instrument)
-         inst_stuff = inst_list&.map { |il| link_to(il.capitalize, members_url(:instrument=>il)) }&.join(", ")
-          %>
+      <% if @member_instruments[member.id]
+           inst_list = @member_instruments[member.id].map(&:instrument)
+           inst_stuff = inst_list.map { |il| link_to(il.capitalize, members_url(:instrument=>il)) }.join(", ")
+         else
+           inst_stuff = ""
+         end  %>
       <tr>
         <td class="arrow">	▶</td>
         <td><%= link_to "#{member.first_name} #{member.last_name}", member %></td>
@@ -41,7 +44,7 @@
          <% end %></td>
         <td><%= inst_stuff&.html_safe %></td>
         <td><%= render 'members/partials/member_set_pill',
-                        member_sets: @member_sets[member.id] %></td>
+                        member_sets: @member_sets[member.id] || [] %></td>
         <td><%= link_to 'Edit', edit_member_path(member) %></td>
       </tr>
     <% end %>

@@ -9,8 +9,8 @@ class MembersController < ApplicationController
   def index
     @instruments = MemberInstrument.all.map { |mi| [mi.instrument.capitalize, mi.instrument] }.uniq
     @instruments = @instruments.unshift(['All Instruments', 0])
-    @performance_sets = PerformanceSet.all.map { |ps| [ps.name, ps.id] }
-    @performance_sets = @performance_sets.unshift(['All Sets', 0])
+    @performance_sets_for_filter = PerformanceSet.all.map { |ps| [ps.name, ps.id] }
+    @performance_sets_for_filter = @performance_sets_for_filter.unshift(['All Sets', 0])
 
     @instrument_label = 0
     @performance_set_label = 0
@@ -19,20 +19,25 @@ class MembersController < ApplicationController
 
     @member_instruments = {}
     MemberInstrument.all.map do |m|
-      if @member_instruments[m.id]
-        @member_instruments[m.id].push(m)
-      else
-        @member_instruments[m.id] = [m]
+      if m.member && @member_instruments[m.member.id]
+        @member_instruments[m.member.id].push(m)
+      elsif m.member
+        @member_instruments[m.member.id] = [m]
       end
     end
 
     @member_sets = {}
     MemberSet.all.map do |m|
-      if @member_sets[m.id]
-        @member_sets[m.id].push(m)
-      else
-        @member_sets[m.id] = [m]
+      if m.member && @member_sets[m.member.id]
+        @member_sets[m.member.id].push(m)
+      elsif m.member
+        @member_sets[m.member.id] = [m]
       end
+    end
+
+    @performance_sets = {}
+    PerformanceSet.all.map do |ps|
+      @performance_sets[ps.id] = ps
     end
 
     if params[:instrument]
