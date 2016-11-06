@@ -5,6 +5,11 @@
     <td style='width: 500px' valign=top>
       <br>
       <h2>Member Information</h2><br><br>
+        <% if @member.program_name && @member.program_name != (@member.first_name + " " + @member.last_name) %>
+          <strong>Preferred Name for Program:</strong><br>
+          <%= @member.program_name %>
+          <br><br>
+        <% end %>
         <b>Address:</b><br>
         <% if @member.address_1.present? &&
               @member.city.present? &&
