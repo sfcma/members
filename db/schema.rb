@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161025064001) do
+ActiveRecord::Schema.define(version: 20161106052734) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -153,6 +153,7 @@ ActiveRecord::Schema.define(version: 20161025064001) do
     t.datetime "initial_date"
     t.datetime "waiver_signed"
     t.datetime "deleted_at"
+    t.string   "program_name"
     t.index ["deleted_at"], name: "index_members_on_deleted_at"
   end
 
@@ -162,6 +163,30 @@ ActiveRecord::Schema.define(version: 20161025064001) do
     t.integer  "password_archivable_id",   null: false
     t.datetime "created_at"
     t.index ["password_archivable_type", "password_archivable_id"], name: "index_password_archivable"
+  end
+
+  create_table "performance_pieces", force: :cascade do |t|
+    t.integer  "performance_set_id"
+    t.string   "title",              null: false
+    t.string   "composer"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_performance_pieces_on_deleted_at"
+    t.index ["performance_set_id"], name: "index_performance_pieces_on_performance_set_id"
+  end
+
+  create_table "performance_pieces_members", force: :cascade do |t|
+    t.integer  "performance_piece_id"
+    t.integer  "member_id"
+    t.string   "instrument",           null: false
+    t.string   "member_piece_status",  null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_performance_pieces_members_on_deleted_at"
+    t.index ["member_id"], name: "index_performance_pieces_members_on_member_id"
+    t.index ["performance_piece_id"], name: "index_performance_pieces_members_on_performance_piece_id"
   end
 
   create_table "performance_sets", force: :cascade do |t|

@@ -1,0 +1,97 @@
+<div class='pageHeader'><i><%= link_to '< Back to All Members', members_path %></i><br><br><h2><%= @member.first_name + " " + @member.last_name %></h2>&emsp;&emsp;<%= link_to 'Edit Member', edit_member_path(@member), class: 'button' %></div>
+
+<table class="memberTable">
+  <tr>
+    <td style='width: 500px' valign=top>
+      <br>
+      <h2>Member Information</h2><br><br>
+        <b>Address:</b><br>
+        <% if @member.address_1.present? &&
+              @member.city.present? &&
+              @member.state.present? &&
+              @member.zip.present? %>
+
+          <%= @member.address_1 %><br>
+          <%= @member.address_2 %>
+          <% if @member.address_2.present? %>
+            <br>
+          <% end %>
+          <%= @member.city %>, <%= @member.state %> <%= @member.zip %>
+        <% else %>
+          No Valid Address Available
+        <% end %>
+
+
+      <br><br>
+        <strong>Phone:</strong><br>
+        <% if @member.phone_1.present? || @member.phone_2.present? %>
+          <% if @member.phone_1.present? %>
+            <%= @member.phone_1 %> (<%= @member.phone_1_type %>)<br>
+          <% end %>
+          <% if @member.phone_2.present? %>
+            <%= @member.phone_2 %> (<%= @member.phone_2_type %>)
+          <% end %>
+        <% else %>
+          No Phone Numbers Available
+        <% end %>
+      <br><br>
+        <strong>Email:</strong><br>
+        <% if @member.email_1.present? || @member.email_2.present? %>
+          <%= @member.email_1 %><br>
+          <%= @member.email_2 %>
+        <% else %>
+          No Email Addresses Available
+        <% end %>
+      <br><br>
+        <strong>Emergency Contact:</strong><br>
+        <% if @member.emergency_name.present? && @member.emergency_phone.present? %>
+          <%= @member.emergency_name %>
+          <% if @member.emergency_relation.present? %>
+            (<%= @member.emergency_relation %>)
+          <% end %>
+          <%= @member.emergency_phone %>
+        <% else %>
+          No Emergency Contact Available
+        <% end %>
+      <br><br>
+        <strong>Overall Membership Status:</strong>
+        <%= @member.playing_status %><br>
+        <strong>Waiver Signed Date:</strong>
+        <%= @member.waiver_signed %><br>
+        <strong>Initial Contact Date:</strong>
+        <%= @member.initial_date %>
+      <br><br>
+        <strong>Instruments:</strong>
+        <%= @member.member_instruments.map(&:instrument).join(', ') %>
+      </p>
+    </td>
+    <td valign=top>
+      <br>
+      <h2>Performance Sets</h2>
+      <% if @member.member_sets.length == 0 %>
+        <br><br>
+        <i>Has not played in any performance sets</i>
+      <% end %>
+      <% @member.member_sets.sort_by { |v| v.performance_set.start_date }.reverse.each do |ms| %>
+        <br><br>
+        <b><%= ms.performance_set.name %></b>&emsp;
+        <span class='grays'>(<%= ms.performance_set.start_date.to_datetime.strftime('%B %e, %Y') %> – <%= ms.performance_set.end_date.to_datetime.strftime('%B %e, %Y')  %>)</span><br>
+        <i><%= ms.set_status %></i><br>
+        <% if ms.rotating %>
+          <b>Rotating</b>
+        <% else %>
+          Not rotating
+        <% end %>
+        <br><%= ms.set_member_instruments[0].member_instrument.instrument.capitalize %>
+      <% end %>
+
+      <br><br>
+      <h2>Audit Logs</h2>
+        <ul>
+        <% @audit_string && @audit_string.each_with_index do |member_audit, i| %>
+          <li><%= @audit_string[i].html_safe %><br><br>
+        <% end %>
+      </ul>
+    </td>
+  </tr>
+</table>
