@@ -88,8 +88,8 @@
       <br><br>
       <h2>Audit Logs</h2>
         <ul>
-        <% @audit_string && @audit_string.each_with_index do |member_audit, i| %>
-          <li><%= @audit_string[i].html_safe %><br><br>
+        <% @audit_string && @audit_string.each_with_index do |member_audit| %>
+          <li><%= member_audit[:html] %>
         <% end %>
       </ul>
     </td>

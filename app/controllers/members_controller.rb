@@ -50,9 +50,10 @@ class MembersController < ApplicationController
     @audit_string = helpers.generate_audit_array(@member)
     @audit_string += helpers.generate_audit_array(@member.member_instruments.with_deleted.all.to_a)
     @audit_string += helpers.generate_audit_array(@member.member_sets.with_deleted.all.to_a)
-    @audit_string.sort_by do |_as|
-      # Impression.where(:controller_name => 'members', :impressionable_id => 30).map{|s| User.find(s.user_id).email + " " + s.created_at.to_s }
-    end
+    @audit_string.flatten!
+    @audit_string += Impression.where(:controller_name => 'members', :impressionable_id => @member.id).map{|s| { html: User.find(s.user_id).email + " viewed user on " + s.created_at.in_time_zone('Pacific Time (US & Canada)').strftime('%Y-%m-%d %-I:%M %p PT'), audit_created_at: s.created_at.in_time_zone('Pacific Time (US & Canada)') } }
+    puts @audit_string.map { |as| as[:audit_created_at] }
+    @audit_string = @audit_string.sort_by { |as| as[:audit_created_at] }.reverse
   end
 
   # GET /members/new
