@@ -5,6 +5,9 @@ class PerformanceSetDatesController < ApplicationController
   # GET /performance_set_dates.json
   def index
     @performance_set_dates = PerformanceSetDate.includes(:performance_set).order(:performance_set_id).all
+
+    @performance_sets_for_filter = PerformanceSet.all.map { |ps| [ps.name, ps.id] }
+    @performance_sets_for_filter = @performance_sets_for_filter.unshift(['All Sets', 0])
   end
 
   # GET /performance_set_dates/1

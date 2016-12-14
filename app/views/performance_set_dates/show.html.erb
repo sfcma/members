@@ -1,4 +1,14 @@
-<p id="notice"><%= notice %></p>
+<% if notice %>
+  <p id="notice"><%= notice %></p>
+<% end %>
 
-<%= link_to 'Edit', edit_performance_set_date_path(@performance_set_date) %> |
-<%= link_to 'Back', performance_set_dates_path %>
+<div class='pageHeader'><h2>
+Absences</h2> &emsp; &emsp; <%= @performance_set_date.performance_set.name %> — <%= @performance_set_date.date %>
+</div>
+<% @performance_set_date.absences.each do |ab| %>
+  <%= ab %>
+<% end %>
+
+<br><br>
+<%= link_to 'Edit Rehearsal Date', edit_performance_set_date_path(@performance_set_date) %> |
+<%= link_to 'View All Rehearsal Dates', performance_set_dates_path %>

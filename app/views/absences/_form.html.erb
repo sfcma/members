@@ -12,18 +12,18 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :member_id %>
-    <%= f.text_field :member_id %>
+    <%# f.label :email %>
+    <%# f.text_field :email %>
   </div>
 
   <div class="field">
     <%= f.label :performance_set_id %>
-    <%= f.text_field :performance_set_id %>
+    <%= f.collection_select :performance_set_id, @performance_sets, :id, :name, { prompt: true } %>
   </div>
 
   <div class="field">
-    <%= f.label :date %>
-    <%= f.date_select :date %>
+    <%= f.label :performance_set_date_id %>
+    <%= f.collection_select :performance_set_date_id, @performance_set_dates, :id, :date, { prompt: true } %>
   </div>
 
   <div class="field">

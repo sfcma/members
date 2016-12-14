@@ -15,11 +15,15 @@ class AbsencesController < ApplicationController
 
   # GET /absences/new
   def new
+    @performance_sets = PerformanceSet.all
+    @performance_set_dates = PerformanceSetDate.all
     @absence = Absence.new
   end
 
   # GET /absences/1/edit
   def edit
+    @performance_sets = PerformanceSet.all
+    @performance_set_dates = PerformanceSetDate.all
   end
 
   # POST /absences

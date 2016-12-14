@@ -1,12 +1,19 @@
-<p id="notice"><%= notice %></p>
+<% if notice %>
+  <p id="notice"><%= notice %></p>
+<% end %>
 
-<h1>Performance Set Dates</h1>
+<div class='pageHeader'><h2>Rehearsal Dates</h2> &emsp; <%= link_to 'Add New Rehearsal Date', new_performance_set_date_path %></div>
+
+<div class='listDescription'>
+  <%= select_tag :sets, options_for_select(@performance_sets_for_filter, selected: @performance_sets_for_filter), id: 'setSelector' %>
+</div>
+
 
 <table>
   <thead>
     <tr>
-      <th>Performance Set</th>
-      <th>Date</th>
+      <th width=250>Performance Set</th>
+      <th width=125>Rehearsal Date</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -16,7 +23,7 @@
       <tr>
         <td><%= link_to performance_set_date.performance_set %></td>
         <td><%= performance_set_date.date %></td>
-        <td><%= link_to 'Show', performance_set_date %></td>
+        <td width=200><%= link_to 'View Absences for this date', performance_set_date %></td>
         <td><%= link_to 'Edit', edit_performance_set_date_path(performance_set_date) %></td>
         <td><%= link_to 'Destroy', performance_set_date, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
@@ -26,4 +33,3 @@
 
 <br>
 
-<%= link_to 'New Performance Set Date', new_performance_set_date_path %>
