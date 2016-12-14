@@ -55,7 +55,7 @@ class MembersController < ApplicationController
       end
     end
 
-    @members = Member.joins(joins)
+    @members = Member.includes(:member_instruments, :member_sets).all
 
     if @instrument
       @members = @members.where('member_instruments.instrument = ?', @instrument.humanize.downcase)
