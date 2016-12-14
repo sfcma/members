@@ -10,20 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161214080429) do
+ActiveRecord::Schema.define(version: 20161214082059) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
-    t.integer  "performance_set_id"
     t.date     "date"
     t.boolean  "planned"
     t.boolean  "sub_found"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
     t.datetime "deleted_at"
+    t.integer  "performance_set_date_id"
     t.index ["deleted_at"], name: "index_absences_on_deleted_at"
     t.index ["member_id"], name: "index_absences_on_member_id"
-    t.index ["performance_set_id"], name: "index_absences_on_performance_set_id"
   end
 
   create_table "action_logs", force: :cascade do |t|
