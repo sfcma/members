@@ -103,7 +103,7 @@ instruments = ['Flute', 'Clarinet', 'Oboe', 'Bassoon', 'Cello', 'Violin', 'Viola
     state: 'CA',
     zip: Faker::Address.zip,
     phone_1: Faker::PhoneNumber.phone_number,
-    phone_1_type: 'Work',
+    phone_1_type: 'Home',
     email_1: Faker::Internet.email,
   )
 
