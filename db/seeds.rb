@@ -92,7 +92,7 @@ performance9 = PerformanceSet.create!(
 )
 
 performances = [performance1, performance2, performance3, performance4, performance5, performance6, performance7, performance8, performance9]
-instruments = ['Flute', 'Clarinet', 'Oboe', 'Cello', 'Violin', 'Viola', 'Cello', 'Trumpet', 'Trombone']
+instruments = ['Flute', 'Clarinet', 'Oboe', 'Bassoon', 'Cello', 'Violin', 'Viola', 'Cello', 'Trumpet', 'Trombone']
 
 50.times do
   member = Member.create!(
@@ -112,12 +112,13 @@ instruments = ['Flute', 'Clarinet', 'Oboe', 'Cello', 'Violin', 'Viola', 'Cello',
     instrument: instruments.sample,
   )
 
-  perfID = rand(performances.length - 3)
+  perfIds = [0..9]
   x = rand(5)
   x.times do
+    perfId = perfIds.sample
     member_set = MemberSet.create!(
       member: member,
-      performance_set: performances[perfID],
+      performance_set: performances[perfId],
       set_status: :playing,
     )
 
@@ -126,6 +127,6 @@ instruments = ['Flute', 'Clarinet', 'Oboe', 'Cello', 'Violin', 'Viola', 'Cello',
       member_instrument: instrument,
     )
 
-    perfID += 1
+    perfIds.delete perfId
   end
 end
