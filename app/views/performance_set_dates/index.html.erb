@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Performance Set Dates</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Performance Set</th>
+      <th>Date</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @performance_set_dates.each do |performance_set_date| %>
+      <tr>
+        <td><%= link_to performance_set_date.performance_set %></td>
+        <td><%= performance_set_date.date %></td>
+        <td><%= link_to 'Show', performance_set_date %></td>
+        <td><%= link_to 'Edit', edit_performance_set_date_path(performance_set_date) %></td>
+        <td><%= link_to 'Destroy', performance_set_date, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Performance Set Date', new_performance_set_date_path %>

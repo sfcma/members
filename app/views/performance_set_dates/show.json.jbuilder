@@ -1,0 +1,1 @@
+json.partial! "performance_set_dates/performance_set_date", performance_set_date: @performance_set_date

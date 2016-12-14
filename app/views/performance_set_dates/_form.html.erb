@@ -1,0 +1,27 @@
+<%= form_for(performance_set_date) do |f| %>
+  <% if performance_set_date.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(performance_set_date.errors.count, "error") %> prohibited this performance_set_date from being saved:</h2>
+
+      <ul>
+      <% performance_set_date.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :performance_set_id %>
+    <%= f.collection_select :performance_set_id, @performance_sets, :id, :name, { prompt: true } %>
+  </div>
+
+  <div class="field">
+    <%= f.label :date, "Set Rehearsal Date  (Format: YYYY-MM-DD)" %>
+    <%= date_field :performance_set_date, :date %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

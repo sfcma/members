@@ -15,4 +15,8 @@ class PerformanceSet < ApplicationRecord
   def old_name
     "#{Ensemble.find(ensemble_id).name} from #{start_date} to #{end_date}"
   end
+
+  def to_s
+    return name
+  end
 end
