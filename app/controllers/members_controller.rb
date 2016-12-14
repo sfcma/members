@@ -18,7 +18,7 @@ class MembersController < ApplicationController
     joins = []
 
     @member_instruments = {}
-    MemberInstrument.all.map do |m|
+    MemberInstrument.includes(:member).all.map do |m|
       if m.member && @member_instruments[m.member.id]
         @member_instruments[m.member.id].push(m)
       elsif m.member
@@ -27,7 +27,7 @@ class MembersController < ApplicationController
     end
 
     @member_sets = {}
-    MemberSet.all.map do |m|
+    MemberSet.includes(:member).all.map do |m|
       if m.member && @member_sets[m.member.id]
         @member_sets[m.member.id].push(m)
       elsif m.member
@@ -44,18 +44,16 @@ class MembersController < ApplicationController
       if MemberInstrument.where('instrument = ?', params[:instrument]).count > 0
         @instrument = params[:instrument]
         @instrument_label = @instrument
-        joins << :member_instruments
       end
     end
     if params[:set]
       if PerformanceSet.where('id = ?', params[:set]).count > 0
         @performance_set = params[:set]
         @performance_set_label = @performance_set
-        joins << :member_sets
       end
     end
 
-    @members = Member.includes(:member_instruments, :member_sets).all
+    @members = Member.all
 
     if @instrument
       @members = @members.where('member_instruments.instrument = ?', @instrument.humanize.downcase)
