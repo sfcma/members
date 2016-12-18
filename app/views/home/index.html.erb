@@ -17,11 +17,13 @@
   <%= link_to 'View Ensemble List', ensembles_path %><br>
   <%= link_to 'Performance Set Rehearsal Dates', performance_set_dates_path %>
 
-  <br><br>
-  <b>Users</b>
-  <br><br>
-  <%= link_to 'User List', users_path %>
-  <br><br>
+  <%= if current_user.global_admin? %>
+    <br><br>
+    <b>Users</b>
+    <br><br>
+    <%= link_to 'User List', users_path %>
+    <br><br>
+  <% end %>
   <hr>
   <i>Coming Soon!</i><br><br>
   <b>Absences / Attendance</b>
