@@ -60,6 +60,9 @@ GEM
       rails-observers (~> 0.1.2)
     bcrypt (3.1.11)
     builder (3.2.2)
+    bullet (5.2.0)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.10.0)
     byebug (9.0.5)
     coffee-rails (4.2.1)
       coffee-script (>= 2.2.0)
@@ -87,6 +90,8 @@ GEM
       yard (>= 0.7.0)
     erubis (2.7.0)
     execjs (2.7.0)
+    faker (1.6.6)
+      i18n (~> 0.5)
     ffi (1.9.14)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
@@ -221,6 +226,7 @@ GEM
     uglifier (3.0.2)
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.1.1)
+    uniform_notifier (1.10.0)
     validates_timeliness (4.0.2)
       timeliness (~> 0.3.7)
     warden (1.2.6)
@@ -240,11 +246,13 @@ PLATFORMS
 
 DEPENDENCIES
   audited (~> 4.3)
+  bullet
   byebug
   coffee-rails (~> 4.2)
   devise
   devise_security_extension!
   easy_captcha
+  faker
   impressionist
   jbuilder (~> 2.5)
   jquery-rails
@@ -266,4 +274,4 @@ DEPENDENCIES
   web-console
 
 BUNDLED WITH
-   1.13.2
+   1.13.6

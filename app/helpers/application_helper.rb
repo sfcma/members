@@ -61,12 +61,20 @@ module ApplicationHelper
   }.freeze
 
   def generate_audit_string(audit)
+
     audit_string = []
     if audit.action == 'destroy'
-      audit_string << {
-        html: "#{User.find(audit.user_id).email} destroyed <b>#{audit.auditable_type.underscore.humanize}</b> with values #{audit.audited_changes.inspect} on #{audit.created_at.in_time_zone('Pacific Time (US & Canada)').strftime('%Y-%m-%d %-I:%M %p PT')}<br>".html_safe,
-        audit_created_at: audit.created_at.in_time_zone('Pacific Time (US & Canada)')
-      }
+      if audit.user_id
+        audit_string << {
+          html: "#{User.find(audit.user_id).email} destroyed <b>#{audit.auditable_type.underscore.humanize}</b> with values #{audit.audited_changes.inspect} on #{audit.created_at.in_time_zone('Pacific Time (US & Canada)').strftime('%Y-%m-%d %-I:%M %p PT')}<br>".html_safe,
+          audit_created_at: audit.created_at.in_time_zone('Pacific Time (US & Canada)')
+        }
+      else
+        audit_string << {
+          html: "UNKNOWN USER destroyed <b>#{audit.auditable_type.underscore.humanize}</b> with values #{audit.audited_changes.inspect} on #{audit.created_at.in_time_zone('Pacific Time (US & Canada)').strftime('%Y-%m-%d %-I:%M %p PT')}<br>".html_safe,
+          audit_created_at: audit.created_at.in_time_zone('Pacific Time (US & Canada)')
+        }
+      end
     else
       audit.audited_changes.each do |field, change|
         if change.is_a?(Array)
@@ -92,10 +100,17 @@ module ApplicationHelper
                         else
                           "on <b>#{audit.auditable_type.underscore.humanize}</b>"
                         end
-        audit_string << {
-          html: "#{User.find(audit.user_id).email} #{verb} <b>#{field.humanize.capitalize}</b> #{a_type_string} #{change_text} on #{audit.created_at.in_time_zone('Pacific Time (US & Canada)').strftime('%Y-%m-%d %-I:%M %p PT')}<br>".html_safe,
-          audit_created_at: audit.created_at.in_time_zone('Pacific Time (US & Canada)')
-        }
+        if audit.user_id
+          audit_string << {
+            html: "#{User.find(audit.user_id).email} #{verb} <b>#{field.humanize.capitalize}</b> #{a_type_string} #{change_text} on #{audit.created_at.in_time_zone('Pacific Time (US & Canada)').strftime('%Y-%m-%d %-I:%M %p PT')}<br>".html_safe,
+            audit_created_at: audit.created_at.in_time_zone('Pacific Time (US & Canada)')
+          }
+        else
+          audit_string << {
+            html: "UNKNOWN USER destroyed <b>#{audit.auditable_type.underscore.humanize}</b> with values #{audit.audited_changes.inspect} on #{audit.created_at.in_time_zone('Pacific Time (US & Canada)').strftime('%Y-%m-%d %-I:%M %p PT')}<br>".html_safe,
+            audit_created_at: audit.created_at.in_time_zone('Pacific Time (US & Canada)')
+          }
+        end
       end
     end
     audit_string
