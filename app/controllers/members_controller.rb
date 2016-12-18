@@ -59,13 +59,13 @@ class MembersController < ApplicationController
     @members = Member.all
 
     if @instrument
-      @members = @members.where('member_instruments.instrument = ?', @instrument.humanize.downcase)
+      @members = @members.to_a.keep_if {|m| m.member_instruments.map(&:instrument).include?(@instrument.humanize.downcase) }
     end
     if @performance_set
-      @members = @members.where('member_sets.performance_set_id = ?', params[:set])
+      @members = @members.includes(:member_sets).to_a.keep_if {|m| m.member_sets.map(&:performance_set_id).include?(params[:set].to_i) }
     end
 
-    @members = @members.order(:last_name)
+    @members = @members.sort_by(&:last_name)
   end
 
   # GET /members/1

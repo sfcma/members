@@ -42,7 +42,7 @@
         <td><% if !member.waiver_signed %>
            <span class="nowaiver" title="Waiver not signed and returned"> W </span>
          <% end %></td>
-        <td><%= inst_stuff.html_safe %></td>
+        <td><%= inst_stuff ? inst_stuff.html_safe : "" %></td>
         <td><%= render 'members/partials/member_set_pill',
                         member_sets: @member_sets[member.id] || [] %></td>
         <td><%= link_to 'Edit', edit_member_path(member) %></td>
