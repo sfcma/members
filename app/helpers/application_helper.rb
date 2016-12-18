@@ -66,7 +66,7 @@ module ApplicationHelper
     if audit.action == 'destroy'
       if audit.user_id
         audit_string << {
-          html: "#{User.find(audit.user_id).email} destroyed <b>#{audit.auditable_type.underscore.humanize}</b> with values #{audit.audited_changes.inspect} on #{audit.created_at.in_time_zone('Pacific Time (US & Canada)').strftime('%Y-%m-%d %-I:%M %p PT')}<br>".html_safe,
+          html: "#{User.find(audit.user_id).display_name} destroyed <b>#{audit.auditable_type.underscore.humanize}</b> with values #{audit.audited_changes.inspect} on #{audit.created_at.in_time_zone('Pacific Time (US & Canada)').strftime('%Y-%m-%d %-I:%M %p PT')}<br>".html_safe,
           audit_created_at: audit.created_at.in_time_zone('Pacific Time (US & Canada)')
         }
       else
@@ -102,7 +102,7 @@ module ApplicationHelper
                         end
         if audit.user_id
           audit_string << {
-            html: "#{User.find(audit.user_id).email} #{verb} <b>#{field.humanize.capitalize}</b> #{a_type_string} #{change_text} on #{audit.created_at.in_time_zone('Pacific Time (US & Canada)').strftime('%Y-%m-%d %-I:%M %p PT')}<br>".html_safe,
+            html: "#{User.find(audit.user_id).display_name} #{verb} <b>#{field.humanize.capitalize}</b> #{a_type_string} #{change_text} on #{audit.created_at.in_time_zone('Pacific Time (US & Canada)').strftime('%Y-%m-%d %-I:%M %p PT')}<br>".html_safe,
             audit_created_at: audit.created_at.in_time_zone('Pacific Time (US & Canada)')
           }
         else

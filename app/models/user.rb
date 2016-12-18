@@ -8,4 +8,12 @@ class User < ApplicationRecord
 
   has_many :ensembles, class_name: "UserEnsemble"
   has_many :instruments, class_name: "UserInstrument"
+
+  def display_name
+    if self.name
+      self.name
+    else
+      self.email
+    end
+  end
 end
