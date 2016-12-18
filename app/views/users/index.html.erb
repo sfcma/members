@@ -1,0 +1,15 @@
+<div class='pageHeader'><h2>Admin Users</h2></div>
+
+<br><br>
+<% @users.each do |user| %>
+  <b><%= user.name %></b>
+    <% if user == current_user %>
+    <%# link_to "Edit", edit_password_path(current_user) %>
+  <% end %><br>
+  <%= user.email %><br>
+  <%= user.phone %><br>
+  <b>Ensembles:</b> <%= user.ensembles.map(&:ensemble).map(&:name).join(",") %><br>
+  <b>Instruments:</b> <%= user.instruments.map(&:instrument).join(",") %><br>
+  <b>Global Admin:</b> <%= !!user.global_admin %><br><br>
+  <hr><br><br>
+<% end %>
