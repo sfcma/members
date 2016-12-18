@@ -16,18 +16,27 @@ class PerformanceSetsController < ApplicationController
 
   # GET /performance_sets/new
   def new
+    unless current_user.global_admin?
+      redirect_to performance_sets_url, notice: 'You do not have permissions to add performance sets' and return
+    end
     @performance_set = PerformanceSet.new
     @ensembles = Ensemble.all
   end
 
   # GET /performance_sets/1/edit
   def edit
+    unless current_user.global_admin?
+      redirect_to @performance_set, notice: 'You do not have permissions to edit performance sets' and return
+    end
     @ensembles = Ensemble.all
   end
 
   # POST /performance_sets
   # POST /performance_sets.json
   def create
+    unless current_user.global_admin?
+      redirect_to performance_sets_url, notice: 'You do not have permissions to add performance sets' and return
+    end
     @performance_set = PerformanceSet.new(performance_set_params)
 
     # @performance_set.start_date = performance_set_params.start_date.to_time.to_i
@@ -47,6 +56,9 @@ class PerformanceSetsController < ApplicationController
   # PATCH/PUT /performance_sets/1
   # PATCH/PUT /performance_sets/1.json
   def update
+    unless current_user.global_admin?
+      redirect_to @performance_set, notice: 'You do not have permissions to edit performance sets' and return
+    end
     @ensembles = Ensemble.all
     respond_to do |format|
       if @performance_set.update(performance_set_params)

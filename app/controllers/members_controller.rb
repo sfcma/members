@@ -4,6 +4,9 @@ class MembersController < ApplicationController
   before_action :load_sets
   impressionist
 
+  # boo
+  include MembersHelper
+
   # GET /members
   # GET /members.json
   def index
@@ -91,6 +94,9 @@ class MembersController < ApplicationController
 
   # GET /members/1/edit
   def edit
+    if !can_view_member_personal_info(@member)
+      redirect_to(@member, notice: "You do not have permissions to edit #{@member.first_name} #{@member.last_name}. Check what instruments and ensembles you have permissions to view") and return
+    end
     @member.member_instruments.build
     @member.member_sets.build
     @member.member_sets.each do |ms|

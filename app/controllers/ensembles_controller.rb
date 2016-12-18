@@ -15,16 +15,25 @@ class EnsemblesController < ApplicationController
 
   # GET /ensembles/new
   def new
+    unless current_user.global_admin?
+      redirect_to ensembles_url, notice: 'You do not have permissions to add ensembles' and return
+    end
     @ensemble = Ensemble.new
   end
 
   # GET /ensembles/1/edit
   def edit
+    unless current_user.global_admin?
+      redirect_to @ensemble, notice: 'You do not have permissions to edit ensembles' and return
+    end
   end
 
   # POST /ensembles
   # POST /ensembles.json
   def create
+    unless current_user.global_admin?
+      redirect_to ensembles_url, notice: 'You do not have permissions to create ensembles' and return
+    end
     @ensemble = Ensemble.new(ensemble_params)
 
     respond_to do |format|
@@ -41,6 +50,9 @@ class EnsemblesController < ApplicationController
   # PATCH/PUT /ensembles/1
   # PATCH/PUT /ensembles/1.json
   def update
+    unless current_user.global_admin?
+      redirect_to @ensemble, notice: 'You do not have permissions to edit ensembles' and return
+    end
     respond_to do |format|
       if @ensemble.update(ensemble_params)
         format.html { redirect_to @ensemble, notice: 'Ensemble was successfully updated.' }

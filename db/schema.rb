@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161214082059) do
+ActiveRecord::Schema.define(version: 20161218082705) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -211,7 +211,7 @@ ActiveRecord::Schema.define(version: 20161214082059) do
   end
 
   create_table "set_member_instruments", force: :cascade do |t|
-    t.integer  "performance_set_id" # This should be killed
+    t.integer  "performance_set_id"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
     t.integer  "member_set_id"
@@ -221,24 +221,44 @@ ActiveRecord::Schema.define(version: 20161214082059) do
     t.index ["performance_set_id"], name: "index_set_member_instruments_on_performance_set_id"
   end
 
+  create_table "user_ensembles", force: :cascade do |t|
+    t.integer  "user_id",     null: false
+    t.integer  "ensemble_id", null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["ensemble_id"], name: "index_user_ensembles_on_ensemble_id"
+    t.index ["user_id"], name: "index_user_ensembles_on_user_id"
+  end
+
+  create_table "user_instruments", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.string   "instrument", null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["instrument"], name: "index_user_instruments_on_instrument"
+    t.index ["user_id"], name: "index_user_instruments_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
-    t.string   "email",                                    default: "", null: false
-    t.string   "encrypted_password",                       default: "", null: false
+    t.string   "email",                                    default: "",    null: false
+    t.string   "encrypted_password",                       default: "",    null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                            default: 0,  null: false
+    t.integer  "sign_in_count",                            default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at",                                            null: false
-    t.datetime "updated_at",                                            null: false
+    t.datetime "created_at",                                               null: false
+    t.datetime "updated_at",                                               null: false
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
-    t.integer  "failed_attempts",                          default: 0,  null: false
+    t.integer  "failed_attempts",                          default: 0,     null: false
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.datetime "password_changed_at"
@@ -249,6 +269,9 @@ ActiveRecord::Schema.define(version: 20161214082059) do
     t.integer  "paranoid_verification_attempt",            default: 0
     t.datetime "paranoid_verified_at"
     t.datetime "deleted_at"
+    t.boolean  "global_admin",                             default: false
+    t.string   "name"
+    t.string   "phone"
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["expired_at"], name: "index_users_on_expired_at"

@@ -8,6 +8,17 @@ class PerformanceSetDatesController < ApplicationController
 
     @performance_sets_for_filter = PerformanceSet.all.map { |ps| [ps.name, ps.id] }
     @performance_sets_for_filter = @performance_sets_for_filter.unshift(['All Sets', 0])
+
+    if params[:set]
+      if PerformanceSet.where('id = ?', params[:set]).count > 0
+        @performance_set = params[:set]
+        @performance_set_label = @performance_set
+      end
+    end
+
+    if @performance_set
+      @members = @members.where('member_sets.performance_set_id = ?', params[:set])
+    end
   end
 
   # GET /performance_set_dates/1
