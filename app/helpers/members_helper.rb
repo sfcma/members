@@ -13,7 +13,16 @@ module MembersHelper
 
   def can_view_member_personal_info(member)
     current_user.global_admin? ||
-    ((current_user.ensembles.map(&:ensemble_id) & member.member_sets.map(&:performance_set).map(&:ensemble_id)).present? &&
-    (current_user.instruments.map(&:instrument) & member.member_instruments.map(&:instrument)).present?)
+    (
+      (
+        current_user.ensembles.map(&:ensemble_id) & member.member_sets.map(&:performance_set).map(&:ensemble_id)
+      ).present? &&
+      (
+        (
+          current_user.instruments.map(&:instrument) & member.member_instruments.map(&:instrument)
+        ).present? ||
+        current_user.instruments.include?('all')
+      )
+    )
   end
 end
