@@ -169,9 +169,9 @@ class MembersController < ApplicationController
   end
 
   def send_email
-    MemberMailer.standard_member_email(@member, 'Test Email Subject', 'Test Email Body').deliver_now
+    MemberMailer.standard_member_email(@member, 'Test Email Subject', 'Test Email Body', current_user).deliver_now
     respond_to do |format|
-      format.html { redirect_to members_url, notice: 'Email to member successfully sent.' }
+      format.html { redirect_to members_url, notice: "Email to #{@member.first_name} #{@member.last_name} successfully sent." }
       format.json { head :no_content }
     end
   end
