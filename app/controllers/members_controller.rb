@@ -1,5 +1,5 @@
 class MembersController < ApplicationController
-  before_action :set_member, only: [:show, :edit, :update, :destroy]
+  before_action :set_member, only: [:show, :edit, :update, :destroy, :send_email]
   before_action :authenticate_user!
   before_action :load_sets
   impressionist
@@ -164,6 +164,14 @@ class MembersController < ApplicationController
     @member.destroy
     respond_to do |format|
       format.html { redirect_to members_url, notice: 'Member was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+
+  def send_email
+    MemberMailer.standard_member_email(@member, 'Test Email Subject', 'Test Email Body').deliver_now
+    respond_to do |format|
+      format.html { redirect_to members_url, notice: 'Email to member successfully sent.' }
       format.json { head :no_content }
     end
   end

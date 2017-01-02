@@ -9,7 +9,11 @@ Rails.application.routes.draw do
   resources :performance_sets
   resources :ensembles
   resources :member_instruments
-  resources :members
+  resources :members do
+    member do
+      get :send_email
+    end
+  end
   resources :performance_pieces
   resources :users
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
