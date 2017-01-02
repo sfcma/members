@@ -6,7 +6,11 @@ Rails.application.routes.draw do
   resources :action_logs
   devise_for :users
   resources :set_member_instruments
-  resources :performance_sets
+  resources :performance_sets do
+    member do
+      get :rehearsal_dates
+    end
+  end
   resources :ensembles
   resources :member_instruments
   resources :members do

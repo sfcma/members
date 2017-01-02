@@ -1,5 +1,9 @@
-<h1>New Absence</h1>
+<div class='pageHeader'><h2>Record Absence</h2></div>
 
-<%= render 'form', absence: @absence %>
-
-<%= link_to 'Back', absences_path %>
+<% unless current_user %>
+  <div class="bigForm">
+<% end %>
+  <%= render 'form', absence: @absence %>
+<% unless current_user %>
+  </div>
+<% end %>

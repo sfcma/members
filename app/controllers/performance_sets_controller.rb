@@ -1,6 +1,6 @@
 class PerformanceSetsController < ApplicationController
-  before_action :set_performance_set, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!
+  before_action :set_performance_set, only: [:show, :edit, :update, :destroy, :rehearsal_dates]
+  before_action :authenticate_user!, except: [:rehearsal_dates]
 
   # GET /performance_sets
   # GET /performance_sets.json
@@ -78,6 +78,13 @@ class PerformanceSetsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to performance_sets_url, notice: 'Performance set was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def rehearsal_dates
+    rehearal_dates = @performance_set.performance_set_dates
+    respond_to do |format|
+      format.json { render json: rehearal_dates, status: :ok }
     end
   end
 

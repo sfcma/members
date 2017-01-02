@@ -251,10 +251,27 @@ var loadStuff = function() {
     window.location.href = 'https://' + window.location.hostname + '/members?instrument=' + e.target.value;
   });
 
+  // For Absence#new page
+  $('#absence_performance_set_dates_performance_set_id').on('change', function() {
+    var rehearsalSel = $('#absenceRehearsalDateSelector');
+    var newOptions = "";
+    var performanceSetId = $('#absence_performance_set_dates_performance_set_id').val();
+    $.get('../../performance_sets/' + performanceSetId + '/rehearsal_dates').then(function(response) {
+      $.each(response, function(rehearsal) {
+        var dt = moment(response[rehearsal].date).format('dddd, MMMM Do YYYY');
+        newOptions += '<option value=' + response[rehearsal].id + '>' + dt + '</option>';
+      });
+      rehearsalSel.prop('disabled', false);
+      rehearsalSel.empty().append($(newOptions));
+    });
+  });
+
   if (isNew) {
     $('a[id^=removeMemberSet]').hide();
     $('a[id^=removeMemberInstrument]').hide();
   }
+
+
 };
 
 var instruments =

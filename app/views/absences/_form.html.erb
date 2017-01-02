@@ -1,7 +1,7 @@
 <%= form_for(absence) do |f| %>
   <% if absence.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(absence.errors.count, "error") %> prohibited this absence from being saved:</h2>
+      <h2>This absence could not be recorded:</h2>
 
       <ul>
       <% absence.errors.full_messages.each do |message| %>
@@ -12,31 +12,37 @@
   <% end %>
 
   <div class="field">
-    <%# f.label :email %>
-    <%# f.text_field :email %>
+    <%= f.fields_for :members do |member_f| %>
+      <%= member_f.label :email_1, "Your Email Address" %>
+      <%= member_f.text_field :email_1 %>
+    <% end %>
   </div>
 
   <div class="field">
-    <%= f.label :performance_set_id %>
-    <%= f.collection_select :performance_set_id, @performance_sets, :id, :name, { prompt: true } %>
+    <%= f.fields_for :performance_set_dates do |performance_set_date_f| %>
+      <%= performance_set_date_f.label :performance_set_id, "Which group and set are you playing with?" %>
+      <%= performance_set_date_f.collection_select :performance_set_id, @performance_sets, :id, :name, { prompt: true } %>
+    <% end %>
   </div>
 
   <div class="field">
-    <%= f.label :performance_set_date_id %>
-    <%= f.collection_select :performance_set_date_id, @performance_set_dates, :id, :date, { prompt: true } %>
+    <%= f.label :performance_set_date_id, "Which rehearsal are you missing?" %>
+    <%= f.collection_select :performance_set_date_id, [], :id, :date, { prompt: true }, { disabled: true, id: 'absenceRehearsalDateSelector' } %>
   </div>
 
-  <div class="field">
-    <%= f.label :planned %>
-    <%= f.check_box :planned %>
-  </div>
+  <% if current_user %>
+    <div class="field">
+      <%= f.label :planned %>
+      <%= f.check_box :planned %>
+    </div>
 
-  <div class="field">
-    <%= f.label :sub_found %>
-    <%= f.text_field :sub_found %>
-  </div>
+    <div class="field">
+      <%= f.label :sub_found %>
+      <%= f.text_field :sub_found %>
+    </div>
+  <% end %>
 
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit "Record Absence", class: 'button' %>
   </div>
 <% end %>

@@ -2,6 +2,7 @@ class PerformanceSet < ApplicationRecord
   audited associated_with: :ensemble
   acts_as_paranoid
   has_many :member_sets
+  has_many :performance_set_dates
 
   # This maybe should be a has_and_belongs_to_many association
   has_many :members, through: :member_sets

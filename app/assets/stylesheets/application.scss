@@ -452,6 +452,26 @@ div {
   }
 }
 
+.bigForm {
+  * {
+    font-size: 1.25em;
+    margin-top: 5px;
+  }
+  label {
+    margin-top: 25px;
+  }
+
+  select {
+    font-size: 0.9em;
+  }
+  option {
+    margin-top: 0;
+  }
+  input[type=submit] {
+    margin-top: 25px;
+  }
+}
+
 #setMaster {
   margin: 0;
   padding: 0;

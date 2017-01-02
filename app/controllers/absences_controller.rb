@@ -1,6 +1,6 @@
 class AbsencesController < ApplicationController
   before_action :set_absence, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:new, :create]
 
   # GET /absences
   # GET /absences.json
@@ -11,12 +11,12 @@ class AbsencesController < ApplicationController
   # GET /absences/1
   # GET /absences/1.json
   def show
+    @performance_sets = PerformanceSet.all
   end
 
   # GET /absences/new
   def new
     @performance_sets = PerformanceSet.all
-    @performance_set_dates = PerformanceSetDate.all
     @absence = Absence.new
   end
 
@@ -29,12 +29,29 @@ class AbsencesController < ApplicationController
   # POST /absences
   # POST /absences.json
   def create
-    @absence = Absence.new(absence_params)
+    aparams = absence_params
+
+    # figure out which member it is
+    member = Member.where('email_1 = ? OR email_2 = ?', aparams[:members][:email_1], aparams[:members][:email_1]).first
+    if member
+      aparams[:member_id] = member.id
+    end
+    aparams.delete(:members)
+
+    # don't care which performance set it is
+    aparams.delete(:performance_set_dates)
+
+    @absence = Absence.new(aparams)
+    @performance_sets = PerformanceSet.all
 
     respond_to do |format|
       if @absence.save
-        format.html { redirect_to @absence, notice: 'Absence was successfully created.' }
-        format.json { render :show, status: :created, location: @absence }
+        if !current_user
+          format.html { redirect_to new_absence_url, notice: 'Absence was successfully recorded. You can record another absence below.' }
+        else
+          format.html { redirect_to @absence, notice: 'Absence was successfully created.' }
+          format.json { render :show, status: :created, location: @absence }
+        end
       else
         format.html { render :new }
         format.json { render json: @absence.errors, status: :unprocessable_entity }
@@ -45,6 +62,8 @@ class AbsencesController < ApplicationController
   # PATCH/PUT /absences/1
   # PATCH/PUT /absences/1.json
   def update
+    @performance_sets = PerformanceSet.all
+
     respond_to do |format|
       if @absence.update(absence_params)
         format.html { redirect_to @absence, notice: 'Absence was successfully updated.' }
@@ -78,9 +97,16 @@ class AbsencesController < ApplicationController
     params.require(:absence).permit(
       :member_id,
       :performance_set_id,
+      :performance_set_date_id,
       :date,
       :planned,
-      :sub_found
+      :sub_found,
+      performance_set_dates: [
+        :performance_set_id
+      ],
+      members: [
+        :email_1
+      ]
     )
   end
 end
