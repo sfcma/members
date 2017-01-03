@@ -17,12 +17,12 @@
     </thead>
 
     <tbody>
-      <% @members.each do |member| %>
+      <% @member_sets.sort_by{ |ms| ms.set_member_instruments.first.member_instrument.instrument}.each do |member_set| %>
         <tr>
-          <td><%= link_to member, member %></td>
-          <td><%= @member_sets.where('member_id = ?', member.id).first.set_member_instruments.first.member_instrument.instrument %>
+          <td><%= link_to member_set.member, member_set.member %></td>
+          <td><%= @member_sets.where('member_id = ?', member_set.member.id).first.set_member_instruments.first.member_instrument.instrument %>
           <% @set_rehearsal_dates.each do |rehearsal_date| %>
-            <% this_absence = @absences.keep_if { |a| a.member == member && a.performance_set_date_id == rehearsal_date.id } %>
+            <% this_absence = @absences.keep_if { |a| a.member == member_set.member && a.performance_set_date_id == rehearsal_date.id } %>
             <th><%= this_absence.present? ? absence_text(this_absence.first) : "" %></th>
           <% end %>
 
