@@ -293,7 +293,7 @@ div {
   padding: 10px;
 }
 
-#members td {
+#members td, #members th, #absences td, #absences th {
   padding: 10px;
 }
 
@@ -314,6 +314,26 @@ div {
 
 #members tr:nth-child(even) {
   background: #ddd;
+}
+
+#absences tr:nth-child(even) {
+  background: #eee;
+}
+
+#absences tr:nth-child(even) td:nth-child(even) {
+  background: #f6f6f6;
+}
+
+#absences tr td:nth-child(even) {
+  background: #e6e6e6;
+}
+
+.edit_absence {
+  display: none;
+  margin-left: 40px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  width: 150px;
 }
 
 .member-set-pill {

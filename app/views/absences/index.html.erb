@@ -1,32 +1,37 @@
 <div class='pageHeader'><h2>Absences</h2> &emsp; <%= link_to 'New Absence', new_absence_path, class: 'button' %></div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Member</th>
-      <th>Performanceset</th>
-      <th>Date</th>
-      <th>Planned</th>
-      <th>Sub found</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<div class='listDescription'>
+  <%= select_tag :sets, options_for_select(@performance_sets, selected: @performance_set), id: 'setSelectorAbsence' %>
+</div>
 
-  <tbody>
-    <% @absences.each do |absence| %>
+<% if @performance_set %>
+  <table cellspacing=0 cellpadding=0 id='absences'>
+    <thead>
       <tr>
-        <td><%= absence.member %></td>
-        <td><%= absence.performance_set %></td>
-        <td><%= absence.date %></td>
-        <td><%= absence.planned %></td>
-        <td><%= absence.sub_found %></td>
-        <td><%= link_to 'Show', absence %></td>
-        <td><%= link_to 'Edit', edit_absence_path(absence) %></td>
-        <td><%= link_to 'Destroy', absence, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <th>Member</th>
+        <th>Instrument</th>
+        <% @set_rehearsal_dates.each do |rehearsal_date| %>
+          <th><%= rehearsal_date.date %></th>
+        <% end %>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
 
+    <tbody>
+      <% @members.each do |member| %>
+        <tr>
+          <td><%= link_to member, member %></td>
+          <td><%= @member_sets.where('member_id = ?', member.id).first.set_member_instruments.first.member_instrument.instrument %>
+          <% @set_rehearsal_dates.each do |rehearsal_date| %>
+            <% this_absence = @absences.keep_if { |a| a.member == member && a.performance_set_date_id == rehearsal_date.id } %>
+            <th><%= this_absence.present? ? absence_text(this_absence.first) : "" %></th>
+          <% end %>
+
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <i>Please select a performance set to continue</i>
+<% end %>
 <br>
 

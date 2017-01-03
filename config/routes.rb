@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
   resources :performance_set_dates
   captcha_route
-  resources :absences
+  resources :absences do
+    member do
+      put :flip_excused_flag, as: :flip_excused_flag
+      patch :set_sub, as: :set_sub
+    end
+  end
   resources :member_notes
   resources :action_logs
   devise_for :users

@@ -1,5 +1,5 @@
 class AbsencesController < ApplicationController
-  before_action :set_absence, only: [:show, :edit, :update, :destroy]
+  before_action :set_absence, only: [:show, :edit, :update, :destroy, :flip_excused_flag, :set_sub]
   before_action :authenticate_user!, except: [:index, :new, :create]
 
   # GET /absences
@@ -8,7 +8,26 @@ class AbsencesController < ApplicationController
     unless current_user
       redirect_to new_absence_url
     end
-    @absences = Absence.all
+    @performance_sets = PerformanceSet.all.map { |ps| [ps.name, ps.id] }
+    @performance_sets = @performance_sets.unshift(['All Sets', 0])
+
+    if params[:set]
+      if PerformanceSet.where('id = ?', params[:set]).count > 0
+        @perf_set = PerformanceSet.where('id = ?', params[:set]).first
+        @members = @perf_set.members
+        @member_sets = @perf_set.member_sets
+
+        @set_rehearsal_dates = @perf_set.performance_set_dates
+
+        @performance_set = params[:set]
+        @performance_set_label = @performance_set
+      end
+    end
+
+    @absences = Absence.includes(:member).includes(performance_set_date: :performance_set).all
+    if @performance_set
+      @absences = @absences.to_a.keep_if {|a| a.performance_set_date && a.performance_set_date.performance_set_id == params[:set].to_i }
+    end
   end
 
   # GET /absences/1
@@ -94,6 +113,24 @@ class AbsencesController < ApplicationController
     @absence.destroy
     respond_to do |format|
       format.html { redirect_to absences_url, notice: 'Absence was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+
+  def flip_excused_flag
+    @absence.planned = !@absence.planned
+    @absence.save
+    respond_to do |format|
+      format.html { redirect_to absence_url(@absence), notice: 'Absence was successfully updated.' }
+      format.json { head :no_content }
+    end
+  end
+
+  def set_sub
+    @absence.sub_found = absence_params[:sub_found]
+    @absence.save
+    respond_to do |format|
+      format.html { redirect_to absence_url(@absence), notice: 'Absence was successfully updated.' }
       format.json { head :no_content }
     end
   end

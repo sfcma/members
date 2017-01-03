@@ -243,12 +243,23 @@ var loadStuff = function() {
     }
   });
 
+  // Member#index
   $('#setSelector').on('change', function(e) {
-    window.location.href = 'https://' + window.location.hostname + '/members?set=' + e.target.value;
+    window.location.href = location.protocol + '//' + window.location.hostname + (location.port ? ':'+location.port: '') + '/members?set=' + e.target.value;
   });
 
   $('#instrumentSelector').on('change', function(e) {
-    window.location.href = 'https://' + window.location.hostname + '/members?instrument=' + e.target.value;
+    window.location.href = location.protocol + '//' + window.location.hostname + (location.port ? ':'+location.port: '') + '/members?instrument=' + e.target.value;
+  });
+
+  // Absence#index
+  $('#setSelectorAbsence').on('change', function(e) {
+    window.location.href = location.protocol + '//' + window.location.hostname + (location.port ? ':'+location.port: '') + '/absences?set=' + e.target.value;
+  });
+
+  // Absence#show
+  $('#open_absence_sub_box').on('click', function(e) {
+    $('.edit_absence').toggle();
   });
 
   // For Absence#new page

@@ -5,23 +5,34 @@
 
 <p>
   <strong>Performance Set:</strong>
-  <%= @absence.performance_set %>
+  <%= @absence.performance_set_date.performance_set.name %>
 </p>
 
 <p>
-  <strong>Date:</strong>
-  <%= @absence.date %>
+  <strong>Rehearsal Date:</strong>
+  <%= @absence.performance_set_date.date %>
 </p>
 
 <p>
-  <strong>Planned:</strong>
-  <%= @absence.planned %>
+  <strong>Excused?:</strong>
+  <%= @absence.planned %>  <%= link_to "(Change to #{!@absence.planned})", flip_excused_flag_absence_url(@absence), method: 'PUT' %>
 </p>
 
 <p>
-  <strong>Sub found:</strong>
-  <%= @absence.sub_found %>
+  <strong>Substitute:</strong>
+  <%= @absence.sub_found %>  <%= link_to "(Change)", "#", id: 'open_absence_sub_box' %>
 </p>
 
-<%= link_to 'Edit', edit_absence_path(@absence) %> |
-<%= link_to 'Back', absences_path %>
+<p class='absence_sub_box' id='absence_sub_box'>
+  <%= form_for @absence, url: set_sub_absence_path(@absence) do |f| %>
+    <div class="field">
+      <%= f.label :sub_found, "Name of Substitue" %>
+      <%= f.text_field :sub_found %>
+    </div>
+    <div class="actions">
+      <%= f.submit "Update", class: 'button' %>
+    </div>
+  <% end %>
+</p>
+
+<%= link_to 'Show All Absences', absences_path %>

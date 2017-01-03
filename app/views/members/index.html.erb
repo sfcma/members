@@ -2,7 +2,7 @@
 
 <div class='listDescription'>
   <%= select_tag :instruments, options_for_select(@instruments, selected: @instrument), id: 'instrumentSelector' %>
-  <%= select_tag :sets, options_for_select(@performance_sets_for_filter, selected: @performance_sets_for_filter), id: 'setSelector' %>
+  <%= select_tag :sets, options_for_select(@performance_sets_for_filter, selected: @performance_set), id: 'setSelector' %>
   <br>
   <% if @performance_set || @instrument %>
     <% if @performance_set %>

@@ -20,4 +20,9 @@ class Member < ApplicationRecord
   validates_date :waiver_signed, allow_blank: true
 
   enum statuses: [:untriaged, :placed_in_group, :waitlist, :sub_only, :inactive]
+
+  def to_s
+    return program_name if program_name.present?
+    return first_name + " " + last_name
+  end
 end
