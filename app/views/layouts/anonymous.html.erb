@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Members</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= javascript_include_tag 'application'%>
+  </head>
+
+  <body class="top-anonymous">
+    <h1 class="h1-anonymous">Civic Symphony Association <br>of<br>San Francisco</h1>
+    <% flash.each do |key, value| %>
+      <div class="alert alert-<%= key %>">
+        <a href="#" data-dismiss="alert" class="close">×</a>
+        <ul>
+          <li>
+            <%= value %>
+          </li>
+        </ul>
+      </div>
+    <% end %>
+    <div class='body-anonymous'>
+      <%= yield %>
+    </div>
+  </body>
+</html>

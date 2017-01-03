@@ -18,6 +18,7 @@ class AbsencesController < ApplicationController
   def new
     @performance_sets = PerformanceSet.all
     @absence = Absence.new
+    render layout: 'anonymous' unless current_user.present?
   end
 
   # GET /absences/1/edit
@@ -53,7 +54,11 @@ class AbsencesController < ApplicationController
           format.json { render :show, status: :created, location: @absence }
         end
       else
-        format.html { render :new }
+        if current_user
+          format.html { render :new }
+        else
+          format.html { render :new, layout: 'anonymous' }
+        end
         format.json { render json: @absence.errors, status: :unprocessable_entity }
       end
     end

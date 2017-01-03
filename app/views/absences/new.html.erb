@@ -1,4 +1,4 @@
-<div class='pageHeader'><h2>Record Absence</h2></div>
+<div class='pageHeader'><h2>Record an Absence</h2></div>
 
 <% unless current_user %>
   <div class="bigForm">
@@ -6,4 +6,7 @@
   <%= render 'form', absence: @absence %>
 <% unless current_user %>
   </div>
+
+  <i class='form-disclaimer'>If you have any questions or issues with this form,
+  please contact membership@sfcivicsymphony.org</i>
 <% end %>

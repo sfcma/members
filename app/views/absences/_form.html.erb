@@ -11,6 +11,11 @@
     </div>
   <% end %>
 
+  <% unless current_user %>
+    <i>This form replaces the missing@sfcivicsymphony.org email address.<br>
+      Please use it to record all reheasal absences.</i>
+  <% end %>
+
   <div class="field">
     <%= f.fields_for :members do |member_f| %>
       <%= member_f.label :email_1, "Your Email Address" %>
