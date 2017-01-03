@@ -1,12 +1,13 @@
 <div class='pageHeader'><h2>Roster for <%= @performance_set.extended_name %></h2></div>
 
-<br><%= @instrument_groups.flatten.length %> musicians signed up
-
 <% @instrument_groups.each do |ig, i| %>
-  <h4><%= ig %> (<%= @instrument_groups[ig].length %>)</h4>
+  <% j = 0 %>
+  <h4><%= ig.capitalize %></h4>
   <% @instrument_groups[ig].each do |ms| %>
     <% if ms %>
+      <% j += 1 %>
       <%= link_to ms, ms %><br>
     <% end %>
   <% end %>
+  <i><%= "#{pluralize(j, ig)}" %></i>
 <% end %>

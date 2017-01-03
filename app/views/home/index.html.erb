@@ -8,7 +8,7 @@
   <br><br>
   <b>Sets</b>
   <br><br>
-  Current Set Rosters:<br>
+  Current Set Rosters: <br>
   <% PerformanceSet.now_or_future.each do |ps| %>
     <%= link_to ps.extended_name, roster_performance_set_url(ps) %><br>
   <% end %><br>

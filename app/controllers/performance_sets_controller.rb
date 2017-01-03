@@ -90,7 +90,7 @@ class PerformanceSetsController < ApplicationController
 
   def roster
     @instrument_groups = {}
-    @member_sets = MemberSet.includes(:member).where(performance_set_id: @performance_set.id).to_a
+    @member_sets = MemberSet.includes(:member).where(performance_set_id: @performance_set.id, set_status: 'Playing').to_a
     @member_sets.each do |ms|
       instrument = ms.set_member_instruments.first.member_instrument.instrument
       @instrument_groups[instrument] ||= []
