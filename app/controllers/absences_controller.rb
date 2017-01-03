@@ -16,14 +16,14 @@ class AbsencesController < ApplicationController
 
   # GET /absences/new
   def new
-    @performance_sets = PerformanceSet.all
+    @performance_sets = PerformanceSet.now_or_future
     @absence = Absence.new
     render layout: 'anonymous' unless current_user.present?
   end
 
   # GET /absences/1/edit
   def edit
-    @performance_sets = PerformanceSet.all
+    @performance_sets = PerformanceSet.now_or_future
     @performance_set_dates = PerformanceSetDate.all
   end
 
@@ -43,7 +43,7 @@ class AbsencesController < ApplicationController
     aparams.delete(:performance_set_dates)
 
     @absence = Absence.new(aparams)
-    @performance_sets = PerformanceSet.all
+    @performance_sets = PerformanceSet.now_or_future
 
     respond_to do |format|
       if @absence.save
@@ -67,7 +67,7 @@ class AbsencesController < ApplicationController
   # PATCH/PUT /absences/1
   # PATCH/PUT /absences/1.json
   def update
-    @performance_sets = PerformanceSet.all
+    @performance_sets = PerformanceSet.now_or_future
 
     respond_to do |format|
       if @absence.update(absence_params)
