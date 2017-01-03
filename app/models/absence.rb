@@ -5,6 +5,6 @@ class Absence < ApplicationRecord
   belongs_to :performance_set_date, required: true
 
   validate do |absence|
-    errors[:base] << "<h3>That email address doesn't have a member attached to it! Please enter the email address you gave us, or contact info@sfcivicsymphony.org for help.</h3>".html_safe if member.blank?
+    errors[:base] << "<h3>That email address doesn't have a member attached to it! Please enter the email address you gave us, or contact membership@sfcivicsymphony.org for help.</h3>".html_safe if member.blank?
   end
 end
