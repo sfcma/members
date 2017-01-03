@@ -36,7 +36,7 @@ class AbsencesController < ApplicationController
     aparams = absence_params
 
     # figure out which member it is
-    if aparams[:members][:email_1]
+    if aparams[:members][:email_1].blank?
       member = nil
     else
       member = Member.where('email_1 = ? OR email_2 = ?', aparams[:members][:email_1], aparams[:members][:email_1]).first

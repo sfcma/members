@@ -37,10 +37,13 @@
 
   <% if current_user %>
     <div class="field">
-      <%= f.label :planned %>
-      <%= f.check_box :planned %>
+  <% else %>
+    <div class="field hidden">
+  <% end %>
+      <%= f.label :planned, "Excused?" %>
+      <%= f.check_box :planned, {checked: true} %>
     </div>
-
+  <% if current_user %>
     <div class="field">
       <%= f.label :sub_found %>
       <%= f.text_field :sub_found %>
