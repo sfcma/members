@@ -8,8 +8,18 @@
   <br><br>
   <b>Sets</b>
   <br><br>
+  Current Set Rosters:<br>
+  <% PerformanceSet.now_or_future.each do |ps| %>
+    <%= link_to ps.name, roster_performance_set_url(ps) %><br>
+  <% end %><br>
   <%= link_to 'Add New Performance Set', new_performance_set_path %><br>
   <%= link_to 'View Performance Set List', performance_sets_path %>
+
+  <br><br>
+  <b>Absences <sup style='color: red'>NEW!</sup></b>
+  <br><br>
+  <%= link_to 'View Absences', absences_path %><br>
+  <%= link_to 'Record new Absence', new_absence_path %>
 
   <br><br>
   <b>Ensembles</b>
@@ -24,22 +34,6 @@
     <%= link_to 'User List', users_path %>
     <br><br>
   <% end %>
-  <hr>
-  <i>Coming Soon!</i><br><br>
-  <b>Absences / Attendance</b>
-  <br><br>
-  Add New Absence<br>
-  View Absences List
-
-  <br><br>
-  <b>Audit Trail</b>
-  <br><br>
-  View Action Log List
-
-  <br><br>
-
-  <br><br>
-  View Users
 
 <% else %>
   Hello! Please <%= link_to "Log In", new_user_session_path %>

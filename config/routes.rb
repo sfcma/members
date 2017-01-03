@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   resources :performance_sets do
     member do
       get :rehearsal_dates
+      get :roster, as: :roster
     end
   end
   resources :ensembles

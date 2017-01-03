@@ -15,7 +15,7 @@ class AbsencesController < ApplicationController
       if PerformanceSet.where('id = ?', params[:set]).count > 0
         @perf_set = PerformanceSet.where('id = ?', params[:set]).first
         @members = @perf_set.members
-        @member_sets = @perf_set.member_sets
+        @member_sets = @perf_set.member_sets.where('member_id != 0')
 
         @set_rehearsal_dates = @perf_set.performance_set_dates
 

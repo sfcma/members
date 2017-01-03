@@ -1,0 +1,12 @@
+<div class='pageHeader'><h2>Roster for <%= @performance_set.name %></h2></div>
+
+<br><%= @instrument_groups.flatten.length %> musicians signed up
+
+<% @instrument_groups.each do |ig, i| %>
+  <h4><%= ig %> (<%= @instrument_groups[ig].length %>)</h4>
+  <% @instrument_groups[ig].each do |ms| %>
+    <% if ms %>
+      <%= link_to ms, ms %><br>
+    <% end %>
+  <% end %>
+<% end %>
