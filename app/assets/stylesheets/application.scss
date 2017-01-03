@@ -320,12 +320,12 @@ div {
   background: #eee;
 }
 
-#absences tr:nth-child(even) td:nth-child(even) {
-  background: #f6f6f6;
+#absences tr td:nth-child(even) {
+  border-left: 2px solid #eee;
 }
 
-#absences tr td:nth-child(even) {
-  background: #e6e6e6;
+#absences tr td:nth-child(odd) {
+  border-left: 1px solid #ccc;
 }
 
 .edit_absence {
