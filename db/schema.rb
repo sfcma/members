@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161218082705) do
+ActiveRecord::Schema.define(version: 20170103061130) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
     t.date     "date"
     t.boolean  "planned"
-    t.boolean  "sub_found"
+    t.string   "sub_found"
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
     t.datetime "deleted_at"
@@ -105,9 +105,10 @@ ActiveRecord::Schema.define(version: 20161218082705) do
     t.integer  "member_id"
     t.integer  "user_id"
     t.string   "note"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
     t.datetime "deleted_at"
+    t.boolean  "private_note", default: false
     t.index ["deleted_at"], name: "index_member_notes_on_deleted_at"
     t.index ["member_id"], name: "index_member_notes_on_member_id"
     t.index ["user_id"], name: "index_member_notes_on_user_id"
@@ -206,6 +207,7 @@ ActiveRecord::Schema.define(version: 20161218082705) do
     t.datetime "updated_at",  null: false
     t.string   "name"
     t.datetime "deleted_at"
+    t.string   "description"
     t.index ["deleted_at"], name: "index_performance_sets_on_deleted_at"
     t.index ["ensemble_id"], name: "index_performance_sets_on_ensemble_id"
   end
