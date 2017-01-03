@@ -1,10 +1,13 @@
 class AbsencesController < ApplicationController
   before_action :set_absence, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, except: [:new, :create]
+  before_action :authenticate_user!, except: [:index, :new, :create]
 
   # GET /absences
   # GET /absences.json
   def index
+    unless current_user
+      redirect_to new_absence_url
+    end
     @absences = Absence.all
   end
 
