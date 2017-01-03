@@ -74,7 +74,7 @@
       <% end %>
       <% @member.member_sets.sort_by { |v| v.performance_set.start_date }.reverse.each do |ms| %>
         <br><br>
-        <b><%= ms.performance_set.name %></b>&emsp;
+        <b><%= ms.performance_set.extended_name %></b>&emsp;
         <span class='grays'>(<%= ms.performance_set.start_date.to_datetime.strftime('%B %e, %Y') %> – <%= ms.performance_set.end_date.to_datetime.strftime('%B %e, %Y')  %>)</span><br>
         <i><%= ms.set_status %></i><br>
         <% if ms.rotating %>

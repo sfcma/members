@@ -6,7 +6,7 @@
   <br>
   <% if @performance_set || @instrument %>
     <% if @performance_set %>
-      <i>Showing only members playing in <b><%= PerformanceSet.find_by_id(params[:set]).name %></b></i>
+      <i>Showing only members playing in <b><%= PerformanceSet.find_by_id(params[:set]).extended_name %></b></i>
     <% end %>
     <% if @instrument %>
       <i>Showing only members who play the <b><%= params[:instrument].humanize.capitalize %></b></i>

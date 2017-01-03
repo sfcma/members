@@ -13,4 +13,8 @@ module AbsencesHelper
     end
     text
   end
+
+  def sort_by_set_instrument(member)
+    @member_sets.where('member_id = ?', member.id).first.set_member_instruments.first.member_instrument.instrument
+  end
 end

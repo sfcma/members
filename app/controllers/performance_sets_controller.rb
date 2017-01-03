@@ -110,6 +110,7 @@ class PerformanceSetsController < ApplicationController
     params.require(:performance_set).permit(
       :ensemble_id,
       :start_date,
+      :description,
       :end_date,
       :name
     )

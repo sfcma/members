@@ -32,6 +32,11 @@
     <%= date_field :performance_set, :end_date %>
   </div>
 
+  <div class="field">
+    <%= f.label :description, "Set Short Description (used in title)" %>
+    <%= f.text_field :description %>
+  </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>

@@ -13,7 +13,7 @@
 
   <div class="field">
     <%= f.label :performance_set_id %>
-    <%= f.collection_select :performance_set_id, @performance_sets, :id, :name, { prompt: true } %>
+    <%= f.collection_select :performance_set_id, @performance_sets, :id, :extended_name, { prompt: true } %>
   </div>
 
   <div class="field">

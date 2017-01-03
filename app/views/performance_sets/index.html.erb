@@ -10,7 +10,7 @@
   <tbody>
     <% @performance_sets.each do |performance_set| %>
       <tr>
-        <td><%= link_to performance_set.name, performance_set %></td>
+        <td><%= link_to performance_set.extended_name, performance_set %> (<%= link_to "Edit", edit_performance_set_url(performance_set) %>)</td>
       </tr>
     <% end %>
   </tbody>

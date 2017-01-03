@@ -12,7 +12,7 @@ class MembersController < ApplicationController
   def index
     @instruments = MemberInstrument.all.map { |mi| [mi.instrument.capitalize, mi.instrument] }.uniq
     @instruments = @instruments.unshift(['All Instruments', 0])
-    @performance_sets_for_filter = PerformanceSet.all.map { |ps| [ps.name, ps.id] }
+    @performance_sets_for_filter = PerformanceSet.all.map { |ps| [ps.extended_name, ps.id] }
     @performance_sets_for_filter = @performance_sets_for_filter.unshift(['All Sets', 0])
 
     @instrument_label = 0

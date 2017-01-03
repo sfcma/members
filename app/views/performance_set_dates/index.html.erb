@@ -21,7 +21,7 @@
   <tbody>
     <% @performance_set_dates.each do |performance_set_date| %>
       <tr>
-        <td><%= link_to performance_set_date.performance_set %></td>
+        <td><%= link_to performance_set_date.performance_set.extended_name, performance_set_date.performance_set %></td>
         <td><%= performance_set_date.date %></td>
         <td width=200><%= link_to 'View Absences for this date', performance_set_date %></td>
         <td><%= link_to 'Edit', edit_performance_set_date_path(performance_set_date) %></td>

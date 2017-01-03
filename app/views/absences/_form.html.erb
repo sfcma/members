@@ -26,7 +26,7 @@
   <div class="field">
     <%= f.fields_for :performance_set_dates do |performance_set_date_f| %>
       <%= performance_set_date_f.label :performance_set_id, "Which group and set are you playing with?" %>
-      <%= performance_set_date_f.collection_select :performance_set_id, @performance_sets, :id, :name, { prompt: true } %>
+      <%= performance_set_date_f.collection_select :performance_set_id, @performance_sets, :id, :extended_name, { prompt: true } %>
     <% end %>
   </div>
 

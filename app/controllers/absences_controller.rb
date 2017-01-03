@@ -8,7 +8,7 @@ class AbsencesController < ApplicationController
     unless current_user
       redirect_to new_absence_url
     end
-    @performance_sets = PerformanceSet.all.map { |ps| [ps.name, ps.id] }
+    @performance_sets = PerformanceSet.all.map { |ps| [ps.extended_name, ps.id] }
     @performance_sets = @performance_sets.unshift(['All Sets', 0])
 
     if params[:set]

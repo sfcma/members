@@ -10,7 +10,7 @@
   <br><br>
   Current Set Rosters:<br>
   <% PerformanceSet.now_or_future.each do |ps| %>
-    <%= link_to ps.name, roster_performance_set_url(ps) %><br>
+    <%= link_to ps.extended_name, roster_performance_set_url(ps) %><br>
   <% end %><br>
   <%= link_to 'Add New Performance Set', new_performance_set_path %><br>
   <%= link_to 'View Performance Set List', performance_sets_path %>

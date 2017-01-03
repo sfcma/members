@@ -19,6 +19,10 @@ class PerformanceSet < ApplicationRecord
     "#{Ensemble.find(ensemble_id).name} from #{start_date} to #{end_date}"
   end
 
+  def extended_name
+    description.present? ? "#{name} – #{description}" : name
+  end
+
   def to_s
     return name
   end
