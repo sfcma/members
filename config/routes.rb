@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     member do
       get :rehearsal_dates
       get :roster, as: :roster
+      get :email_roster, as: :email_roster
     end
   end
   resources :ensembles

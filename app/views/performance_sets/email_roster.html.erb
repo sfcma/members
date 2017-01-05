@@ -1,0 +1,9 @@
+<% if current_user.global_admin? %>
+
+  <div class='pageHeader'><h2>Email Roster for <%= @performance_set.extended_name %></h2></div>
+
+  <% @members.each do |m| %>
+    <%= "#{m.email_1}," %>
+  <% end %>
+
+<% end %>

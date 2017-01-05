@@ -1,5 +1,5 @@
 class PerformanceSetsController < ApplicationController
-  before_action :set_performance_set, only: [:show, :edit, :update, :destroy, :rehearsal_dates, :roster]
+  before_action :set_performance_set, only: [:show, :edit, :update, :destroy, :rehearsal_dates, :roster, :email_roster]
   before_action :authenticate_user!, except: [:rehearsal_dates]
 
   # GET /performance_sets
@@ -95,6 +95,14 @@ class PerformanceSetsController < ApplicationController
       instrument = ms.set_member_instruments.first.member_instrument.instrument
       @instrument_groups[instrument] ||= []
       @instrument_groups[instrument] << ms.member
+    end
+  end
+
+  def email_roster
+    @members = []
+    @member_sets = MemberSet.includes(:member).where(performance_set_id: @performance_set.id, set_status: 'Playing').to_a
+    @member_sets.each do |ms|
+      @members << ms.member
     end
   end
 
