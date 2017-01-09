@@ -41,13 +41,17 @@
             No Phone Numbers Available
           <% end %>
         <br><br>
-          <strong>Email:</strong><br>
+        <% end %>
+	<% if can_view_member_email(@member) %>
+	<strong>Email:</strong><br>
           <% if @member.email_1.present? || @member.email_2.present? %>
             <%= @member.email_1 %><br>
             <%= @member.email_2 %>
           <% else %>
             No Email Addresses Available
           <% end %>
+        <% end %>
+	<% if can_view_member_personal_info(@member) %>
         <br><br>
           <strong>Emergency Contact:</strong><br>
           <% if @member.emergency_name.present? && @member.emergency_phone.present? %>
