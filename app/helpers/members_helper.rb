@@ -26,7 +26,7 @@ module MembersHelper
     )
   end
 
-  def can_view_member_email(memeber)
+  def can_view_member_email(member)
     current_user.global_admin? ||
     ( current_user.instruments.map(&:instrument) & member.member_instruments.map(&:instrument) )
   end
