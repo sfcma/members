@@ -89,12 +89,19 @@ class PerformanceSetsController < ApplicationController
   end
 
   def roster
+    if params[:all]
+      @member_sets = MemberSet.includes(:member).where(performance_set_id: @performance_set.id).to_a
+      @showing_all = true
+    else
+      @member_sets = MemberSet.includes(:member).where(performance_set_id: @performance_set.id, set_status: 'Playing').to_a
+      @showing_all = false
+    end
+
     @instrument_groups = {}
-    @member_sets = MemberSet.includes(:member).where(performance_set_id: @performance_set.id, set_status: 'Playing').to_a
     @member_sets.each do |ms|
       instrument = ms.set_member_instruments.first.member_instrument.instrument
       @instrument_groups[instrument] ||= []
-      @instrument_groups[instrument] << ms.member
+      @instrument_groups[instrument] << ms
     end
   end
 

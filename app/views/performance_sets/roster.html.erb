@@ -1,12 +1,24 @@
 <div class='pageHeader'><h2>Roster for <%= @performance_set.extended_name %></h2></div>
 
+<div class='listDescription'>
+
+<% if @showing_all %>
+Showing All Members Interested in <%= @performance_set.extended_name %>&nbsp;&emsp;&nbsp;&middot;&nbsp;&emsp;&nbsp;
+<b><%= link_to "Show only confirmed members", roster_performance_set_path %></b>
+<% else %>
+Showing Only Confirmed Playing Members in  <%= @performance_set.extended_name %>&nbsp;&emsp;&nbsp;&middot;&nbsp;&emsp;&nbsp;
+<b><%= link_to "Show All Members", roster_performance_set_path(:all => "true") %></b>
+<% end %>
+
+</div>
+
 <% @instrument_groups.each do |ig, i| %>
   <% j = 0 %>
   <h4><%= ig.capitalize %></h4>
   <% @instrument_groups[ig].each do |ms| %>
     <% if ms %>
       <% j += 1 %>
-      <%= link_to ms, ms %><br>
+      <%= link_to ms.member, ms.member %> <% if @showing_all %> &emsp;&emsp;&emsp;<i style='color: gray'><%= ms.set_status == 'Playing' ? '' : ms.set_status %></i> <% end %> <br>
     <% end %>
   <% end %>
   <i><%= "#{pluralize(j, ig)}" %></i>
