@@ -8,7 +8,8 @@ class MemberSet < ApplicationRecord
   accepts_nested_attributes_for :set_member_instruments, allow_destroy: true
   validates :performance_set, presence: true
 
-  enum statuses: ['Interested in playing this set, unconfirmed',
+  enum statuses: ['Opted In for this set',
+                  'Interested in playing this set, unconfirmed',
                   :playing,
                   'Stopped playing, due to member\'s own decision',
                   'Unable to play, not due to Member\'s decision',

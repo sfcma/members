@@ -27,6 +27,10 @@ Rails.application.routes.draw do
   end
   resources :performance_pieces
   resources :users
+  resources :performance_set_instruments
+
+  resources :member_sets, only: [:new, :create]
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: 'home#index'
 end

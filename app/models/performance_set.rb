@@ -14,6 +14,9 @@ class PerformanceSet < ApplicationRecord
   validates_date :end_date, on_or_before: 5.years.from_now
 
   scope :now_or_future, -> { where("end_date > ?", 1.week.ago.strftime('%F'))}
+  scope :joinable, -> { where("start_date > ? and start_date < ?",
+                              2.week.ago.strftime('%F'),
+                              6.weeks.from_now.strftime('%F'))}
 
   def old_name
     "#{Ensemble.find(ensemble_id).name} from #{start_date} to #{end_date}"

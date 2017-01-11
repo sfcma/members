@@ -277,6 +277,21 @@ var loadStuff = function() {
     });
   });
 
+  // For MemberSet#new page
+  $('#member_set_performance_set_id').on('change', function() {
+    var rehearsalSel = $('#member_set\\[new_performance_set_instrument_id\\]');
+    var newOptions = "";
+    var performanceSetId = $('#member_set_performance_set_id').val();
+    $.get('../../performance_set_instruments/?performance_set_id=' + performanceSetId).then(function(response) {
+      $.each(response, function(instrument) {
+        var inst = response[instrument].instrument;
+        newOptions += '<option value=' + response[instrument].instrument + '>' + inst + '</option>';
+      });
+      rehearsalSel.prop('disabled', false);
+      rehearsalSel.empty().append($(newOptions));
+    });
+  });
+
   if (isNew) {
     $('a[id^=removeMemberSet]').hide();
     $('a[id^=removeMemberInstrument]').hide();

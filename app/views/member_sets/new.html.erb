@@ -1,0 +1,45 @@
+<div class='pageHeader'><h2>Opt-in to a Performance Set</h2></div>
+
+<div class="bigForm">
+<%= form_for(@member_set) do |f| %>
+  <% if @member_set.errors.any? %>
+    <div id="error_explanation">
+      <h2>This opt-in could not be recorded:</h2>
+
+      <ul>
+      <% @member_set.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% unless current_user %>
+    <i>Please use this form to opt-in to an upcoming set.</i>
+  <% end %>
+
+  <div class="field">
+    <%= f.fields_for :members do |member_f| %>
+      <%= member_f.label :email_1, "Your Email Address" %>
+      <%= member_f.text_field :email_1 %>
+    <% end %>
+  </div>
+
+  <div class="field">
+    <%= f.label :performance_set_id, "Which group and set are you playing with?" %>
+    <%= f.collection_select :performance_set_id, @performance_sets, :id, :extended_name, { prompt: true } %>
+  </div>
+
+  <div class="field">
+    <label id='member_set_new_performance_set_instrument_id_label'>What instrument are you planning to play?</label>
+    <select name='member_set[new_performance_set_instrument_id]' id='member_set[new_performance_set_instrument_id]' disabled><option>Please Select</option></select>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Submit Form", class: 'button' %>
+  </div>
+<% end %>
+</div>
+
+<i class='form-disclaimer'>If you have any questions or issues with this form,
+  please contact membership@sfcivicsymphony.org</i>

@@ -1,0 +1,32 @@
+<%= form_for(performance_set_instrument) do |f| %>
+  <% if performance_set_instrument.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(performance_set_instrument.errors.count, "error") %> prohibited this performance_set_instrument from being saved:</h2>
+
+      <ul>
+      <% performance_set_instrument.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :performance_set_id %>
+    <%= f.collection_select :performance_set_id, @performance_sets, :id, :extended_name, { prompt: true } %>
+  </div>
+
+  <div class="field">
+    <%= f.label :instrument, "Instrument" %>
+    <%= f.text_field :instrument %>
+  </div>
+
+  <div class="field">
+    <%= f.label :limit, "Limit (optional)" %>
+    <%= f.text_field :limit %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
