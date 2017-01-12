@@ -49,9 +49,9 @@ class MemberSetsController < ApplicationController
               respond_to do |format|
                 if @member_set.save
                   if !current_user
-                    format.html { redirect_to new_member_set_url, notice: 'Member Opt-In was successfully recorded.' }
+                    format.html { redirect_to new_member_set_url, notice: "Thank you for submitting your interest in #{@member_set.performance_set.extended_name}." }
                   else
-                    format.html { redirect_to @member_set, notice: 'Member Opt-In was successfully created.' }
+                    format.html { redirect_to @member_set, notice: "Thank you for submitting your interest in #{@member_set.performance_set.extended_name}." }
                     format.json { render :show, status: :created, location: @member_set }
                   end
                 else
