@@ -2,9 +2,9 @@ class Member < ApplicationRecord
   audited
   acts_as_paranoid
   is_impressionable
-  has_many :member_instruments
-  has_many :member_sets
-  has_many :member_notes
+  has_many :member_instruments, dependent: :destroy
+  has_many :member_sets, dependent: :destroy
+  has_many :member_notes, dependent: :destroy
 
   # This maybe should be a has_and_belongs_to_many
   has_many :performance_sets, through: :member_sets

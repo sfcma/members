@@ -2,7 +2,7 @@ class MemberSet < ApplicationRecord
   audited associated_with: :member
   acts_as_paranoid
 
-  has_many :set_member_instruments
+  has_many :set_member_instruments, dependent: :destroy
   belongs_to :member
   belongs_to :performance_set, class_name: 'PerformanceSet'
   accepts_nested_attributes_for :set_member_instruments, allow_destroy: true
