@@ -4,16 +4,21 @@ class PerformanceSetDatesController < ApplicationController
   # GET /performance_set_dates
   # GET /performance_set_dates.json
   def index
-    @performance_set_dates = PerformanceSetDate.includes(:performance_set).order(:performance_set_id).all
+
 
     @performance_sets = PerformanceSet.all.map { |ps| [ps.extended_name, ps.id] }
     @performance_sets = @performance_sets.unshift(['All Sets', 0])
 
-    if params[:set]
+    if params[:set] && params[:set] != '0'
       if PerformanceSet.where('id = ?', params[:set]).count > 0
         @performance_set = params[:set]
         @performance_set_label = @performance_set
+        @performance_set_dates = PerformanceSetDate.where(performance_set_id: @performance_set)
+                                                   .includes(:performance_set)
+                                                   .order(:performance_set_id)
       end
+    else
+      @performance_set_dates = PerformanceSetDate.includes(:performance_set).order(:performance_set_id).all
     end
   end
 
