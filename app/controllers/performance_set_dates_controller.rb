@@ -15,10 +15,6 @@ class PerformanceSetDatesController < ApplicationController
         @performance_set_label = @performance_set
       end
     end
-
-    if @performance_set
-      @members = @members.where('member_sets.performance_set_id = ?', params[:set])
-    end
   end
 
   # GET /performance_set_dates/1
