@@ -9,7 +9,7 @@ module AbsencesHelper
     end
 
     if absence.planned
-      text << "<br><i style='color: gray; font-size: 0.9em;'>Submitted #{absence.created_at.strftime('%b %e %H:%M')}</i>".html_safe
+      text << "<br><i style='color: gray; font-size: 0.9em;'>Submitted #{absence.created_at.strftime('%b %e %l:%M%P')}</i>".html_safe
     end
 
     if absence.sub_found.present?
