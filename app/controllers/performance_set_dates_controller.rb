@@ -4,8 +4,6 @@ class PerformanceSetDatesController < ApplicationController
   # GET /performance_set_dates
   # GET /performance_set_dates.json
   def index
-
-
     @performance_sets = PerformanceSet.all.map { |ps| [ps.extended_name, ps.id] }
     @performance_sets = @performance_sets.unshift(['All Sets', 0])
 

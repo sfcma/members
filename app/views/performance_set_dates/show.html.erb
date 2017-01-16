@@ -6,7 +6,16 @@
 Absences</h2> &emsp; &emsp; <%= @performance_set_date.performance_set.name %> — <%= @performance_set_date.date %>
 </div>
 <% @performance_set_date.absences.each do |ab| %>
-  <%= ab %>
+  <br><br>
+  <% member_set = MemberSet.find_by(member_id: ab.member.id, performance_set_id: @performance_set_date.performance_set.id) %>
+  <% if member_set %>
+    <b><%= ab.member %></b><br>
+    <%= member_set.set_member_instruments.first.member_instrument.instrument %>
+    <% if ab.planned %>
+      <br><%= absence_text(ab) %>
+    <% end %>
+  <% end %>
+
 <% end %>
 
 <br><br>
