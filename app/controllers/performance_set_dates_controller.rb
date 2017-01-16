@@ -6,8 +6,8 @@ class PerformanceSetDatesController < ApplicationController
   def index
     @performance_set_dates = PerformanceSetDate.includes(:performance_set).order(:performance_set_id).all
 
-    @performance_sets_for_filter = PerformanceSet.all.map { |ps| [ps.extended_name, ps.id] }
-    @performance_sets_for_filter = @performance_sets_for_filter.unshift(['All Sets', 0])
+    @performance_sets = PerformanceSet.all.map { |ps| [ps.extended_name, ps.id] }
+    @performance_sets = @performance_sets_for_filter.unshift(['All Sets', 0])
 
     if params[:set]
       if PerformanceSet.where('id = ?', params[:set]).count > 0

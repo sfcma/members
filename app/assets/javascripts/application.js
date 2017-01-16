@@ -257,6 +257,12 @@ var loadStuff = function() {
     window.location.href = location.protocol + '//' + window.location.hostname + (location.port ? ':'+location.port: '') + '/absences?set=' + e.target.value;
   });
 
+  // PerformanceSetDates#index
+  $('#setSelectorPerfSetDates').on('change', function(e) {
+    window.location.href = location.protocol + '//' + window.location.hostname + (location.port ? ':'+location.port: '') + '/performance_set_dates?set=' + e.target.value;
+  });
+
+
   // Absence#show
   $('#open_absence_sub_box').on('click', function(e) {
     $('.edit_absence').toggle();

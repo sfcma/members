@@ -5,7 +5,7 @@
 <div class='pageHeader'><h2>Rehearsal Dates</h2> &emsp; <%= link_to 'Add New Rehearsal Date', new_performance_set_date_path %></div>
 
 <div class='listDescription'>
-  <%= select_tag :sets, options_for_select(@performance_sets_for_filter, selected: @performance_sets_for_filter), id: 'setSelector' %>
+  <%= select_tag :sets, options_for_select(@performance_sets, selected: @performance_set), id: 'setSelectorPerfSetDates' %>
 </div>
 
 
