@@ -13,7 +13,7 @@ class MemberSetsController < ApplicationController
     if msparams[:members][:email_1].blank?
       member = nil
     else
-      member = Member.where('email_1 = ? OR email_2 = ?', msparams[:members][:email_1], msparams[:members][:email_1]).first
+      member = Member.where('email_1 = ? OR email_2 = ?', msparams[:members][:email_1].strip, msparams[:members][:email_1].strip).first
     end
 
     member ? msparams[:member_id] = member.id : nil
