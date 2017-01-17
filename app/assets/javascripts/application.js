@@ -291,7 +291,7 @@ var loadStuff = function() {
     $.get('../../performance_set_instruments/?performance_set_id=' + performanceSetId).then(function(response) {
       $.each(response, function(instrument) {
         var inst = response[instrument].instrument;
-        newOptions += '<option value=' + response[instrument].instrument + '>' + inst + '</option>';
+        newOptions += '<option value="' + response[instrument].instrument + '">' + inst + '</option>';
       });
       rehearsalSel.prop('disabled', false);
       rehearsalSel.empty().append($(newOptions));
