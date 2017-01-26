@@ -24,6 +24,9 @@ Rails.application.routes.draw do
     member do
       get :send_email
     end
+    collection do
+      get :requires_sub_name
+    end
   end
   resources :performance_pieces
   resources :users

@@ -35,20 +35,18 @@
     <%= f.collection_select :performance_set_date_id, [], :id, :date, { prompt: true }, { disabled: true, id: 'absenceRehearsalDateSelector' } %>
   </div>
 
-  <% if current_user %>
-    <div class="field">
-  <% else %>
-    <div class="field hidden">
-  <% end %>
-      <%= f.label :planned, "Excused?" %>
-      <%= f.check_box :planned, {checked: true} %>
-    </div>
-  <% if current_user %>
-    <div class="field">
-      <%= f.label :sub_found %>
-      <%= f.text_field :sub_found %>
-    </div>
-  <% end %>
+  <div class="field<%= ' hidden' unless current_user %>">
+    <%= f.label :planned, "Excused?" %>
+    <%= f.check_box :planned, {checked: true} %>
+  </div>
+  <div id='sub_found_container' class="field<%= ' hidden' unless current_user %>">
+    <% if current_user %>
+      <%= f.label :sub_found, "Please enter the name of the sub for this member, if appropriate" %>
+    <% else %>
+      <%= f.label :sub_found, "If you have found a sub for this rehearsal, please include their name" %>
+    <% end %>
+    <%= f.text_field :sub_found %>
+  </div>
 
   <div class="actions">
     <%= f.submit "Submit Form", class: 'button' %>

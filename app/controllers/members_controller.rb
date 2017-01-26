@@ -1,6 +1,6 @@
 class MembersController < ApplicationController
   before_action :set_member, only: [:show, :edit, :update, :destroy, :send_email]
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:requires_sub_name]
   before_action :load_sets
   impressionist
 
@@ -173,6 +173,43 @@ class MembersController < ApplicationController
     respond_to do |format|
       format.html { redirect_to members_url, notice: "Email to #{@member.first_name} #{@member.last_name} successfully sent." }
       format.json { head :no_content }
+    end
+  end
+
+  def requires_sub_name
+    member_email_address = params[:member_email]
+    performance_set_id = params[:performance_set_id]
+
+    if member_email_address.blank?
+      respond_to do |format|
+        format.json { render json: false, status: :ok }
+      end
+      return
+    else
+      member = Member.find_by('email_1 = ? OR email_2 = ?', member_email_address.strip, member_email_address.strip)
+    end
+
+    member_set = MemberSet.find_by('member_id = ? and performance_set_id = ?', member.id, performance_set_id)
+
+    if !member_set
+      respond_to do |format|
+        format.json { render json: false, status: :ok }
+      end
+      return
+    end
+
+    if member_set.set_member_instruments
+      instrument_name = member_set.set_member_instruments.first.member_instrument.instrument
+      if Absence::INSTRUMENTS_REQUIRING_SUBS.include?(instrument_name)
+        respond_to do |format|
+          format.json { render json: true, status: :ok }
+        end
+        return
+      end
+    else
+      respond_to do |format|
+        format.json { render json: false, status: :ok }
+      end
     end
   end
 

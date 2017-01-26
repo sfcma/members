@@ -281,6 +281,29 @@ var loadStuff = function() {
       rehearsalSel.prop('disabled', false);
       rehearsalSel.empty().append($(newOptions));
     });
+
+    var member_email_address = $('#absence_members_email_1').val();
+    $.get('../../members/requires_sub_name?member_email=' + member_email_address + '&performance_set_id=' + performanceSetId).then(function(response) {
+      if (response === true) {
+        $('#sub_found_container').show();
+      } else {
+        $('#sub_found_container').hide();
+        $('#absence_sub_found').val('');
+      }
+    });
+  });
+
+  $('#absence_members_email_1').on('change', function() {
+    var performanceSetId = $('#absence_performance_set_dates_performance_set_id').val();
+    var member_email_address = $('#absence_members_email_1').val();
+    $.get('../../members/requires_sub_name?member_email=' + member_email_address + '&performance_set_id=' + performanceSetId).then(function(response) {
+      if (response === true) {
+        $('#sub_found_container').show();
+      } else {
+        $('#sub_found_container').hide();
+        $('#absence_sub_found').val('');
+      }
+    });
   });
 
   // For MemberSet#new page
