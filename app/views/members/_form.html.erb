@@ -210,18 +210,16 @@
       </div>
       <i class='addSet'><a href='#' id='addNewMemberSet'> + Add Set</a></i><br>
 
-    <!--
-
-
-        <script>var notesCount = <%= [@member.member_notes.count - 1, 1].max %>;</script>
-        <b>Notes</b> <br>
-        <div class="memberInfoBlock">
+        <script>var notesCount = <%= @member.member_notes.count %>;</script>
+        <h3 class="formHeader">Notes</h3>
+        <div class="field memberInfoBlock<%= ' hideNotes' if @member.member_notes.count == 0 %>" id='memberNotesBlock'>
           <% k = 0 %>
-          <%= f.fields_for :member_notes do |note_f| %>
-            <% if k < @member.member_notes.count || k == 0 %>
+          <b>Notes cannot be deleted. Notes marked as Restricted can only be seen by users who have permission to edit the user (<%= who_can_view_member(@member).map(&:name).join(", ").html_safe %>)</b>
+          <%= f.fields_for :member_notes, @member.member_notes do |note_f| %>
+            <% if k < @member.member_notes.count %>
               <div class="field">
-                <%= note_f.text_field :note, size: 50 %> <i><a href='#' class='removeLink' id='removeMemberNote<%=k%>'>Remove</a></i>
-
+                "<%= note_f.object.note %>" <i>(added by <%= User.find(note_f.object.user_id).name %> on <%= note_f.object.created_at %>)</i>
+                <% if note_f.object.private_note %><i> — Restricted</i><% end %>
               </div>
             <% end %>
             <% k += 1; %>
@@ -229,7 +227,6 @@
         </div>
         <i class='addSet'><a href='#' id='addNewMemberNote'> + Add Note</a></i><br>
 
-    -->
 
 <div class="errZone"></div>
 

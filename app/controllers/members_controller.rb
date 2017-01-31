@@ -78,6 +78,12 @@ class MembersController < ApplicationController
     @audit_string += Impression.where(:controller_name => 'members', :impressionable_id => @member.id).map{|s| { html: User.find(s.user_id).display_name + " viewed user on " + s.created_at.in_time_zone('Pacific Time (US & Canada)').strftime('%Y-%m-%d %-I:%M %p PT'), audit_created_at: s.created_at.in_time_zone('Pacific Time (US & Canada)') } }
     puts @audit_string.map { |as| as[:audit_created_at] }
     @audit_string = @audit_string.sort_by { |as| as[:audit_created_at] }.reverse
+
+    if (can_view_member_personal_info(@member))
+      @notes = @member.member_notes
+    else
+      @notes = @member.member_notes.where(private_note: false)
+    end
   end
 
   # GET /members/new
@@ -225,6 +231,12 @@ class MembersController < ApplicationController
       end
     end
 
+    if member_params[:member_notes_attributes]
+      member_params[:member_notes_attributes].each do |_, member_notes|
+        member_notes['user_id'] = current_user.id
+      end
+    end
+
     if member_params[:member_sets_attributes]
       # Remove any empty sets
       member_params[:member_sets_attributes].reject! do |_, member_sets_fields|
@@ -317,6 +329,11 @@ class MembersController < ApplicationController
         :_destroy,
         set_member_instruments_attributes: [:member_instrument_id],
       ],
+      member_notes_attributes: [
+        :id,
+        :note,
+        :private_note
+      ]
     )
   end
 end

@@ -67,6 +67,18 @@ var loadStuff = function() {
     return false;
   });
 
+  $('a#addNewMemberNote').on('click', function(e) {
+    e.preventDefault();
+    $('.hideNotes').show();
+    var div = "<div class='field'><input type='text' name='member[member_notes_attributes][" + notesCount + "][note]' size=50 id='member_member_notes_attributes_" + notesCount + "_note'>";
+    div += "<label for='member_member_notes_attributes_" + notesCount + "_private_note'><input name='member[member_notes_attributes][" + notesCount + "][private_note]' id='member_member_notes_attributes_" + notesCount + "_private_note' value='0' type='checkbox'>";
+    div += "Restricted Note</label></div>";
+
+    $('#memberNotesBlock').append(div)
+    notesCount++;
+    return false;
+  });
+
   $('.new_member, .edit_member').on('blur', 'input[id^=member_member_instruments]', function(e) {
     var id = $(e.target).attr('id').split('member_member_instruments_attributes_')[1].split('_instrument')[0];
     if (findDuplicateInstruments() == true && returnDuplicateInstruments().indexOf($(e.target).val().toLowerCase()) > -1) {
@@ -321,7 +333,7 @@ var loadStuff = function() {
     });
   });
 
-  if (isNew) {
+  if (typeof(isNew) !== "undefined") {
     $('a[id^=removeMemberSet]').hide();
     $('a[id^=removeMemberInstrument]').hide();
   }

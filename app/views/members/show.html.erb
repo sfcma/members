@@ -1,4 +1,4 @@
-<div class='pageHeader'><i><%= link_to '< Back to All Members', members_path %></i><br><br><h2><%= @member.first_name + " " + @member.last_name %></h2>&emsp;&emsp;<%= link_to 'Edit Member', edit_member_path(@member), class: 'button' %></div>
+<div class='pageHeader'><i><%= link_to '< Back to All Members', members_path %></i><br><br><h2><%= @member.first_name + " " + @member.last_name %></h2>&emsp;&emsp;<% if can_view_member_personal_info(@member) %><%= link_to 'Edit Member', edit_member_path(@member), class: 'button' %><% end %></div>
 
 <table class="memberTable">
   <tr>
@@ -95,6 +95,19 @@
         <% end %>
         <br><%= ms.set_member_instruments[0].member_instrument.instrument.capitalize %>
       <% end %>
+      <br><br>
+
+      <h2>Notes</h2>
+      <% if @notes.empty? %>
+        <br><br>No notes to view for this member.
+      <% else %>
+        <ul>
+        <% @notes.each do |note| %>
+          <li><%= "#{note.note} <br><i>written by #{User.find(note.user).name} on #{note.created_at.in_time_zone('Pacific Time (US & Canada)').strftime('%Y-%m-%d %-I:%M %p PT')}".html_safe %></i>
+        <% end %>
+        </ul>
+      <% end %>
+
 
       <br><br>
       <% if can_view_member_personal_info(@member) %>

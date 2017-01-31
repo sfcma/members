@@ -30,4 +30,12 @@ module MembersHelper
     current_user.global_admin? ||
     ( current_user.instruments.map(&:instrument) & member.member_instruments.map(&:instrument) )
   end
+
+  def who_can_view_member(member)
+    User.all.to_a.select do |u|
+      if can_view_member_personal_info(member)
+        member
+      end
+    end
+  end
 end

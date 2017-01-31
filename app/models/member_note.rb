@@ -3,4 +3,9 @@ class MemberNote < ApplicationRecord
   acts_as_paranoid
   belongs_to :member
   belongs_to :user
+
+  validates :member, presence: true
+  validates :user, presence: true
+  validates :note, presence: true
+
 end

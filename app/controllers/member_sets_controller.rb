@@ -1,5 +1,4 @@
 class MemberSetsController < ApplicationController
-
   def new
     @performance_sets = PerformanceSet.joinable
     @member_set = MemberSet.new
