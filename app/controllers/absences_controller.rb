@@ -153,6 +153,10 @@ class AbsencesController < ApplicationController
     if @performance_set_date
       @absences = @absences.to_a.keep_if {|a| a.performance_set_date_id == params[:set_rehearsal_date].to_i }
     end
+    respond_to do |format|
+      format.html { render :record_attendance }
+      format.json { head :no_content }
+    end
   end
 
   def batch_create
