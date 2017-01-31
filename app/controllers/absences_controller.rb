@@ -135,6 +135,48 @@ class AbsencesController < ApplicationController
     end
   end
 
+  def record_attendance
+    unless current_user
+      redirect_to new_absence_url
+    end
+
+    if params[:set_rehearsal_date]
+      if PerformanceSetDate.where('id = ?', params[:set_rehearsal_date]).count > 0
+        @performance_set_date = PerformanceSetDate.where('id = ?', params[:set_rehearsal_date]).first
+        @perf_set = @performance_set_date.performance_set
+        @members = @perf_set.members
+        @member_sets = @perf_set.member_sets.where('member_id != 0')
+      end
+    end
+
+    @absences = Absence.includes(:member).all
+    if @performance_set_date
+      @absences = @absences.to_a.keep_if {|a| a.performance_set_date_id == params[:set_rehearsal_date].to_i }
+    end
+  end
+
+  def batch_create
+    @_dangerous_params = request.parameters
+    set_rehearsal_date = @_dangerous_params['set_rehearsal_date']
+    @_dangerous_params.each do |param|
+      if param[0] =~ /^absence_[0-9]+$/
+        member_id = param[0][8..-1].to_i
+        if @_dangerous_params["absence_#{member_id}_absence"]
+          a = Absence.find_or_create_by!(member_id: member_id, performance_set_date_id: set_rehearsal_date)
+          a.planned = @_dangerous_params["absence_#{member_id}_reported"]
+          a.sub_found = @_dangerous_params["absence_#{member_id}_sub"]
+          a.save
+        else
+          a = Absence.where(member_id: member_id, performance_set_date_id: set_rehearsal_date).destroy_all
+        end
+      end
+    end
+    respond_to do |format|
+      format.html { redirect_to record_attendance_absences_path(set_rehearsal_date: set_rehearsal_date), notice: 'Absences were successfully updated.' }
+      format.json { head :no_content }
+    end
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.

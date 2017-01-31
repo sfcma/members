@@ -4,6 +4,8 @@ class Absence < ApplicationRecord
   belongs_to :member
   belongs_to :performance_set_date, required: true
 
+  validates_uniqueness_of :member, scope: :performance_set_date
+
   INSTRUMENTS_REQUIRING_SUBS = [
     'flute', 'b flat clarinet', 'bassoon', 'french horn', 'piccolo', 'trombone', 'percussion',
     'trumpet', 'oboe', 'alto saxophone', 'english horn', 'bass trombone', 'tuba', 'clarinet'

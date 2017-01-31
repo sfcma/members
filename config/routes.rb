@@ -6,6 +6,10 @@ Rails.application.routes.draw do
       put :flip_excused_flag, as: :flip_excused_flag
       patch :set_sub, as: :set_sub
     end
+    collection do
+      get :record_attendance
+      post :batch_create
+    end
   end
   resources :member_notes
   resources :action_logs

@@ -11,7 +11,7 @@
         <th>Member</th>
         <th>Instrument</th>
         <% @set_rehearsal_dates.each do |rehearsal_date| %>
-          <th><%= rehearsal_date.date %></th>
+          <th><%= rehearsal_date.date %><br><%= link_to 'Take Attendence', record_attendance_absences_path(set_rehearsal_date: rehearsal_date.id), class: 'forceLink' %></th>
         <% end %>
       </tr>
     </thead>
