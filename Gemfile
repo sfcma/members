@@ -58,6 +58,7 @@ gem 'devise_security_extension', git: 'https://github.com/phatworx/devise_securi
 gem 'easy_captcha'
 gem 'rails_email_validator'
 gem "rails-observers", github: 'rails/rails-observers'
+gem "bugsnag"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
