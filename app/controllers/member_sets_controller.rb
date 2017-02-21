@@ -34,7 +34,6 @@ class MemberSetsController < ApplicationController
       else
         @performance_sets = PerformanceSet.now_or_future
 
-        Rails.logger.info msparams.inspect
         if @member_set.save
           @member_instrument = MemberInstrument.where(member_id: member.id, instrument: instrument.downcase).first_or_initialize do |mi|
             mi.save!

@@ -3,11 +3,11 @@
 <div class='listDescription'>
 
 <% if @showing_all %>
-Showing All Members Interested in <%= @performance_set.extended_name %>&nbsp;&emsp;&nbsp;&middot;&nbsp;&emsp;&nbsp;
-<b><%= link_to "Show only confirmed members", roster_performance_set_path %></b>
+  Showing All Members Interested in <%= @performance_set.extended_name %>&nbsp;&emsp;&nbsp;&middot;&nbsp;&emsp;&nbsp;
+  <b><%= link_to "Show only confirmed members", roster_performance_set_path %></b>
 <% else %>
-Showing Only Confirmed Playing Members in  <%= @performance_set.extended_name %>&nbsp;&emsp;&nbsp;&middot;&nbsp;&emsp;&nbsp;
-<b><%= link_to "Show All Members", roster_performance_set_path(:all => "true") %></b>
+  Showing Only Confirmed Playing Members in  <%= @performance_set.extended_name %>&nbsp;&emsp;&nbsp;&middot;&nbsp;&emsp;&nbsp;
+  <b><%= link_to "Show All Members", roster_performance_set_path(:all => "true") %></b>
 <% end %>
 
 </div>
