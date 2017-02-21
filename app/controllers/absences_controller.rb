@@ -20,7 +20,7 @@ class AbsencesController < ApplicationController
           @member_sets = @perf_set.member_sets.where('member_id != 0')
           @showing_all = true
         else
-          @member_sets = @perf_set.member_sets.where('member_id != 0 AND set_status = "Playing"')
+          @member_sets = @perf_set.member_sets.where("member_id != 0 AND set_status = 'Playing'")
           @showing_all = false
         end
 
