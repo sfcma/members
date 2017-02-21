@@ -19,6 +19,6 @@ module AbsencesHelper
   end
 
   def sort_by_set_instrument(member)
-    @member_sets.where('member_id = ?', member.id).first.set_member_instruments.first.member_instrument.instrument
+    @member_sets.where('member_id = ?', member.id).first.set_member_instruments.first.instrument_name_with_variant
   end
 end

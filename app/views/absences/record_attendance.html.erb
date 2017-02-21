@@ -15,10 +15,10 @@
 
       <tbody>
 
-        <% @member_sets.where('member_id != 0').sort_by{ |ms| ms.set_member_instruments.first.member_instrument.instrument}.each do |member_set| %>
+        <% @member_sets.where('member_id != 0').sort_by{ |ms| ms.set_member_instruments.first.instrument_name_with_variant}.each do |member_set| %>
           <tr>
             <td><%= link_to member_set.member, member_set.member %></td>
-            <td><%= @member_sets.where('member_id = ?', member_set.member_id).first.set_member_instruments.first.member_instrument.instrument %>
+            <td><%= @member_sets.where('member_id = ?', member_set.member_id).first.set_member_instruments.first.instrument_name_with_variant%>
             <% this_absence = @absences.select { |a| a.member && a.member.id == member_set.member.id && a.performance_set_date_id == @performance_set_date.id } %>
             <% if can_view_member_personal_info(member_set.member) %>
               <td>

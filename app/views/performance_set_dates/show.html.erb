@@ -10,7 +10,7 @@ Absences</h2> &emsp; &emsp; <%= @performance_set_date.performance_set.name %> â€
   <% member_set = MemberSet.find_by(member_id: ab.member.id, performance_set_id: @performance_set_date.performance_set.id) %>
   <% if member_set %>
     <b><%= ab.member %></b><br>
-    <%= member_set.set_member_instruments.first.member_instrument.instrument %>
+    <%= member_set.set_member_instruments.first.instrument_name_with_variant %>
     <% if ab.planned %>
       <br><%= absence_text(ab) %>
     <% end %>
