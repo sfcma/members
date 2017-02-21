@@ -11,4 +11,9 @@ class SetMemberInstrument < ApplicationRecord
     assign_or_new(attributes).save
   end
 
+  def instrument_name_with_variant
+    return variant if variant
+    member_instrument.instrument
+  end
+
 end

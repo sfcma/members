@@ -12,13 +12,15 @@ Showing Only Confirmed Playing Members in  <%= @performance_set.extended_name %>
 
 </div>
 
-<% @instrument_groups.each do |ig, i| %>
+<% @instrument_groups.keys.sort.each do |k, i| %>
   <% j = 0 %>
+  <% ig = k %>
   <h4><%= ig.capitalize %></h4>
   <% @instrument_groups[ig].each do |ms| %>
+    <% perf_set_inst = @performance_set_instruments.find_by(instrument: ig) %>
     <% if ms %>
       <% j += 1 %>
-      <%= link_to ms.member, ms.member %> <% if @showing_all %> &emsp;&emsp;&emsp;<i style='color: gray'><%= ms.set_status == 'Playing' ? '' : ms.set_status %></i> <% end %> <br>
+      <%= link_to ms.member, ms.member %> <% if @showing_all %> &emsp;&emsp;&emsp;<i style='color: gray'><%= ms.set_status %></i> <% end %> <br>
     <% end %>
   <% end %>
   <i><%= "#{pluralize(j, ig)}" %></i>

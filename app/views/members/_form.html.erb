@@ -196,6 +196,16 @@
                   <% member_instrument_list = @member_instruments.reject do |i|
                         !i.id
                       end %>
+                  <% if member_instrument_list.select{|mi| mi.instrument == 'violin' }.count > 0
+                       member_instrument_list.select{|mi| mi.instrument == 'violin' }.first.instrument = 'violin (unspecified)'
+                     end %>
+                  <% if member_instrument_list.select{|mi| mi.instrument == 'violin (unspecified)' }.count > 0
+                       member_instrument_list << MemberInstrument.new(instrument: 'violin 1')
+                       member_instrument_list << MemberInstrument.new(instrument: 'violin 2')
+                     end
+                  %>
+                  <% member_instrument_list = member_instrument_list.sort{|x,y| x.instrument <=> y.instrument} %>
+                  <%= member_instrument_list %>
                   <%= smi_f.collection_select :member_instrument_id, member_instrument_list, :instrument, :instrument, { :selected => select_current_member_instruments(set_f.object) } %>
                 <% end %>
                 <% x += 1 %>
