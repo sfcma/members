@@ -26,6 +26,14 @@ var loadStuff = function() {
       member_set_instrument_dropdowns.append( $("<option>")
                                      .val($(i).val())
                                      .html($(i).val()));
+      if ($(i).val().toLowerCase() == 'violin') {
+        member_set_instrument_dropdowns.append( $("<option>")
+                                      .val('violin 1')
+                                      .html('violin 1'));
+        member_set_instrument_dropdowns.append( $("<option>")
+                                      .val('violin 2')
+                                      .html('violin 2'));
+      }
     });
     $('select[id^=member_member_sets_attributes_][id$=instrument_id]').each(function(j, i) {
       $(i).val(selectedInstruments[i.id]);
@@ -337,8 +345,6 @@ var loadStuff = function() {
     $('a[id^=removeMemberSet]').hide();
     $('a[id^=removeMemberInstrument]').hide();
   }
-
-
 };
 
 var instruments =

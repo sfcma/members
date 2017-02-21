@@ -97,9 +97,10 @@ class PerformanceSetsController < ApplicationController
       @showing_all = false
     end
 
+    @performance_set_instruments = PerformanceSetInstrument.where(performance_set: @performance_set)
     @instrument_groups = {}
     @member_sets.each do |ms|
-      instrument = ms.set_member_instruments.first.member_instrument.instrument
+      instrument = ms.set_member_instruments.first.instrument_name_with_variant
       @instrument_groups[instrument] ||= []
       @instrument_groups[instrument] << ms
     end

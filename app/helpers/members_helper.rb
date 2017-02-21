@@ -7,7 +7,7 @@ module MembersHelper
   def select_current_member_instruments(member_set)
     return nil unless member_set && member_set.member && member_set.member.id
     if SetMemberInstrument.where(member_set_id: member_set.id).first
-      return MemberInstrument.find(SetMemberInstrument.where(member_set_id: member_set.id).first.member_instrument_id).instrument
+      SetMemberInstrument.where(member_set_id: member_set.id).first.instrument_name_with_variant
     end
   end
 

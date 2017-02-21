@@ -124,7 +124,7 @@ class MembersController < ApplicationController
           next if destroy_empty_member_sets(member_set)
 
           member_instrument_id = get_member_instrument_id(set_member_instruments, member_set)
-          set_member_instrument = get_set_member_instrument(member_instrument_id, member_set)
+          set_member_instrument = get_set_member_instrument(member_instrument_id, member_set, variant)
 
           if set_member_instrument.save
             format.html { render :show, notice: 'Member was successfully created.' }
@@ -149,8 +149,12 @@ class MembersController < ApplicationController
         @member.member_sets.each do |member_set|
           next if destroy_empty_member_sets(member_set)
 
-          member_instrument_id = get_member_instrument_id(set_member_instruments, member_set)
-          set_member_instrument = get_set_member_instrument(member_instrument_id, member_set)
+          member_instrument_id, instrument_name = get_member_instrument_id(set_member_instruments, member_set)
+          variant = nil
+          if instrument_name =~ /violin/
+            variant = instrument_name
+          end
+          set_member_instrument = get_set_member_instrument(member_instrument_id, member_set, variant)
 
           if set_member_instrument.save
             format.html { render :show, notice: 'Member was successfully updated.' }
@@ -261,15 +265,21 @@ class MembersController < ApplicationController
 
   def get_member_instrument_id(set_member_instruments, member_set)
     instrument_name = set_member_instruments[member_set.performance_set_id.to_s]['0'][:member_instrument_id].underscore
-    MemberInstrument.find_or_create_by!(member_id: @member.id, instrument: instrument_name).id
+    if instrument_name =~ /violin/
+      partless_instrument_name = 'violin'
+    else
+      partless_instrument_name = instrument_name
+    end
+    [MemberInstrument.find_or_create_by!(member_id: @member.id, instrument: partless_instrument_name).id, instrument_name]
   end
 
-  def get_set_member_instrument(member_instrument_id, member_set)
+  def get_set_member_instrument(member_instrument_id, member_set, variant)
     if !SetMemberInstrument.where(member_set_id: member_set.id).empty?
       smix = SetMemberInstrument.where(member_set_id: member_set.id).first
       smix.member_instrument_id = member_instrument_id
+      smix.variant = variant
     else
-      smix = SetMemberInstrument.new(member_set_id: member_set.id, member_instrument_id: member_instrument_id)
+      smix = SetMemberInstrument.new(member_set_id: member_set.id, member_instrument_id: member_instrument_id, variant: variant)
     end
     smix
   end
