@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170111074556) do
+ActiveRecord::Schema.define(version: 20170221062003) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -228,6 +228,7 @@ ActiveRecord::Schema.define(version: 20170111074556) do
     t.integer  "member_set_id"
     t.integer  "member_instrument_id"
     t.datetime "deleted_at"
+    t.string   "variant"
     t.index ["deleted_at"], name: "index_set_member_instruments_on_deleted_at"
     t.index ["performance_set_id"], name: "index_set_member_instruments_on_performance_set_id"
   end
