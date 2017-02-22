@@ -12,10 +12,11 @@ module MembersHelper
   end
 
   def can_view_member_personal_info(member)
+    member_performance_sets = member.member_sets.map(&:performance_set)
     current_user.global_admin? ||
     (
       (
-        current_user.ensembles.map(&:ensemble_id) & member.member_sets.map(&:performance_set).map(&:ensemble_id)
+        current_user.ensembles.map(&:ensemble_id) & member_performance_sets.compact.map(&:ensemble_id)
       ).present? &&
       (
         (
