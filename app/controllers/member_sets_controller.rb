@@ -19,16 +19,19 @@ class MemberSetsController < ApplicationController
     msparams.delete(:members)
     instrument = msparams[:new_performance_set_instrument_id]
     msparams.delete(:new_performance_set_instrument_id)
+    out_email = nil
 
     @member_set = MemberSet.new(msparams)
     if !member
       respond_to do |format|
+        Bugsnag.notify("Unable to find and opt-in member")
         format.html { redirect_to new_member_set_url, notice: "That email address doesn't have a member attached to it!<br><br>Please enter the email address you gave us, or contact membership@sfcivicsymphony.org for help." }
       end
     else
       @member_set.set_status = 'Opted In for this set'
       if MemberSet.where(performance_set_id: msparams[:performance_set_id], member_id: msparams[:member_id]).present?
         respond_to do |format|
+          Bugsnag.notify("Unable to find and opt-in member")
           format.html { redirect_to new_member_set_url, notice: 'You have already opted in for this set!' }
         end
       else
@@ -58,6 +61,7 @@ class MemberSetsController < ApplicationController
                   else
                     format.html { render :new, layout: 'anonymous' }
                   end
+                  Bugsnag.notify("Opt-in error")
                   format.json { render json: @member_set.errors, status: :unprocessable_entity }
                 end
               end
@@ -78,6 +82,7 @@ class MemberSetsController < ApplicationController
 
   def return_failure
     respond_to do |format|
+      Bugsnag.notify("Opt-in error")
       format.html { render :new, layout: 'anonymous' }
     end
   end

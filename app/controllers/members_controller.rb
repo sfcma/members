@@ -197,7 +197,7 @@ class MembersController < ApplicationController
       end
       return
     else
-      member = Member.find_by('email_1 = ? OR email_2 = ?', member_email_address.strip, member_email_address.strip)
+      member = Member.find_by('lower(email_1) = lower(?) OR lower(email_2) = lower(?)', member_email_address.strip, member_email_address.strip)
     end
 
     member_set = MemberSet.find_by('member_id = ? and performance_set_id = ?', member.id, performance_set_id)

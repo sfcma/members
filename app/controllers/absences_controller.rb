@@ -65,7 +65,7 @@ class AbsencesController < ApplicationController
     if aparams[:members][:email_1].blank?
       member = nil
     else
-      member = Member.where('email_1 = ? OR email_2 = ?', aparams[:members][:email_1].strip, aparams[:members][:email_1].strip).first
+      member = Member.where('lower(email_1) = lower(?) OR lower(email_2) = lower(?)', aparams[:members][:email_1].strip, aparams[:members][:email_1].strip).first
     end
 
     if member
@@ -89,8 +89,10 @@ class AbsencesController < ApplicationController
         end
       else
         if current_user
+          Bugsnag.notify("Absence creation error (logged in)")
           format.html { render :new }
         else
+          Bugsnag.notify("Absence creation error")
           format.html { render :new, layout: 'anonymous' }
         end
         format.json { render json: @absence.errors, status: :unprocessable_entity }
