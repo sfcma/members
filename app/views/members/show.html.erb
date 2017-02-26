@@ -93,7 +93,9 @@
         <% else %>
           Not rotating
         <% end %>
-        <br><%= ms.set_member_instruments[0].instrument_name_with_variant.capitalize %>
+        <% if ms.set_member_instruments.present? %>
+          <br><%= ms.set_member_instruments[0].instrument_name_with_variant.capitalize %>
+        <% end %>
       <% end %>
       <br><br>
 

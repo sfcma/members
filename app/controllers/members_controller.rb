@@ -123,7 +123,11 @@ class MembersController < ApplicationController
         @member.member_sets.each do |member_set|
           next if destroy_empty_member_sets(member_set)
 
-          member_instrument_id = get_member_instrument_id(set_member_instruments, member_set)
+          member_instrument_id, instrument_name = get_member_instrument_id(set_member_instruments, member_set)
+          variant = nil
+          if instrument_name =~ /violin/
+            variant = instrument_name
+          end
           set_member_instrument = get_set_member_instrument(member_instrument_id, member_set, variant)
 
           if set_member_instrument.save
