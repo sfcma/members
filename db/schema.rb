@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170221062003) do
+ActiveRecord::Schema.define(version: 20170226224109) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -55,6 +55,31 @@ ActiveRecord::Schema.define(version: 20170221062003) do
     t.index ["created_at"], name: "index_audits_on_created_at"
     t.index ["request_uuid"], name: "index_audits_on_request_uuid"
     t.index ["user_id", "user_type"], name: "user_index"
+  end
+
+  create_table "email_logs", force: :cascade do |t|
+    t.integer  "email_id",   null: false
+    t.integer  "member_id",  null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email_id"], name: "index_email_logs_on_email_id"
+    t.index ["member_id"], name: "index_email_logs_on_member_id"
+  end
+
+  create_table "emails", force: :cascade do |t|
+    t.text     "email_body",                    null: false
+    t.string   "email_title",                   null: false
+    t.integer  "user_id",                       null: false
+    t.integer  "performance_set_id"
+    t.integer  "ensemble_id"
+    t.integer  "performance_set_instrument_id"
+    t.string   "status"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.index ["ensemble_id"], name: "index_emails_on_ensemble_id"
+    t.index ["performance_set_id"], name: "index_emails_on_performance_set_id"
+    t.index ["performance_set_instrument_id"], name: "index_emails_on_performance_set_instrument_id"
+    t.index ["user_id"], name: "index_emails_on_user_id"
   end
 
   create_table "ensembles", force: :cascade do |t|
