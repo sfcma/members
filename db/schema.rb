@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170226224109) do
+ActiveRecord::Schema.define(version: 20170226233211) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -62,6 +62,8 @@ ActiveRecord::Schema.define(version: 20170226224109) do
     t.integer  "member_id",  null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_email_logs_on_deleted_at"
     t.index ["email_id"], name: "index_email_logs_on_email_id"
     t.index ["member_id"], name: "index_email_logs_on_member_id"
   end
@@ -76,6 +78,8 @@ ActiveRecord::Schema.define(version: 20170226224109) do
     t.string   "status"
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_emails_on_deleted_at"
     t.index ["ensemble_id"], name: "index_emails_on_ensemble_id"
     t.index ["performance_set_id"], name: "index_emails_on_performance_set_id"
     t.index ["performance_set_instrument_id"], name: "index_emails_on_performance_set_instrument_id"

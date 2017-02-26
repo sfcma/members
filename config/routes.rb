@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :emails
   resources :performance_set_dates
   captcha_route
   resources :absences do
