@@ -4,6 +4,6 @@ class EmailLog < ApplicationRecord
   has_one :member
   #has_one :email
 
-  validates :member, present: true
-  validates :email, present: true
+  validates :member, presence: true
+  validates :email, presence: true
 end
