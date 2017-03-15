@@ -12,7 +12,10 @@
   <% PerformanceSet.now_or_future.each do |ps| %>
     <b><%= ps.extended_name %></b> —
     <%= link_to "Confirmed Members Only", roster_performance_set_path(ps) %> —
-    <%= link_to "All Members", roster_performance_set_path(id: ps.id, 'all': "true") %><br>
+    <%= link_to "All Members", roster_performance_set_path(id: ps.id, 'all': "true") %>
+    <% if current_user.global_admin? %>
+      — <%= link_to "Email List: All Members", email_roster_performance_set_path(id: ps.id) %>
+    <% end %><br>
   <% end %><br>
   <%= link_to 'Add New Performance Set', new_performance_set_path %><br>
   <%= link_to 'View Performance Set List', performance_sets_path %>

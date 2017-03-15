@@ -112,7 +112,7 @@ class PerformanceSetsController < ApplicationController
 
   def email_roster
     @members = []
-    @member_sets = MemberSet.includes(:member).where(performance_set_id: @performance_set.id, set_status: 'Playing').to_a
+    @member_sets = MemberSet.includes(:member).where(performance_set_id: @performance_set.id).to_a
     @member_sets.each do |ms|
       @members << ms.member
     end

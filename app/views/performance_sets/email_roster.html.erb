@@ -1,9 +1,20 @@
 <% if current_user.global_admin? %>
 
   <div class='pageHeader'><h2>Email Roster for <%= @performance_set.extended_name %></h2></div>
+  <div class='listDescription'>Includes ALL MEMBERS with ALL STATUSES</div>
+
+  <% list = [] %>
 
   <% @members.each do |m| %>
-    <%= "#{m.email_1}," %>
+    <% if m.email_1.present? %>
+      <%= "#{m.email_1}," %>
+    <% else %>
+      <%= "bad" %>
+      <% list << "#{m.first_name} #{m.last_name}" %>
+    <% end %>
   <% end %>
+
+  <br><br><br><h2>Members without email addresses:</h2>
+  <%= list.join(",") %>
 
 <% end %>
