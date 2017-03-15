@@ -121,7 +121,7 @@
 
       <div class="field">
         <%= f.label :reply_user_id, "Replying User" %>
-        <%= f.select :reply_user_id, options_for_select(User.all.map{|u| [u.name, u.id]}.to_a), selected: current_user.id %>
+        <%= f.select :reply_user_id, options_for_select(User.all.map{|u| [u.name, u.id]}.to_a.unshift(['', 0])), selected: current_user.id %>
       </div>
 
       <div class="field">
