@@ -75,6 +75,14 @@ var loadStuff = function() {
     return false;
   });
 
+  $('#member_custom_source_button').on('click', function(e) {
+    $('.member_custom_source_box').show();
+  });
+
+  $('#member_website_source_button').on('click', function(e) {
+    $('.member_custom_source_box').hide();
+  });
+
   $('a#addNewMemberNote').on('click', function(e) {
     e.preventDefault();
     $('.hideNotes').show();

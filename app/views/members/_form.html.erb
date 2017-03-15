@@ -115,16 +115,44 @@
       </div>
 
       <div class="field">
+        <%= f.label :contact_reply_date, "Reply Date  (use date picker or in format YYYY-MM-DD)" %>
+        <%= date_field :member, :contact_reply_date %>
+      </div>
+
+      <div class="field">
+        <%= f.label :reply_user_id, "Replying User" %>
+        <%= f.select :reply_user_id, options_for_select(User.all.map{|u| [u.name, u.id]}.to_a), selected: current_user.id %>
+      </div>
+
+      <div class="field">
+        <%= f.label :introduction, "Member's Introduction from website" %>
+        <%= f.text_area :introduction, cols: 50, rows: 5 %>
+      </div>
+
+      <div class="field">
+        How did they hear about us?<br>
+        <%= f.label :source_website, 'true', :value => 'true', :id => 'member_website_source_button' do %>
+          <%= f.radio_button :source_website, 'true' %> Website ("Google", searching, etc)
+        <% end %>
+        <%= f.label :source_website, 'false', :value => 'false', :id => 'member_custom_source_button' do %>
+          <%= f.radio_button :source_website, 'false' %> Other
+        <% end %>
+        <div class='member_custom_source_box <%= @member.source_website == false ? "member_custom_source_box_full" : "" %>'>
+          Other: <%= f.text_field :source_other, size: 30 %>
+        </div>
+      </div>
+
+      <div class="field">
         <%= f.label :waiver_signed, "Waiver Signed Date  (use date picker or in format YYYY-MM-DD)" %>
         <%= date_field :member, :waiver_signed %>
       </div>
 
-      <div class="field">
+      <!-- <div class="field">
         <b><%= f.label :playing_status, "Overall Status" %></b>
         <%= f.select :playing_status, Member.statuses.keys.map(&:humanize).to_a %>
         <span id="playerStatusModalOpener" class='button'>What Does This Mean?</span>
 
-      </div>
+      </div> -->
     </div>
 
 <br>

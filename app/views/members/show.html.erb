@@ -64,12 +64,25 @@
             No Emergency Contact Available
           <% end %>
         <br><br>
-          <strong>Overall Membership Status:</strong>
-          <%= @member.playing_status %><br>
+          <!-- <strong>Overall Membership Status:</strong>
+          <%= @member.playing_status %><br> -->
+          <strong>Initial Contact Date:</strong>
+          <%= @member.initial_date %><br>
+          <strong>Reply Date:</strong>
+          <%= @member.contact_reply_date %><br>
+          <strong>Member's Introduction:</strong><br>
+          <%= @member.introduction %><br><br>
+          <strong>User who replied:</strong>
+          <%= User.find(@member.reply_user_id).name %><br>
+          <strong>Source:</strong>
+          <% if @member.source_website %>
+            Website<br>
+          <% else %>
+            <%= @member.source_other %><br>
+          <% end %>
           <strong>Waiver Signed Date:</strong>
           <%= @member.waiver_signed %><br>
-          <strong>Initial Contact Date:</strong>
-          <%= @member.initial_date %>
+
         <br><br>
       <% end %>
       <strong>Instruments:</strong>

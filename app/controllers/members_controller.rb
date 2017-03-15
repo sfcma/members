@@ -330,6 +330,11 @@ class MembersController < ApplicationController
       :playing_status,
       :initial_date,
       :waiver_signed,
+      :contact_reply_date,
+      :reply_user_id,
+      :introduction,
+      :source_website,
+      :source_other,
       member_instruments_attributes: [
         :id,
         :instrument,

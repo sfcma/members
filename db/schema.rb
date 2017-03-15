@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170226233211) do
+ActiveRecord::Schema.define(version: 20170315053158) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -183,6 +183,11 @@ ActiveRecord::Schema.define(version: 20170226233211) do
     t.datetime "waiver_signed"
     t.datetime "deleted_at"
     t.string   "program_name"
+    t.datetime "contact_reply_date"
+    t.text     "introduction"
+    t.integer  "reply_user_id"
+    t.boolean  "source_website"
+    t.string   "source_other"
     t.index ["deleted_at"], name: "index_members_on_deleted_at"
   end
 
