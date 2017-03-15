@@ -73,7 +73,9 @@
           <strong>Member's Introduction:</strong><br>
           <%= @member.introduction %><br><br>
           <strong>User who replied:</strong>
-          <%= User.find(@member.reply_user_id).name %><br>
+          <% if @member.reply_user_id) %>
+            <%= User.find(@member.reply_user_id).name %>
+          <% end %><br>
           <strong>Source:</strong>
           <% if @member.source_website %>
             Website<br>
