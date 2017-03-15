@@ -1,0 +1,37 @@
+<%= form_for(member_community_night) do |f| %>
+  <% if member_community_night.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(member_community_night.errors.count, "error") %> prohibited this member_community_night from being saved:</h2>
+
+      <ul>
+      <% member_community_night.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :status %>
+    <%= f.text_field :status %>
+  </div>
+
+  <div class="field">
+    <%= f.label :instrument %>
+    <%= f.text_field :instrument %>
+  </div>
+
+  <div class="field">
+    <%= f.label :member_id %>
+    <%= f.number_field :member_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :community_night_id %>
+    <%= f.number_field :community_night_id %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

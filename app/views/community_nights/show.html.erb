@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Start:</strong>
+  <%= @community_night.start %>
+</p>
+
+<p>
+  <strong>End:</strong>
+  <%= @community_night.end %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @community_night.type %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @community_night.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @community_night.description %>
+</p>
+
+<%= link_to 'Edit', edit_community_night_path(@community_night) %> |
+<%= link_to 'Back', community_nights_path %>

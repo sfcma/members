@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :member_community_nights
+  resources :community_nights
   resources :emails
   resources :performance_set_dates
   captcha_route

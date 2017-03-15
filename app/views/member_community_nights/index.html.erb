@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Member Community Nights</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Status</th>
+      <th>Instrument</th>
+      <th>Member</th>
+      <th>Community night</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @member_community_nights.each do |member_community_night| %>
+      <tr>
+        <td><%= member_community_night.status %></td>
+        <td><%= member_community_night.instrument %></td>
+        <td><%= member_community_night.member_id %></td>
+        <td><%= member_community_night.community_night_id %></td>
+        <td><%= link_to 'Show', member_community_night %></td>
+        <td><%= link_to 'Edit', edit_member_community_night_path(member_community_night) %></td>
+        <td><%= link_to 'Destroy', member_community_night, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Member Community Night', new_member_community_night_path %>

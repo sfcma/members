@@ -1,0 +1,2 @@
+class CommunityNight < ApplicationRecord
+end

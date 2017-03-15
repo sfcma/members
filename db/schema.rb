@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170315053158) do
+ActiveRecord::Schema.define(version: 20170315062528) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -55,6 +55,16 @@ ActiveRecord::Schema.define(version: 20170315053158) do
     t.index ["created_at"], name: "index_audits_on_created_at"
     t.index ["request_uuid"], name: "index_audits_on_request_uuid"
     t.index ["user_id", "user_type"], name: "user_index"
+  end
+
+  create_table "community_nights", force: :cascade do |t|
+    t.datetime "start"
+    t.datetime "end"
+    t.string   "type"
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "email_logs", force: :cascade do |t|
@@ -119,6 +129,15 @@ ActiveRecord::Schema.define(version: 20170315053158) do
     t.index ["impressionable_type", "impressionable_id", "session_hash"], name: "poly_session_index"
     t.index ["impressionable_type", "message", "impressionable_id"], name: "impressionable_type_message_index"
     t.index ["user_id"], name: "index_impressions_on_user_id"
+  end
+
+  create_table "member_community_nights", force: :cascade do |t|
+    t.string   "status"
+    t.string   "instrument"
+    t.integer  "member_id"
+    t.integer  "community_night_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
   end
 
   create_table "member_instruments", force: :cascade do |t|

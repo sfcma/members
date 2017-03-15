@@ -1,0 +1,1 @@
+json.partial! "member_community_nights/member_community_night", member_community_night: @member_community_night

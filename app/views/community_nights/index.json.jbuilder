@@ -1,0 +1,1 @@
+json.array! @community_nights, partial: 'community_nights/community_night', as: :community_night
