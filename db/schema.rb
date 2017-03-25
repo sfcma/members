@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170315062528) do
+ActiveRecord::Schema.define(version: 20170325072605) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -265,11 +265,12 @@ ActiveRecord::Schema.define(version: 20170315062528) do
     t.integer  "ensemble_id"
     t.date     "start_date"
     t.date     "end_date"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.string   "name"
     t.datetime "deleted_at"
     t.string   "description"
+    t.text     "opt_in_message"
     t.index ["deleted_at"], name: "index_performance_sets_on_deleted_at"
     t.index ["ensemble_id"], name: "index_performance_sets_on_ensemble_id"
   end

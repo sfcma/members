@@ -64,6 +64,20 @@ body.top-anonymous {
   }
 }
 
+.performance_set_opt_in_message {
+  margin-top: 25px !important;
+  background: #eeeecc;
+  padding: 10px;
+  border: 1px solid gray;
+  display: none;
+  font-size: 14px !important;
+
+  a {
+    color: blue;
+    font-size: 14px;
+  }
+}
+
 html {
   margin: 0;
   padding: 0;

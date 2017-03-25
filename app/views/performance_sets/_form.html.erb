@@ -37,6 +37,11 @@
     <%= f.text_field :description %>
   </div>
 
+  <div class="field">
+    <%= f.label :opt_in_message, "Opt-in message to display on website" %>
+    <%= f.text_area :opt_in_message, cols: 50, rows: 5 %>
+  </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>

@@ -37,8 +37,18 @@
 
   <input type='hidden' id='member_set_id'></input>
 
+  <% @performance_sets.each do |ps| %>
+    <div class='performance_set_opt_in_message' id='performance_set_opt_in_message_<%=ps.id%>'>
+      Rehearsals for this set are on <%= ps.performance_set_dates.map(&:date).map{|d| d.strftime("%B %e") }.join(",") %>.
+      <br><br>
+      <%= raw ps.opt_in_message %>
+      <br><br>
+      By opting into this set, you are agreeing to abide by our <b><a href="https://sfcivicsymphony.org/code-of-conduct/">Code of Conduct</a></b> for all musicians.
+    </div>
+  <% end %>
+
   <div class="actions">
-    <%= f.submit "Submit Form", class: 'button' %>
+    <%= f.submit "Opt into set", class: 'button', id: 'opt_in_button', disabled: true %>
   </div>
 <% end %>
 </div>

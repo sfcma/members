@@ -345,7 +345,10 @@ var loadStuff = function() {
         newOptions += '<option value="' + response[instrument].instrument + '">' + inst + '</option>';
       });
       rehearsalSel.prop('disabled', false);
+      $('#opt_in_button').prop('disabled', false);
+      $('#opt_in_button').val('Opt Into ' + $('#member_set_performance_set_id option:selected').text());
       rehearsalSel.empty().append($(newOptions));
+      $('#performance_set_opt_in_message_' + performanceSetId).show();
     });
   });
 

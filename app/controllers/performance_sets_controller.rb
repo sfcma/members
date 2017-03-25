@@ -132,7 +132,8 @@ class PerformanceSetsController < ApplicationController
       :start_date,
       :description,
       :end_date,
-      :name
+      :name,
+      :opt_in_message
     )
   end
 end

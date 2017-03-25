@@ -23,6 +23,11 @@
   <%= @performance_set.end_date %>
 </p>
 
+<p>
+  <strong>Opt-in Message:</strong>
+  <%= raw @performance_set.opt_in_message %>
+</p>
+
 <%= link_to 'Edit', edit_performance_set_path(@performance_set) %>
 <br><br>
 <%= link_to 'View All Performance Sets', performance_sets_path %>
