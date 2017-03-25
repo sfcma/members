@@ -39,7 +39,8 @@
 
   <% @performance_sets.each do |ps| %>
     <div class='performance_set_opt_in_message' id='performance_set_opt_in_message_<%=ps.id%>'>
-      Rehearsals for this set are on <%= ps.performance_set_dates.map(&:date).map{|d| d.strftime("%B %e") }.join(",") %>.
+      <h3><%= ps.extended_name %></h3>
+      Rehearsals for this set are on <%= ps.performance_set_dates.map(&:date).map{|d| d.strftime("%B %e") }.join(", ") %>.
       <br><br>
       <%= raw ps.opt_in_message %>
       <br><br>
