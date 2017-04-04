@@ -1,6 +1,6 @@
 class EmailsController < ApplicationController
   before_action :set_email, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:requires_sub_name]
 
   # GET /emails
   # GET /emails.json
@@ -15,16 +15,19 @@ class EmailsController < ApplicationController
 
   # GET /emails/new
   def new
-    @email = Email.new
-  end
+    @performance_sets = PerformanceSet.emailable
+    @statuses = MemberSet.statuses.keys
+    @instruments = []
 
-  # GET /emails/1/edit
-  def edit
+    @email = Email.new
   end
 
   # POST /emails
   # POST /emails.json
   def create
+    @performance_sets = PerformanceSet.emailable
+    @statuses = MemberSet.statuses.keys
+    @instruments = []
     @email = Email.new(email_params)
 
     respond_to do |format|
@@ -41,6 +44,8 @@ class EmailsController < ApplicationController
   # PATCH/PUT /emails/1
   # PATCH/PUT /emails/1.json
   def update
+    @performance_sets = PerformanceSet.emailable
+    @statuses = MemberSet.statuses.keys
     respond_to do |format|
       if @email.update(email_params)
         format.html { redirect_to @email, notice: 'Email was successfully updated.' }

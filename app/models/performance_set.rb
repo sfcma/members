@@ -3,6 +3,7 @@ class PerformanceSet < ApplicationRecord
   acts_as_paranoid
   has_many :member_sets
   has_many :performance_set_dates
+  has_many :performance_set_instruments
 
   # This maybe should be a has_and_belongs_to_many association
   has_many :members, through: :member_sets
@@ -15,7 +16,11 @@ class PerformanceSet < ApplicationRecord
 
   scope :now_or_future, -> { where("end_date > ?", 1.week.ago.strftime('%F'))}
   scope :joinable, -> { where("start_date > ? and start_date < ?",
-                              2.week.ago.strftime('%F'),
+                              2.weeks.ago.strftime('%F'),
+                              6.weeks.from_now.strftime('%F'))}
+
+  scope :emailable, -> { where("end_date > ? and start_date < ?",
+                              4.weeks.ago.strftime('%F'),
                               6.weeks.from_now.strftime('%F'))}
 
   def old_name

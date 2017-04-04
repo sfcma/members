@@ -33,6 +33,7 @@ Rails.application.routes.draw do
     end
     collection do
       get :requires_sub_name
+      get :get_filtered_member_info
     end
   end
   resources :performance_pieces

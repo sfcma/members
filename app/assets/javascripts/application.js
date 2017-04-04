@@ -334,9 +334,8 @@ var loadStuff = function() {
     });
   });
 
-  // For MemberSet#new page
-  $('#member_set_performance_set_id').on('change', function() {
-    var rehearsalSel = $('#member_set\\[new_performance_set_instrument_id\\]');
+  function setInstrumentsForSelection(instrumentSelectorId, addAll) {
+    var rehearsalSel = $(instrumentSelectorId);
     var newOptions = "";
     var performanceSetId = $('#member_set_performance_set_id').val();
     $.get('../../performance_set_instruments/?performance_set_id=' + performanceSetId).then(function(response) {
@@ -350,8 +349,63 @@ var loadStuff = function() {
       rehearsalSel.empty().append($(newOptions));
       $('.performance_set_opt_in_message').hide();
       $('#performance_set_opt_in_message_' + performanceSetId).show();
+
+      if (addAll) {
+        var allOption = '<option value="all" selected>All</option>';
+        $('#emailMemberInstrumentSelector').prepend($(allOption));
+      }
+    });
+  }
+
+  // For MemberSet#new page
+  $('.bigForm #member_set_performance_set_id').on('change', function() {
+    setInstrumentsForSelection('#member_set\\[new_performance_set_instrument_id\\]', false);
+  });
+
+  // For Emails page
+  $('#emailForm #member_set_performance_set_id').on('change', function() {
+    setInstrumentsForSelection('#emailMemberInstrumentSelector', true);
+  });
+
+  // Get email recipients
+  $(document).on('change', '.emailFilter select', function() {
+    if ($('#emailMemberStatusSelector').val() === "" || $('#member_set_performance_set_id').val() === "") {
+      return;
+    } else {
+      $('#roster').html("<i>Working...</i>");
+    }
+    var queryString = 'performance_set_id=' + $('#member_set_performance_set_id').val();
+    queryString += '&status=' + $('#emailMemberStatusSelector').val();
+    if ($('#emailMemberInstrumentSelector').val() != "all") {
+      queryString += '&performance_set_instrument_id=' + $('#emailMemberInstrumentSelector').val();
+    }
+    $.get('../../members/get_filtered_member_info?' + queryString).then(function(response) {
+      var memberListByInst = {};
+      $.each(response, function(i, member_set) {
+        var member = member_set.member;
+        var memberInsts = member.member_instruments;
+        var instrument;
+        $.each(memberInsts, function(i, mi) {
+          if (member_set.set_member_instruments[0].member_instrument_id === mi.id) {
+            instrument = mi.instrument;
+          }
+        });
+        if (memberListByInst.hasOwnProperty(instrument)) {
+          memberListByInst[instrument] << member.first_name + " " + member.last_name;
+        } else {
+          memberListByInst[instrument] = [member.first_name + " " + member.last_name]
+        }
+      });
+      var out = "";
+      $.each(memberListByInst, function(instName, members) {
+        out += "<b>" + instName.charAt(0).toUpperCase() + instName.slice(1) + "</b><br>"
+        out += members.join(", ");
+        out += "<br><br>"
+      })
+      $('#roster').html("<i>" + out + "</i>");
     });
   });
+
 
   if (typeof(isNew) !== "undefined") {
     $('a[id^=removeMemberSet]').hide();

@@ -11,7 +11,41 @@
     </div>
   <% end %>
 
+  <div class="field">
+    <%= f.label :email_title %>
+    <%= f.text_field :email_title %>
+  </div>
+
+  <div class="field">
+    <%= f.label :email_body %>
+    <%= f.text_area :email_body, cols: 100, rows: 15 %>
+  </div>
+
+  <h3>Email Recipients:</h3>
+
+  <b>Emailing Members of a Performance Set</b>
+
+  <div class="field emailFilter" id="emailForm">
+    <%= f.label :performance_set_id, "Performance Set" %>
+    <%= f.collection_select :performance_set_id, @performance_sets, :id, :extended_name, { prompt: true }, { id: 'member_set_performance_set_id' } %>
+  </div>
+
+  <div class="field emailFilter">
+    <%= f.label :status, "Status" %>
+    <%= f.select :status, MemberSet.statuses.keys.map(&:humanize).to_a, { prompt: true }, { id: 'emailMemberStatusSelector' } %>
+  </div>
+
+  <div class="field emailFilter">
+    <%= f.label :performance_set_instrument_id, "Instrument (optional)" %>
+    <%= f.collection_select :performance_set_instrument_id, @instruments, :id, :instrument, { prompt: true }, { disabled: true, id: 'emailMemberInstrumentSelector' } %>
+  </div>
+
+  <h3>These Members Will Be Emailed</h3>
+  <div id="roster">
+    <i>Please select a performance set and status.</i>
+  </div>
+
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit "Preview Email", { disabled: true } %>
   </div>
 <% end %>
