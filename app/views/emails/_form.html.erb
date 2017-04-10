@@ -32,12 +32,12 @@
 
   <div class="field emailFilter">
     <%= f.label :status, "Status" %>
-    <%= f.select :status, MemberSet.statuses.keys.map(&:humanize).to_a, { prompt: true }, { id: 'emailMemberStatusSelector' } %>
+    <%= f.select :status, @statuses_for_email, { prompt: true }, { id: 'emailMemberStatusSelector' } %>
   </div>
 
-  <div class="field emailFilter">
-    <%= f.label :performance_set_instrument_id, "Instrument (optional)" %>
-    <%= f.collection_select :performance_set_instrument_id, @instruments, :id, :instrument, { prompt: true }, { disabled: true, id: 'emailMemberInstrumentSelector' } %>
+  <div class="field emailFilter startHidden">
+    <%= f.label :instruments, "Instrument (optional)" %>
+    <%= f.collection_select :instruments, @instruments, :id, :instrument, { prompt: true }, { id: 'emailMemberInstrumentSelector', multiple: true } %>
   </div>
 
   <h3>These Members Will Be Emailed</h3>

@@ -4,7 +4,7 @@ class Absence < ApplicationRecord
   belongs_to :member
   belongs_to :performance_set_date, required: true
 
-  validates_uniqueness_of :member, scope: :performance_set_date
+  validates_uniqueness_of :member, scope: :performance_set_date, message: "An absence has already been submitted for this date."
 
   INSTRUMENTS_REQUIRING_SUBS = [
     'flute', 'b flat clarinet', 'bassoon', 'french horn', 'piccolo', 'trombone', 'percussion',

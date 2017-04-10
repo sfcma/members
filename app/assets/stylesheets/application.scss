@@ -1,4 +1,5 @@
 //= require jquery.auto-complete
+//= require chosen.min
 //= require datatable
 
 $header-green: #006644;
@@ -523,6 +524,10 @@ div {
     background: darkred;
     color: white;
   }
+}
+
+.startHidden {
+  display: none;
 }
 
 .alert {

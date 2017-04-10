@@ -21,6 +21,21 @@ class Member < ApplicationRecord
 
   enum statuses: [:untriaged, :placed_in_group, :waitlist, :sub_only, :inactive]
 
+  def self.in_set(performance_set_id)
+    Member
+      .includes(:member_instruments, :member_sets)
+      .where('member_sets.performance_set_id = ?', performance_set_id)
+      .references(:member_sets)
+  end
+
+  def self.in_set_with_status(performance_set_id, statuses)
+    Member.in_set(performance_set_id).where('member_sets.set_status' => statuses)
+  end
+
+  def self.filtered_by_criteria(performance_set_id, status_id, instruments = [])
+    MemberSet.filtered_by_criteria(performance_set_id, status_id, instruments).map(&:member)
+  end
+
   def to_s
     return program_name if program_name.present?
     return first_name + " " + last_name

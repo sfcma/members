@@ -231,25 +231,23 @@ class MembersController < ApplicationController
   end
 
   def get_filtered_member_info
-    performance_set_instrument_id = params[:performance_set_instrument_id]
+    instruments = params[:instruments] || ""
     performance_set_id = params[:performance_set_id]
-    set_status = params[:status]
+    status_id = params[:status]
 
-    ms = MemberSet.all
-    if (performance_set_instrument_id.present?)
-      ms = ms.joins('INNER JOIN performance_set_instruments ON member_sets.performance_set_id = performance_set_instruments.performance_set_id')
-      ms = ms.joins('INNER JOIN member_instruments ON lower(member_instruments.instrument) = lower(performance_set_instruments.instrument)')
-      ms = ms.joins('INNER JOIN set_member_instruments ON set_member_instruments.member_instrument_id = member_instruments.id AND set_member_instruments.member_set_id = member_sets.id')
-      ms = ms.joins('INNER JOIN members ON member_instruments.member_id = members.id')
-      ms = ms.where('member_sets.performance_set_id = ? AND member_sets.set_status = ? AND lower(performance_set_instruments.instrument) = lower(?)', performance_set_id, set_status, performance_set_instrument_id)
-    else
-      ms = ms.where(performance_set_id: performance_set_id, set_status: set_status)
-    end
+    instruments = "" if instruments == "null"
 
+    member_sets = MemberSet.filtered_by_criteria(performance_set_id, status_id, instruments.split(','))
     respond_to do |format|
-      format.json { render json: ms.to_json(include: [:set_member_instruments, member: {include: [:member_instruments] }]), status: :ok }
+      format.json { render json: member_sets.to_json(include: [:set_member_instruments, member: {include: [:member_instruments] }]), status: :ok }
     end
   end
+
+  # Get email addresses members for a certain set for a certain instrument
+  # SetMemberInstrument.joins('INNER JOIN member_sets on member_sets.id = set_member_instruments.member_set_id').joins('INNER JOIN member_instruments on member_instruments.id = set_member_instruments.member_instrument_id').where('member_instruments.instrument = ? OR member_instruments.instrument = ?', 'violin 1', 'violin 1').where(member_sets: { performance_set_id: [1,6,9,12]}).map(&:member_set).map(&:member).map(&:email_1).join(", ")
+
+  # Get email addresses for members for a particular instrument in certain sets
+  # Member.all.joins('INNER JOIN member_instruments on member_instruments.member_id = members.id').joins('INNER JOIN member_sets on member_sets.member_id = members.id').where('member_instruments.instrument = ?', 'violin').where(member_sets: {performance_set_id: [1,6,9,12]}).map{|m| "#{m.email_1}" }.uniq.join(", ")
 
   private
 

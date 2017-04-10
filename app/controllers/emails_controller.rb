@@ -16,7 +16,7 @@ class EmailsController < ApplicationController
   # GET /emails/new
   def new
     @performance_sets = PerformanceSet.emailable
-    @statuses = MemberSet.statuses.keys
+    @statuses_for_email = Email.statuses_for_emails
     @instruments = []
 
     @email = Email.new
@@ -26,7 +26,7 @@ class EmailsController < ApplicationController
   # POST /emails.json
   def create
     @performance_sets = PerformanceSet.emailable
-    @statuses = MemberSet.statuses.keys
+    @statuses_for_email = Email.statuses_for_emails
     @instruments = []
     @email = Email.new(email_params)
 
@@ -45,7 +45,7 @@ class EmailsController < ApplicationController
   # PATCH/PUT /emails/1.json
   def update
     @performance_sets = PerformanceSet.emailable
-    @statuses = MemberSet.statuses.keys
+    @statuses_for_email = Email.statuses_for_emails
     respond_to do |format|
       if @email.update(email_params)
         format.html { redirect_to @email, notice: 'Email was successfully updated.' }

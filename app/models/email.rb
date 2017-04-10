@@ -4,7 +4,6 @@ class Email < ApplicationRecord
   has_one :user
   has_one :performance_set
   has_one :ensemble
-  has_one :performance_set_instrument
 
   validates :email_body, presence: true
   validates :email_title, presence: true
@@ -13,4 +12,9 @@ class Email < ApplicationRecord
   has_many :email_logs
 
   accepts_nested_attributes_for :email_logs
+
+  enum statuses_for_email: ["Confirmed Playing ONLY",
+                            "Confirmed Playing and Opted-In",
+                            "Confirmed Playing, Opted-In, Interested, and Subbing"]
+
 end
