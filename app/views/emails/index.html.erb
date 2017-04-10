@@ -1,24 +1,18 @@
 <p id="notice"><%= notice %></p>
+<div class='pageHeader'><h2>Emails</h2></div>
 
-<h1>Emails</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @emails.each do |email| %>
-      <tr>
-        <td><%= link_to 'Show', email %></td>
-        <td><%= link_to 'Edit', edit_email_path(email) %></td>
-        <td><%= link_to 'Destroy', email, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+<% if current_user.global_admin? %>
+  <% @emails.each do |email| %>
+    <% if email.instruments == '[""]' %>
+      <% inst_to_display = "All instruments" %>
+    <% else %>
+      <% inst_to_display = email.instruments.gsub(/[\"\]\[]/,"") %>
     <% end %>
-  </tbody>
-</table>
+    <% sent_at = email.sent_at.nil? ? "Unsent" : "Sent at #{email.sent_at.in_time_zone('Pacific Time (US & Canada)')}" %>
+    <%= link_to "View Email #{email.email_title} / #{email.performance_set.extended_name} / #{inst_to_display} / #{sent_at}", email %><br>
+  <% end %>
+<% end %>
+
 
 <br>
 

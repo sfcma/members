@@ -77,20 +77,35 @@ class EmailsController < ApplicationController
   # DELETE /emails/1
   # DELETE /emails/1.json
   def destroy
-    @email.destroy
     respond_to do |format|
-      format.html { redirect_to emails_url, notice: 'Email was successfully destroyed.' }
+      format.html { redirect_to emails_url, notice: 'Cannot delete emails.' }
       format.json { head :no_content }
     end
   end
 
   def send_email
-    members = Member.find(params[:member_ids].split(",").map{ |mi| mi.to_i })
-    MemberMailer.standard_member_email(members, @email.email_title, @email.email_body, current_user).deliver_now
-    @email.update(sent_at: Time.now)
-    members.each do |member|
-      EmailLog.new(email_id: @email.id, member_id: member.id, created_at: Time.now)
+    unless @email.sent_at.nil?
+      respond_to do |format|
+        format.html { redirect_to email_url(@email), notice: 'Cannot re-send email already sent.' }
+        format.json { head :no_content }
+      end
+      return
     end
+    unless params[:member_ids].present?
+      respond_to do |format|
+        format.html { redirect_to email_url(@email), notice: 'No members to send to.' }
+        format.json { head :no_content }
+      end
+      return
+    end
+
+    members = Member.find(params[:member_ids].split(",").map{ |mi| mi.to_i })
+
+    members.each do |member|
+      MemberMailer.standard_member_email(member, @email.email_title, @email.email_body, current_user, @email.id, member.id, @email.performance_set.extended_name, @email.instruments, @email.status).deliver_now
+      EmailLog.new(email_id: @email.id, member_id: member.id, created_at: Time.now).save
+    end
+    @email.update(sent_at: Time.now)
     respond_to do |format|
       format.html { redirect_to emails_url, notice: "Email successfully sent." }
       format.json { head :no_content }

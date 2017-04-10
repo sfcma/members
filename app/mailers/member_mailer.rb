@@ -1,16 +1,26 @@
 class MemberMailer < ApplicationMailer
 
-  def standard_member_email(members, subject, body, sending_user)
+  def standard_member_email(member, subject, body, sending_user, email_id, member_id, perf_set_name, inst, status)
     @body = body
     @subject = subject
     @sending_user = sending_user
-    bcced_users = members.map{ |m| "#{m.to_s} <#{m.email_1}>"}.join(",")
+    @member_id = member_id
+    @email_id = email_id
+    @perf_set_name = perf_set_name
+    @instruments = inst.gsub(/[\"\]\[]/,"").split(",").reject!(&:blank?) || []
+    @instruments = @instruments.map(&:strip)
+    if status == 0
+      @status_text = "are playing in"
+    elsif status == 1
+      @status_text = "are opted into playing in"
+    else
+      @status_text = "have expressed an interest in"
+    end
 
-    mail(to: 'Civic Symphony Association of San Francisco <no-reply@mail.sfcivicmusic.org>',
-         bcc: bcced_users,
-         reply_to: "#{sending_user.name} <#{sending_user.email}>",
-         from: 'Civic Symphony Association of San Francisco <no-reply@mail.sfcivicmusic.org>',
-         subject: subject)
+    mail(to: "#{member.to_s} <#{member.email_1}>",
+          reply_to: "#{sending_user.name} <#{sending_user.email}>",
+          from: 'Civic Symphony Association of San Francisco <no-reply@mail.sfcivicmusic.org>',
+          subject: subject)
   end
 
 end

@@ -6,6 +6,11 @@ Rails.application.routes.draw do
       get :send_email
     end
   end
+  resources :email_logs do
+    collection do
+      get :ping
+    end
+  end
   resources :performance_set_dates
   captcha_route
   resources :absences do

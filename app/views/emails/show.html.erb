@@ -18,7 +18,7 @@
 <br><br>
 <% recipients = [] %>
 <% if @email.sent_at.nil? %>
-  <h3>Specific Members On This Email (<%= @instrument_groups.values.flatten.count %>)</h3>
+  <h3>Specific Recipients of This Email (<%= @instrument_groups.values.flatten.count %>)</h3>
 
   <% @instrument_groups.keys.sort.each do |k, i| %>
     <% j = 0 %>
@@ -34,7 +34,12 @@
   <br><br>
   <%= link_to 'Confirm and Send Email', send_email_email_url(member_ids: recipients.join(",")), class: 'button' %>
 <% else %>
-
+  <h3>Specific Recipients</h3>
+  Sent to <%= EmailLog.where(email_id: @email.id).count %> members
+  <br><br>
+  <% EmailLog.where(email_id: @email.id).each do |el| %>
+    <%= link_to el.member, el.member %>,
+  <% end %>
 
 
 <% end %>
