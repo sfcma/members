@@ -409,6 +409,11 @@ var loadStuff = function() {
         out += "<br><br>"
       })
       $('#roster').html("<i>" + memberCount + " members being emailed.<br><br>" + out + "</i>");
+      if (memberCount > 0) {
+        $('#email_preview_submit_button').prop('disabled', false);
+      } else {
+        $('#email_preview_submit_button').prop('disabled', true);
+      }
     });
   });
 

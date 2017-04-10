@@ -1,6 +1,8 @@
 class EmailsController < ApplicationController
-  before_action :set_email, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, except: [:requires_sub_name]
+  before_action :set_email, only: [:show, :edit, :update, :destroy, :send_email]
+  before_action :authenticate_user!
+
+  include PerformanceSetsHelper
 
   # GET /emails
   # GET /emails.json
@@ -11,6 +13,21 @@ class EmailsController < ApplicationController
   # GET /emails/1
   # GET /emails/1.json
   def show
+    @performance_set = @email.performance_set
+    @instruments = @email.instruments.gsub(/[\"\]\[]/,"").split(",").reject!(&:blank?) || []
+    @instruments = @instruments.map(&:strip)
+    @status_id = @email.status
+    @member_sets = MemberSet.filtered_by_criteria(@performance_set.id, @status_id, @instruments)
+    @instrument_groups = organize_members_by_instrument(@performance_set, @member_sets)
+  end
+
+  def edit
+    @performance_sets = PerformanceSet.emailable
+    @statuses_for_email = Email.statuses_for_emails
+    @instruments = []
+    unless @email.sent_at.nil?
+      redirect_to emails_url, notice: 'Cannot edit emails that have already been sent!'
+    end
   end
 
   # GET /emails/new
@@ -48,7 +65,7 @@ class EmailsController < ApplicationController
     @statuses_for_email = Email.statuses_for_emails
     respond_to do |format|
       if @email.update(email_params)
-        format.html { redirect_to @email, notice: 'Email was successfully updated.' }
+        format.html { redirect_to @email, notice: 'Email successfully created – not yet sent.' }
         format.json { render :show, status: :ok, location: @email }
       else
         format.html { render :edit }
@@ -67,6 +84,19 @@ class EmailsController < ApplicationController
     end
   end
 
+  def send_email
+    members = Member.find(params[:member_ids].split(",").map{ |mi| mi.to_i })
+    MemberMailer.standard_member_email(members, @email.email_title, @email.email_body, current_user).deliver_now
+    @email.update(sent_at: Time.now)
+    members.each do |member|
+      EmailLog.new(email_id: @email.id, member_id: member.id, created_at: Time.now)
+    end
+    respond_to do |format|
+      format.html { redirect_to emails_url, notice: "Email successfully sent." }
+      format.json { head :no_content }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_email
@@ -75,6 +105,13 @@ class EmailsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def email_params
-      params.fetch(:email, {})
+      params.require(:email).permit(
+        :email_body,
+        :email_title,
+        :performance_set_id,
+        :status,
+        :user_id,
+        :instruments => []
+      )
     end
 end

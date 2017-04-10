@@ -1,9 +1,8 @@
 class Email < ApplicationRecord
   audited
   acts_as_paranoid
-  has_one :user
-  has_one :performance_set
-  has_one :ensemble
+  belongs_to :user
+  belongs_to :performance_set
 
   validates :email_body, presence: true
   validates :email_title, presence: true

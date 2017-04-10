@@ -1,4 +1,44 @@
 <p id="notice"><%= notice %></p>
+<div class='pageHeader'><h2>EMAIL: <%= @email.email_title %></h2>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<% if @email.sent_at != nil %>SENT <%= @email.sent_at %><%else%>UNSENT<% end %></div>
+<br>
+<b>Email Title</b><br>
+<%= @email.email_title %>
+<br><br>
+<b>Email Body</b><br>
+<div class='emailContainer'>
+  <%= @email.email_body %>
+</div>
+<br><br>
+<h3>Who are we sending this email to?</h3>
+<b>Performance Set:</b> <%= @email.performance_set.extended_name %>
+<br><br>
+<b>Statuses:</b> <%= Email.statuses_for_emails[@email.status.to_i] %>
+<br><br>
+<b>Instruments:</b> <%= @instruments.present? ? @instruments.join(',') : 'All' %>
+<br><br>
+<% recipients = [] %>
+<% if @email.sent_at.nil? %>
+  <h3>Specific Members On This Email (<%= @instrument_groups.values.flatten.count %>)</h3>
 
-<%= link_to 'Edit', edit_email_path(@email) %> |
-<%= link_to 'Back', emails_path %>
+  <% @instrument_groups.keys.sort.each do |k, i| %>
+    <% j = 0 %>
+    <h4><%= k.capitalize.pluralize %> (<%= (@instrument_groups[k].count) %>)</h4>
+    <% @instrument_groups[k].each do |ms| %>
+      <% if ms %>
+        <%= link_to ms.member, ms.member %> <% if @showing_all %> &emsp;&emsp;&emsp;<i style='color: gray'><%= ms.set_status %></i> <% end %> <br>
+        <% recipients << ms.member.id %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <br><br>
+  <%= link_to 'Confirm and Send Email', send_email_email_url(member_ids: recipients.join(",")), class: 'button' %>
+<% else %>
+
+
+
+<% end %>
+
+
+<br><br>
+<%= link_to 'Return to All Emails', emails_path %>

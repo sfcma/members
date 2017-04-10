@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
   resources :member_community_nights
   resources :community_nights
-  resources :emails
+  resources :emails do
+    member do
+      get :send_email
+    end
+  end
   resources :performance_set_dates
   captcha_route
   resources :absences do
