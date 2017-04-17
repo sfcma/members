@@ -3,7 +3,7 @@
   <%= @body %><br>
 </p>
 
-<p style="border-top: 1px solid gray; padding: 5px;"><img src="<%= ping_email_logs_url %>?member_id=<%=@member_id%>&email_id=<%=@email_id%>" width="1" height="1">
+<p style="border-top: 1px solid gray; padding: 5px;">
 You received this email because you <%= @status_text %> <%= @perf_set_name %><%= @instrument.present? ? " playing #{@instrument}" : "" %>.
 This email was sent by <%= @sending_user.name %> through our membership management system.
-    If you believe you have recieved this email in error, please contact this individual directly, or email membership@sfcivicsymphony.org.</p>
+    If you believe you have recieved this email in error, please contact this individual directly, or email membership@sfcivicsymphony.org.<img src="<%= ping_email_logs_url %>?member_id=<%=@member_id%>&email_id=<%=@email_id%>" width="1" height="1"></p>
