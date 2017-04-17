@@ -1,7 +1,8 @@
 class MemberMailer < ApplicationMailer
+  include ActionView::Helpers::TextHelper
 
   def standard_member_email(member, subject, body, sending_user, email_id, member_id, perf_set_name, inst, status, set_member_instrument)
-    @body = body
+    @body = simple_format(body)
     @subject = subject
     @sending_user = sending_user
     @member_id = member_id

@@ -11,46 +11,57 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :email_title %>
-    <%= f.text_field :email_title %>
+  <h3>Step One: Email Title and Body</h3>
+
+  <div class="indentMe">
+    <div class="field">
+      <b><%= f.label :email_title %></b>
+      <%= f.text_field :email_title %>
+    </div>
+
+    <div class="field">
+      <b><%= f.label :email_body %></b>
+      <%= f.text_area :email_body, cols: 100, rows: 15 %>
+    </div>
   </div>
 
-  <div class="field">
-    <%= f.label :email_body %>
-    <%= f.text_area :email_body, cols: 100, rows: 15 %>
-  </div>
+  <h3>Step Two: Email Recipients:</h3>
 
-  <h3>Email Recipients:</h3>
+  <div class="indentMe">
+    <b>Emailing Members of a Performance Set</b>
 
-  <b>Emailing Members of a Performance Set</b>
+    <div class="field emailFilter" id="emailForm">
+      <%= f.label :performance_set_id, "Performance Set" %>
+      <%= f.collection_select :performance_set_id, @performance_sets, :id, :extended_name, { prompt: true }, { id: 'member_set_performance_set_id' } %>
+    </div>
 
-  <div class="field emailFilter" id="emailForm">
-    <%= f.label :performance_set_id, "Performance Set" %>
-    <%= f.collection_select :performance_set_id, @performance_sets, :id, :extended_name, { prompt: true }, { id: 'member_set_performance_set_id' } %>
-  </div>
+    <div class="field emailFilter">
+      <%= f.label :status, "Status" %>
+      <%= f.select :status, @statuses_for_email, { prompt: true }, { id: 'emailMemberStatusSelector' } %>
+    </div>
 
-  <div class="field emailFilter">
-    <%= f.label :status, "Status" %>
-    <%= f.select :status, @statuses_for_email, { prompt: true }, { id: 'emailMemberStatusSelector' } %>
-  </div>
-
-  <div class="field emailFilter startHidden">
-    <%= f.label :instruments, "Instrument (optional)" %>
-    <%= f.collection_select :instruments, @instruments, :id, :instrument, { prompt: true }, { id: 'emailMemberInstrumentSelector', multiple: true } %>
+    <div class="field emailFilter startHidden">
+      <%= f.label :instruments, "Instrument (optional)" %>
+      <%= f.collection_select :instruments, @instruments, :id, :instrument, { prompt: true }, { id: 'emailMemberInstrumentSelector', multiple: true } %>
+    </div>
   </div>
 
   <%= f.hidden_field :user_id, value: current_user.id %>
 
-  <h3>These Members Will Be Emailed</h3>
-  <div id="roster">
-    <% if action_name == 'edit' %>
-      <i>Please re-select a performance set, status, and instruments to save.</i>
-    <% else %>
-      <i>Please select a performance set and status.</i>
-    <% end %>
+  <h3>Step Three: Verify These Members Will Be Emailed</h3>
+
+  <div class="indentMe">
+    <div id="roster">
+      <% if action_name == 'edit' %>
+        <i>Please re-select a performance set, status, and instruments to save.</i>
+      <% else %>
+        <i>Please select a performance set and status.</i>
+      <% end %>
+    </div>
   </div>
 
+  <h3>Step Four: Save and Preview Email</h3>
+  <h4 style='color: red;'>Email CANNOT be edited after it is saved!</h4>
   <div class="actions">
     <%= f.submit "Save and Preview Email", { disabled: true, id: 'email_preview_submit_button' } %>
   </div>
