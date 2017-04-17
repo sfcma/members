@@ -14,7 +14,7 @@ class MemberSet < ApplicationRecord
                   'Unable to play, not due to Member\'s decision',
                   :subbing,
                   'Not Interested in this set',
-                  'Opted In for this set']
+                  'Opted in for this set']
 
   # TODO
   # :interested, :playing, :stopped, :prevented, :subbing, :uninterested, :optedin
@@ -25,9 +25,9 @@ class MemberSet < ApplicationRecord
     when 0    # playing only
       ['Playing']
     when 1    # playing or opt in
-      ['Opted In for this set', 'Playing']
+      ['Opted in for this set', 'Playing']
     when 2    # any that are or might be playing
-      ['Interested in playing this set, unconfirmed', 'Playing', 'Subbing', 'Opted In for this set']
+      ['Interested in playing this set, unconfirmed', 'Playing', 'Subbing', 'Opted in for this set']
     else
       throw 'Unexpected email status id'
     end

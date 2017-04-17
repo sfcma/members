@@ -28,7 +28,7 @@ class MemberSetsController < ApplicationController
         format.html { redirect_to new_member_set_url, notice: "That email address doesn't have a member attached to it!<br><br>Please enter the email address you gave us, or contact membership@sfcivicsymphony.org for help." }
       end
     else
-      @member_set.set_status = 'Opted In for this set'
+      @member_set.set_status = 'Opted in for this set'
       if MemberSet.where(performance_set_id: msparams[:performance_set_id], member_id: msparams[:member_id]).present?
         respond_to do |format|
           Bugsnag.notify("Unable to find and opt-in member")
