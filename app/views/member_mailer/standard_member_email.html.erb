@@ -3,7 +3,7 @@
   <%= @body %>.<br>
 </p>
 <hr>
-<p>You received this email because you <%= @status_text %> <%= @perf_set_name %> <%= @inst ? " playing #{@inst}" : "" %>.
+<p>You received this email because you <%= @status_text %> <%= @perf_set_name %> <%= @instrument ? " playing #{@instrument}" : "" %>.
 This email was sent by <%= @sending_user.name %> through our membership management system.
     If you believe you have recieved this email in error, please contact them directly, or email membership@sfcivicsymphony.org.</p>
 <img src="<%= ping_email_logs_url %>?member_id=<%=@member_id%>&email_id=<%=@email_id%>" width="1" height="1">
