@@ -52,7 +52,7 @@ class MemberSet < ApplicationRecord
           SetMemberInstrument
           .includes(:member_instrument)
           .where(member_set_id: potential_member_set_ids)
-          .where('variant' => instruments)
+          .where('variant in (?) OR member_instruments.instrument in (?)', instruments, instruments)
           .references(:member_instruments)
           .map(&:member_set_id)
       else
