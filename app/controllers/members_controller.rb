@@ -189,8 +189,9 @@ class MembersController < ApplicationController
     @member = Member.new(member_params)
     respond_to do |format|
       if (verify_recaptcha(model: @member) || ENV['RAILS_ENV'] != 'production') && @member.save
-        MemberMailer.member_signup_email(@member).deliver_now
-        format.html { redirect_to(signup_complete_members_url, notice: 'Thank you for signing up for membership in the San Francisco Civic Music Association! A representative from our Membership Committee will be in touch with you in the next few days to discuss our current openings and help find the best fit for you!') }
+        MemberMailer.member_signup_email(@member, 'dan@sfcivicsymphony.org').deliver_now
+        MemberMailer.member_signup_email(@member, 'helentsang@tsangarchitects.com').deliver_now
+        format.html { redirect_to(signup_complete_members_url, notice: 'Thank you for signing up for membership in the San Francisco Civic Music Association!<br><br>A representative from our Membership Committee will be in touch with you in the next few days to discuss our current openings and help find the best fit for you.'.html_safe) }
       else
         format.html { render(:signup, layout: 'anonymous', notice: 'Unfortunately, we were unable to save your record. Please try again or contact membership@sfcivicsymphony.org.') }
       end
