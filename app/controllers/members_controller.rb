@@ -187,6 +187,7 @@ class MembersController < ApplicationController
 
   def create_from_signup
     @member = Member.new(member_params)
+    @member.initial_date = Time.now
     respond_to do |format|
       if (verify_recaptcha(model: @member) || ENV['RAILS_ENV'] != 'production') && @member.save
         MemberMailer.member_signup_email(@member, 'dan@sfcivicsymphony.org').deliver_now
