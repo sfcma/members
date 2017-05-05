@@ -41,8 +41,11 @@ Rails.application.routes.draw do
       get :send_email
     end
     collection do
+      get :signup
+      get :signup_complete
       get :requires_sub_name
       get :get_filtered_member_info
+      post :create_from_signup
     end
   end
   resources :performance_pieces

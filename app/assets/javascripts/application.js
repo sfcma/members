@@ -362,9 +362,21 @@ var loadStuff = function() {
     setInstrumentsForSelection('#member_set\\[new_performance_set_instrument_id\\]');
   });
 
+  // For Member#signup page
+  $('.bigForm #member_set_performance_set_id').on('change', function() {
+    setInstrumentsForSelection('#member_set\\[new_performance_set_instrument_id\\]');
+  });
+
   // For Emails page
-  $('#emailForm #member_set_performance_set_id').on('change', function() {
-    setInstrumentsForSelection('#emailMemberInstrumentSelector');
+  $('#memberSignupFormFirstName, #memberSignupFormLastName, #memberSignupFormEmail1, #memberSignupFormIntroduction').on('change', function() {
+    if ($('#memberSignupFormFirstName').val().trim().length > 0 &&
+        $('#memberSignupFormLastName').val().trim().length > 0 &&
+        $('#memberSignupFormEmail1').val().trim().length > 0 &&
+        $('#memberSignupFormIntroduction').val().trim().length > 0) {
+      $('#submit_form_button').prop('disabled', false);
+    } else {
+      $('#submit_form_button').prop('disabled', true);
+    }
   });
 
   // Get email recipients

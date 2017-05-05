@@ -1,6 +1,6 @@
 class MembersController < ApplicationController
   before_action :set_member, only: [:show, :edit, :update, :destroy, :send_email]
-  before_action :authenticate_user!, except: [:requires_sub_name]
+  before_action :authenticate_user!, except: [:requires_sub_name, :signup, :create_from_signup, :signup_complete]
   before_action :load_sets
   impressionist except: [:get_filtered_member_info]
 
@@ -185,6 +185,22 @@ class MembersController < ApplicationController
     end
   end
 
+  def create_from_signup
+    @member = Member.new(member_params)
+    respond_to do |format|
+      if (verify_recaptcha(model: @member) || ENV['RAILS_ENV'] != 'production') && @member.save
+        MemberMailer.member_signup_email(@member).deliver_now
+        format.html { redirect_to(signup_complete_members_url, notice: 'Thank you for signing up for membership in the San Francisco Civic Music Association! A representative from our Membership Committee will be in touch with you in the next few days to discuss our current openings and help find the best fit for you!') }
+      else
+        format.html { render(:signup, layout: 'anonymous', notice: 'Unfortunately, we were unable to save your record. Please try again or contact membership@sfcivicsymphony.org.') }
+      end
+    end
+  end
+
+  def signup_complete
+    render layout: 'anonymous' unless current_user.present?
+  end
+
   def send_email
     MemberMailer.standard_member_email(@member, 'Test Email Subject', 'Test Email Body', current_user).deliver_now
     respond_to do |format|
@@ -241,6 +257,14 @@ class MembersController < ApplicationController
     respond_to do |format|
       format.json { render json: member_sets.to_json(include: [:set_member_instruments, member: {include: [:member_instruments] }]), status: :ok }
     end
+  end
+
+  def signup
+    if current_user.present?
+      redirect_to new_member_url, notice: 'Cannot use anonymous new member signup form while signed in'
+    end
+    @member = Member.new
+    render layout: 'anonymous' unless current_user.present?
   end
 
   # Get email addresses members for a certain set for a certain instrument
