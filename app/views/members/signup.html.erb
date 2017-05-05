@@ -1,0 +1,58 @@
+<div class='pageHeader'><h2>Join the San Francisco Civic Music Association</h2></div>
+
+<div class="bigForm">
+<%= form_for(@member, url: create_from_signup_members_path) do |f| %>
+  <% if @member.errors.any? %>
+    <div id="error_explanation">
+      <h2>This attempt to join could not be saved:</h2>
+
+      <ul>
+      <% @member.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% unless current_user %>
+    <i>We're excited that you're interested in joining us! Please fill out this form so we can get to know you better.</i>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :first_name, "First Name (required)" %>
+    <%= f.text_field :first_name, id: 'memberSignupFormFirstName' %>
+  </div>
+
+  <div class="field">
+    <%= f.label :last_name, "Last Name (required)" %>
+    <%= f.text_field :last_name, id: 'memberSignupFormLastName' %>
+  </div>
+
+  <div class="field">
+    <%= f.label :email_1, "Email Address (required)" %>
+    <%= f.text_field :email_1, id: 'memberSignupFormEmail1' %>
+  </div>
+
+  <div class="field">
+    <%= f.label :introduction, "Please Introduce Yourself! (required)<br><br>Why are you interested in joining us?<br>What instrument(s) do you play?".html_safe %>
+    <%= f.text_area :introduction, cols: 60, rows: 10, id: 'memberSignupFormIntroduction' %>
+  </div>
+
+  <div class="field">
+    <%= f.label :source_other, "How did you hear about us?" %>
+    <%= f.text_field :source_other %>
+  </div>
+
+  <%= f.hidden_field :source_website, value: false %>
+  <%= f.hidden_field :from_signup, value: true %>
+
+  <%= recaptcha_tags %>
+
+  <div class="actions">
+    <%= f.submit "Submit Form", class: 'button', id: 'submit_form_button', disabled: true %>
+  </div>
+<% end %>
+</div>
+
+<i class='form-disclaimer'>If you have any questions or issues with this form,
+  please contact membership@sfcivicsymphony.org</i>
