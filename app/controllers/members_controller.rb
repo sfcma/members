@@ -269,6 +269,9 @@ class MembersController < ApplicationController
     render layout: 'anonymous' unless current_user.present?
   end
 
+  def waivers
+  end
+
   # Get email addresses members for a certain set for a certain instrument
   # SetMemberInstrument.joins('INNER JOIN member_sets on member_sets.id = set_member_instruments.member_set_id').joins('INNER JOIN member_instruments on member_instruments.id = set_member_instruments.member_instrument_id').where('member_instruments.instrument = ? OR member_instruments.instrument = ?', 'violin 1', 'violin 1').where(member_sets: { performance_set_id: [1,6,9,12]}).map(&:member_set).map(&:member).map(&:email_1).join(", ")
 

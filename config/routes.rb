@@ -45,6 +45,7 @@ Rails.application.routes.draw do
       get :signup_complete
       get :requires_sub_name
       get :get_filtered_member_info
+      get :waivers
       post :create_from_signup
     end
   end

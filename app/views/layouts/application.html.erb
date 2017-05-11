@@ -20,8 +20,8 @@
       <% end %>
       <b><%= link_to 'Home Page', root_path %></b> &emsp; &middot; &emsp;
       <% if user_signed_in? %>
-        <b><%= link_to 'Membership Roster', members_path %></b>
-
+        <b><%= link_to 'Membership Roster', members_path %></b> &emsp; &middot; &emsp;
+        <b><%= link_to 'Waivers', waivers_members_path %></b>
 
       <% else %>
         Not logged in. <%= link_to "Log In", new_user_session_path %>
