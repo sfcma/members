@@ -44,8 +44,11 @@ class MemberMailer < ApplicationMailer
   def member_signup_email(member, to_email)
     mail(to: to_email,
          from: 'SF Civic Music <no-reply@mail.sfcivicmusic.org>',
-         subject: "I'm interested in joining the orchestra",
-         body: "A new member has signed up! View them at https://members.sfcivicsymphony.org/members/#{member.id}")
+         subject: "New Member interested in joining the orchestra",
+         body: "A new member has signed up! <br><br>
+                Name: #{member.first_name} #{member.last_name}<br>
+                Introduction: #{member.introduction}<br><br>
+                View them at https://members.sfcivicsymphony.org/members/#{member.id}")
   end
 
 end

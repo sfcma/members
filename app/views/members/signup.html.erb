@@ -46,7 +46,9 @@
   <%= f.hidden_field :source_website, value: false %>
   <%= f.hidden_field :from_signup, value: true %>
 
-  <%= recaptcha_tags %>
+  <% unless Rails.env == 'development' %>
+    <%= recaptcha_tags %>
+  <% end %>
 
   <div class="actions">
     <%= f.submit "Submit Form", class: 'button', id: 'submit_form_button', disabled: true %>
