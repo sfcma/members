@@ -25,7 +25,7 @@
     </div>
   </div>
 
-  <h3>Step Two: Email Recipients:</h3>
+  <br><h3>Step Two: Email Recipients:</h3>
 
   <div class="indentMe">
     <b>Emailing Members of a Performance Set</b>
@@ -48,17 +48,31 @@
 
   <%= f.hidden_field :user_id, value: current_user.id %>
 
-  <h3>Step Three: Verify These Members Will Be Emailed</h3>
+  <br><h3>Step Three: Verify These Members Will Be Emailed</h3>
 
   <div class="indentMe">
     <div id="roster">
       <% if action_name == 'edit' %>
-        <i>Please re-select a performance set, status, and instruments to save.</i>
+        <i>List can't be generated! Please re-select a performance set, status, and instruments to save.</i>
       <% else %>
-        <i>Please select a performance set and status.</i>
+        <i>List can't be generated! Please select a performance set and status.</i>
       <% end %>
     </div>
   </div>
+
+  <% if (current_user.id == 1 && Rails.env == "production") || (current_user.id == 2 && Rails.env == "development") %>
+    <br><h3>Sending on behalf of someone?</h3>
+    <div class="indentMe">
+      <div class="field">
+        <b><%= f.label :behalf_of_name, "Name" %></b>
+        <%= f.text_field :behalf_of_name %>
+      </div>
+      <div class="field">
+        <b><%= f.label :behalf_of_email, "Email Address" %></b>
+        <%= f.text_field :behalf_of_email %>
+      </div>
+    </div>
+  <% end %>
 
   <h3>Step Four: Save and Preview Email</h3>
   <h4 style='color: red;'>Email CANNOT be edited after it is saved!</h4>

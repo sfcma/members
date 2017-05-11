@@ -379,6 +379,11 @@ var loadStuff = function() {
     }
   });
 
+  // For Emails page
+  $('#emailForm #member_set_performance_set_id').on('change', function() {
+    setInstrumentsForSelection('#emailMemberInstrumentSelector');
+  });
+
   // Get email recipients
   $(document).on('change', '.emailFilter select', function() {
     if ($('#emailMemberStatusSelector').val() === "" || $('#member_set_performance_set_id').val() === "") {

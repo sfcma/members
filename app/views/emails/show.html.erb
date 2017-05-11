@@ -23,6 +23,16 @@
   <b>Instruments:</b> <%= @instruments.present? ? @instruments.join(',') : 'All' %>
   <br><br>
 </div>
+
+<% if @email.behalf_of_name.present? && @email.behalf_of_email.present? %>
+  <h3>Sent on behalf of</h3>
+  <div class="indentMe">
+    <b>Name:</b> <%= @email.behalf_of_name %>
+    <br><br>
+    <b>Email:</b> <%= @email.behalf_of_email %>
+  </div>
+<% end %>
+
 <% recipients = [] %>
 <% if @email.sent_at.nil? %>
   <h3>Specific Recipients of This Email (<%= @instrument_groups.values.flatten.count %>)</h3>

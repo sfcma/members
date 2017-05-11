@@ -32,8 +32,9 @@
   <%= link_to 'View Ensemble List', ensembles_path %><br>
   <%= link_to 'Performance Set Rehearsal Dates', performance_set_dates_path %>
 
-  <% if current_user.id == 1 || current_user.id == 20 || current_user.id == 3 %>
+  <% if (current_user.id == 1 && Rails.env == "production") || (current_user.id == 2 && Rails.env == "development") || current_user.id == 20 || current_user.id == 3 %>
     <br><br>
+
     <b>Emails! <sup style='color: red'>NEW!</sup></b>
     <br><br>
     <%= link_to 'Send New Email', new_email_path %><br>

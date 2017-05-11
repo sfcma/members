@@ -128,6 +128,8 @@ class EmailsController < ApplicationController
         :performance_set_id,
         :status,
         :user_id,
+        :behalf_of_name,
+        :behalf_of_email,
         :instruments => []
       )
     end

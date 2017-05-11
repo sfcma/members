@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170410081638) do
+ActiveRecord::Schema.define(version: 20170511053450) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -93,6 +93,8 @@ ActiveRecord::Schema.define(version: 20170410081638) do
     t.integer  "email_type"
     t.datetime "sent_at"
     t.string   "instruments"
+    t.string   "behalf_of_name"
+    t.string   "behalf_of_email"
     t.index ["deleted_at"], name: "index_emails_on_deleted_at"
     t.index ["ensemble_id"], name: "index_emails_on_ensemble_id"
     t.index ["performance_set_id"], name: "index_emails_on_performance_set_id"
