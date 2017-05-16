@@ -44,10 +44,14 @@
         <% end %>
 	<% if can_view_member_email(@member) %>
 	<strong>Email:</strong><br>
-          <% if @member.email_1.present? || @member.email_2.present? %>
-            <%= @member.email_1 %><br>
+          <% if @member.email_1.present? %>
+            <%= @member.email_1 %>
+          <% end %>
+          <% if @member.email_2.present? %>
+            <b>(used for emails from the system)</b><br>
             <%= @member.email_2 %>
-          <% else %>
+          <% end %>
+          <% if !(@member.email_1.present? || @member.email_2.present?) %>
             No Email Addresses Available
           <% end %>
         <% end %>

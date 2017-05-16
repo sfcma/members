@@ -102,10 +102,18 @@ class EmailsController < ApplicationController
     members = Member.find(params[:member_ids].split(",").map{ |mi| mi.to_i })
 
     members.each do |member|
-      member_insts = MemberInstrument.where(member_id: member.id)
-      smi = SetMemberInstrument.where(member_instrument_id: member_insts.map(&:id), member_set_id: MemberSet.where(member_id: member.id, performance_set_id: @email.performance_set.id))
-      MemberMailer.standard_member_email(member, @email.email_title, @email.email_body, current_user, @email.id, member.id, @email.performance_set.extended_name, @email.instruments, @email.status, smi).deliver_now
-      EmailLog.new(email_id: @email.id, member_id: member.id, created_at: Time.now).save
+      begin
+        member_insts = MemberInstrument.where(member_id: member.id)
+        smi = SetMemberInstrument.where(member_instrument_id: member_insts.map(&:id), member_set_id: MemberSet.where(member_id: member.id, performance_set_id: @email.performance_set.id))
+        if member.email_1.present?
+          MemberMailer.standard_member_email(member, @email.email_title, @email.email_body, current_user, @email.id, member.id, @email.performance_set.extended_name, @email.instruments, @email.status, smi).deliver_now
+        else
+          Bugsnag.notify("No email address available for member: #{member.id}")
+        end
+        EmailLog.new(email_id: @email.id, member_id: member.id, created_at: Time.now).save
+      rescue StandardError => e
+        Bugsnag.notify(e)
+      end
     end
     @email.update(sent_at: Time.now)
     respond_to do |format|
