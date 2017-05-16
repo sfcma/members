@@ -24,15 +24,15 @@ class MemberSetsController < ApplicationController
     @member_set = MemberSet.new(msparams)
     if !member
       respond_to do |format|
-        Bugsnag.notify("Unable to find and opt-in member")
+        Bugsnag.notify("Unable to find and opt-in member - email not found")
         format.html { redirect_to new_member_set_url, notice: "That email address doesn't have a member attached to it!<br><br>Please enter the email address you gave us, or contact membership@sfcivicsymphony.org for help." }
       end
     else
       @member_set.set_status = 'Opted in for this set'
       if MemberSet.where(performance_set_id: msparams[:performance_set_id], member_id: msparams[:member_id]).present?
         respond_to do |format|
-          Bugsnag.notify("Unable to find and opt-in member")
-          format.html { redirect_to new_member_set_url, notice: 'You have already opted in for this set!' }
+          Bugsnag.notify("Unable to find and opt-in member - already opted in")
+          format.html { redirect_to new_member_set_url, notice: 'You have already opted in (or been added) for this set!' }
         end
       else
         @performance_sets = PerformanceSet.now_or_future
@@ -50,9 +50,9 @@ class MemberSetsController < ApplicationController
               respond_to do |format|
                 if @member_set.save
                   if !current_user
-                    format.html { redirect_to new_member_set_url, notice: "Thank you for submitting your interest in #{@member_set.performance_set.extended_name}." }
+                    format.html { redirect_to new_member_set_url, notice: "Thank you for submitting your interest in #{@member_set.performance_set.extended_name}.<br><br>Ready to make your donation for this set? You can do that now via our <a href='http://sfcivicmusic.org/give-now'>online donations page</a>.<br><br>Need to report an absence? You can do that now via <a href='http://missing.sfcivicsymphony.org'>missing.sfcivicsymphony.org</a>.".html_safe }
                   else
-                    format.html { redirect_to new_member_set_url, notice: "Thank you for submitting your interest in #{@member_set.performance_set.extended_name}." }
+                    format.html { redirect_to new_member_set_url, notice: "Thank you for submitting your interest in #{@member_set.performance_set.extended_name}.<br><br>Ready to make your donation for this set? You can do that now via our <a href='http://sfcivicmusic.org/give-now'>online donations page</a>.<br><br>Need to report an absence? You can do that now via <a href='http://missing.sfcivicsymphony.org'>missing.sfcivicsymphony.org</a>.".html_safe }
                     format.json { render :show, status: :created, location: @member_set }
                   end
                 else
