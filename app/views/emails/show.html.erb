@@ -1,10 +1,10 @@
-<div class='pageHeader'><h2>EMAIL: <%= @email.email_title %></h2>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<% if @email.sent_at != nil %>SENT <%= @email.sent_at %><%else%>UNSENT<% end %></div>
+<div class='pageHeader'><h2>EMAIL: <%= @email.email_title %></h2>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<% if @email.sent_at != nil %>SENT <%= @email.sent_at %><%else%>UNSENT &emsp; <%= link_to 'Edit Email', edit_email_path(@email), class: 'button' %><% end %></div>
 <br>
 
-<% if @email.sent_at.nil? %><h3 class='alert'>This email has not yet been sent! You can send using the button at the bottom of this page.</h3><% end %>
+<% if @email.sent_at.nil? %><h3 class='alert' style='padding: 10px;'>This email has not yet been sent! You can send using the button at the bottom of this page.</h3><% end %>
 
-<h3>Email Title and Body</h3>
-<div class="indentMe">
+<br><h3 class="formHeader">Email Title and Body</h3>
+<div class="field memberInfoBlock">
   <b>Email Title</b><br>
   <%= @email.email_title %>
   <br><br>
@@ -14,8 +14,9 @@
   </div>
 </div>
 
-<h3>Who are we sending this email to?</h3>
-<div class="indentMe">
+<br>
+<h3 class="formHeader">Who are we sending this email to?</h3>
+<div class="field memberInfoBlock">
   <b>Performance Set:</b> <%= @email.performance_set.extended_name %>
   <br><br>
   <b>Statuses:</b> <%= Email.statuses_for_emails[@email.status.to_i] %>
@@ -26,7 +27,7 @@
 
 <% if @email.behalf_of_name.present? && @email.behalf_of_email.present? %>
   <h3>Sent on behalf of</h3>
-  <div class="indentMe">
+  <div class="field memberInfoBlock">
     <b>Name:</b> <%= @email.behalf_of_name %>
     <br><br>
     <b>Email:</b> <%= @email.behalf_of_email %>
@@ -35,8 +36,8 @@
 
 <% recipients = [] %>
 <% if @email.sent_at.nil? %>
-  <h3>Specific Recipients of This Email (<%= @instrument_groups.values.flatten.count %>)</h3>
-  <div class="indentMe">
+  <br><h3 class="formHeader">Specific Recipients of This Email (<%= @instrument_groups.values.flatten.count %>)</h3>
+  <div class="field memberInfoBlock">
     <% @instrument_groups.keys.sort.each do |k, i| %>
       <% j = 0 %>
       <h4><%= k.capitalize.pluralize %> (<%= (@instrument_groups[k].count) %>)</h4>
@@ -51,8 +52,8 @@
   <br><br>
   <%= link_to 'Confirm and Send Email', send_email_email_url(member_ids: recipients.join(",")), class: 'button' %>
 <% else %>
-  <h3>Specific Recipients</h3>
-  <div class="indentMe">
+  <br><h3 class="formHeader">Specific Recipients</h3>
+  <div class="field memberInfoBlock">
     Sent to <%= EmailLog.where(email_id: @email.id).count %> members
     <br><br>
     <% EmailLog.where(email_id: @email.id).each do |el| %>

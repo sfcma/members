@@ -35,7 +35,7 @@
   <% if (current_user.id == 1 && Rails.env == "production") || (current_user.id == 2 && Rails.env == "development") || current_user.id == 20 || current_user.id == 3 %>
     <br><br>
 
-    <b>Emails! <sup style='color: red'>NEW!</sup></b>
+    <b>Emails <sup style='color: red'>BETA</sup></b>
     <br><br>
     <%= link_to 'Send New Email', new_email_path %><br>
     <%= link_to 'View Emails', emails_path %><br>

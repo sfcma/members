@@ -71,7 +71,7 @@ module ApplicationHelper
         }
       else
         audit_string << {
-          html: "UNKNOWN USER destroyed <b>#{audit.auditable_type.underscore.humanize}</b> with values #{audit.audited_changes.inspect} on #{audit.created_at.in_time_zone('Pacific Time (US & Canada)').strftime('%Y-%m-%d %-I:%M %p PT')}<br>".html_safe,
+          html: "Logged out user destroyed <b>#{audit.auditable_type.underscore.humanize}</b> with values #{audit.audited_changes.inspect} on #{audit.created_at.in_time_zone('Pacific Time (US & Canada)').strftime('%Y-%m-%d %-I:%M %p PT')}<br>".html_safe,
           audit_created_at: audit.created_at.in_time_zone('Pacific Time (US & Canada)')
         }
       end

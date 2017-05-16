@@ -334,29 +334,6 @@ var loadStuff = function() {
     });
   });
 
-  function setInstrumentsForSelection(instrumentSelectorId) {
-    var rehearsalSel = $(instrumentSelectorId);
-    var newOptions = "";
-    var performanceSetId = $('#member_set_performance_set_id').val();
-    $.get('../../performance_set_instruments/?performance_set_id=' + performanceSetId).then(function(response) {
-      $.each(response, function(instrument) {
-        var inst = response[instrument].instrument;
-        newOptions += '<option value="' + response[instrument].instrument.toLowerCase() + '">' + inst.toLowerCase() + '</option>';
-      });
-      $('#opt_in_button').prop('disabled', false);
-      $('#opt_in_button').val('Opt Into ' + $('#member_set_performance_set_id option:selected').text());
-      rehearsalSel.empty().append($(newOptions));
-      $('.performance_set_opt_in_message').hide();
-      $('#performance_set_opt_in_message_' + performanceSetId).show();
-      if (instrumentSelectorId === "#emailMemberInstrumentSelector") {
-        $('.startHidden').show();
-        $(instrumentSelectorId).trigger('chosen:updated');
-      } else {
-        rehearsalSel.prop('disabled', false);
-      }
-    });
-  }
-
   // For MemberSet#new page
   $('.bigForm #member_set_performance_set_id').on('change', function() {
     setInstrumentsForSelection('#member_set\\[new_performance_set_instrument_id\\]');
@@ -367,7 +344,7 @@ var loadStuff = function() {
     setInstrumentsForSelection('#member_set\\[new_performance_set_instrument_id\\]');
   });
 
-  // For Emails page
+  // For member signup page
   $('#memberSignupFormFirstName, #memberSignupFormLastName, #memberSignupFormEmail1, #memberSignupFormIntroduction').on('change', function() {
     if ($('#memberSignupFormFirstName').val().trim().length > 0 &&
         $('#memberSignupFormLastName').val().trim().length > 0 &&
@@ -386,52 +363,7 @@ var loadStuff = function() {
 
   // Get email recipients
   $(document).on('change', '.emailFilter select', function() {
-    if ($('#emailMemberStatusSelector').val() === "" || $('#member_set_performance_set_id').val() === "") {
-      return;
-    } else {
-      $('#roster').html("<i>Working...</i>");
-    }
-    var queryString = 'performance_set_id=' + $('#member_set_performance_set_id').val();
-    queryString += '&status=' + $('#emailMemberStatusSelector').val();
-    if ($('#emailMemberInstrumentSelector').val() != "all") {
-      queryString += '&instruments=' + $('#emailMemberInstrumentSelector').val();
-    }
-    $.get('../../members/get_filtered_member_info?' + queryString).then(function(response) {
-      var memberListByInst = {};
-      $.each(response, function(i, member_set) {
-        var member = member_set.member;
-        var memberInsts = member.member_instruments;
-        var instrument;
-        $.each(memberInsts, function(i, mi) {
-          if (member_set.set_member_instruments[0].variant != null) {
-            instrument = member_set.set_member_instruments[0].variant
-          } else if (member_set.set_member_instruments[0].member_instrument_id === mi.id) {
-            instrument = mi.instrument;
-          }
-        });
-        if (memberListByInst.hasOwnProperty(instrument)) {
-          memberListByInst[instrument].push(member.first_name + " " + member.last_name);
-        } else {
-          memberListByInst[instrument] = [member.first_name + " " + member.last_name]
-        }
-      });
-      var out = "";
-      var orderedKeys = Object.keys(memberListByInst).sort();
-      var memberCount = 0;
-      $.each(orderedKeys, function(_, instName) {
-        var members = memberListByInst[instName];
-        out += "<b>" + instName.charAt(0).toUpperCase() + instName.slice(1) + " (" + members.length + ")</b><br>";
-        memberCount += members.length;
-        out += members.join(", ");
-        out += "<br><br>"
-      })
-      $('#roster').html("<i>" + memberCount + " members being emailed.<br><br>" + out + "</i>");
-      if (memberCount > 0) {
-        $('#email_preview_submit_button').prop('disabled', false);
-      } else {
-        $('#email_preview_submit_button').prop('disabled', true);
-      }
-    });
+    updateEmailRecipients();
   });
 
   $('#emailMemberInstrumentSelector').chosen({
@@ -483,6 +415,82 @@ function attachAC(id) {
         }
       }
       suggest(matches);
+    }
+  });
+}
+
+function setInstrumentsForSelection(instrumentSelectorId, functionToCall) {
+  var rehearsalSel = $(instrumentSelectorId);
+  var newOptions = "";
+  var performanceSetId = $('#member_set_performance_set_id').val();
+  $.get('../../performance_set_instruments/?performance_set_id=' + performanceSetId).then(function(response) {
+    $.each(response, function(instrument) {
+      var inst = response[instrument].instrument;
+      newOptions += '<option value="' + response[instrument].instrument.toLowerCase() + '">' + inst.toLowerCase() + '</option>';
+    });
+    $('#opt_in_button').prop('disabled', false);
+    $('#opt_in_button').val('Opt Into ' + $('#member_set_performance_set_id option:selected').text());
+    rehearsalSel.empty().append($(newOptions));
+    $('.performance_set_opt_in_message').hide();
+    $('#performance_set_opt_in_message_' + performanceSetId).show();
+    if (instrumentSelectorId === "#emailMemberInstrumentSelector") {
+      $('.startHidden').show();
+      $(instrumentSelectorId).trigger('chosen:updated');
+    } else {
+      rehearsalSel.prop('disabled', false);
+    }
+
+    if(functionToCall) {
+      functionToCall();
+    }
+  });
+}
+
+function updateEmailRecipients() {
+  if ($('#emailMemberStatusSelector').val() === "" || $('#member_set_performance_set_id').val() === "") {
+    return;
+  } else {
+    $('#roster').html("<i>Working...</i>");
+  }
+  var queryString = 'performance_set_id=' + $('#member_set_performance_set_id').val();
+  queryString += '&status=' + $('#emailMemberStatusSelector').val();
+  if ($('#emailMemberInstrumentSelector').val() != "all") {
+    queryString += '&instruments=' + $('#emailMemberInstrumentSelector').val();
+  }
+  $.get('../../members/get_filtered_member_info?' + queryString).then(function(response) {
+    var memberListByInst = {};
+    $.each(response, function(i, member_set) {
+      var member = member_set.member;
+      var memberInsts = member.member_instruments;
+      var instrument;
+      $.each(memberInsts, function(i, mi) {
+        if (member_set.set_member_instruments[0].variant != null) {
+          instrument = member_set.set_member_instruments[0].variant
+        } else if (member_set.set_member_instruments[0].member_instrument_id === mi.id) {
+          instrument = mi.instrument;
+        }
+      });
+      if (memberListByInst.hasOwnProperty(instrument)) {
+        memberListByInst[instrument].push(member.first_name + " " + member.last_name);
+      } else {
+        memberListByInst[instrument] = [member.first_name + " " + member.last_name]
+      }
+    });
+    var out = "";
+    var orderedKeys = Object.keys(memberListByInst).sort();
+    var memberCount = 0;
+    $.each(orderedKeys, function(_, instName) {
+      var members = memberListByInst[instName];
+      out += "<b>" + instName.charAt(0).toUpperCase() + instName.slice(1) + " (" + members.length + ")</b><br>";
+      memberCount += members.length;
+      out += members.join(", ");
+      out += "<br><br>"
+    })
+    $('#roster').html("<i>" + memberCount + " members being emailed.<br><br>" + out + "</i>");
+    if (memberCount > 0) {
+      $('#email_preview_submit_button').prop('disabled', false);
+    } else {
+      $('#email_preview_submit_button').prop('disabled', true);
     }
   });
 }

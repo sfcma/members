@@ -1,4 +1,4 @@
-<div class='pageHeader'><h2>Emails</h2></div>
+<div class='pageHeader'><h2>Emails</h2> &emsp; &emsp; &emsp; <%= link_to 'Send New Email', new_email_path, class: 'button' %></div>
 
 <% if current_user.global_admin? %>
   <% @emails.each do |email| %>
@@ -8,11 +8,42 @@
       <% inst_to_display = email.instruments.gsub(/[\"\]\[]/,"") %>
     <% end %>
     <% sent_at = email.sent_at.nil? ? "Unsent" : "Sent at #{email.sent_at.in_time_zone('Pacific Time (US & Canada)')}" %>
-    <%= link_to "View Email #{email.email_title} / #{email.performance_set.extended_name} / #{inst_to_display} / #{sent_at}", email %><br>
+    <b>Title:</b> <%= email.email_title %><br>
+    <b>Performance Set:</b> <%= email.performance_set.extended_name %><br>
+    <b>Instruments:</b> <%= inst_to_display %><br>
+    <% if email.sent_at.nil? %>
+      UNSENT<br>
+      <%= link_to "Edit Email", edit_email_path(email) %><br>
+      <%= link_to "View Draft", email %>
+    <% else %>
+      Date Sent: <%= sent_at %><br>
+      <%= link_to "View Sent Email", email %>
+    <% end %>
+    <br><br>
+  <% end %>
+<% else %>
+  <h3>Emails written by me:</h3>
+  <% @emails.where(user_id: current_user.id).each do |email| %>
+    <% if email.instruments == '[""]' %>
+      <% inst_to_display = "All instruments" %>
+    <% else %>
+      <% inst_to_display = email.instruments.gsub(/[\"\]\[]/,"") %>
+    <% end %>
+    <% sent_at = email.sent_at.nil? ? "Unsent" : "Sent at #{email.sent_at.in_time_zone('Pacific Time (US & Canada)')}" %>
+    <b>Title:</b> <%= email.email_title %><br>
+    <b>Performance Set:</b> <%= email.performance_set.extended_name %><br>
+    <b>Instruments:</b> <%= inst_to_display %><br>
+    <% if email.sent_at.nil? %>
+      UNSENT<br>
+      <%= link_to "Edit Email", edit_email_path(email) %><br>
+      <%= link_to "View Draft", email %>
+    <% else %>
+      Date Sent: <%= sent_at %><br>
+      <%= link_to "View Sent Email", email %>
+    <% end %>
+    <br><br>
   <% end %>
 <% end %>
 
 
-<br>
 
-<%= link_to 'New Email', new_email_path %>

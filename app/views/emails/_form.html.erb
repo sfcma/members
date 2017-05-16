@@ -10,25 +10,11 @@
       </ul>
     </div>
   <% end %>
+<br>
+  <h3 class="formHeader">(1) Email Recipients</h3>
 
-  <h3>Step One: Email Title and Body</h3>
-
-  <div class="indentMe">
-    <div class="field">
-      <b><%= f.label :email_title %></b>
-      <%= f.text_field :email_title %>
-    </div>
-
-    <div class="field">
-      <b><%= f.label :email_body %></b>
-      <%= f.text_area :email_body, cols: 100, rows: 15 %>
-    </div>
-  </div>
-
-  <br><h3>Step Two: Email Recipients:</h3>
-
-  <div class="indentMe">
-    <b>Emailing Members of a Performance Set</b>
+  <div class="field memberInfoBlock">
+    <b>Select the members you would like to email by Performance Set, Status, and optionally Instrument.</b>
 
     <div class="field emailFilter" id="emailForm">
       <%= f.label :performance_set_id, "Performance Set" %>
@@ -40,29 +26,59 @@
       <%= f.select :status, @statuses_for_email, { prompt: true }, { id: 'emailMemberStatusSelector' } %>
     </div>
 
-    <div class="field emailFilter startHidden">
+    <% unless action_name == 'new' %>
+      <script>
+        var next = function() {
+          var instrumentAr = JSON.parse('<%= JSON.parse(@email.instruments).compact.reject!(&:empty?).to_s.html_safe %>');
+          for(var i = 0; i < instrumentAr.length; i++) {
+            $('#emailMemberInstrumentSelector option[value=' + instrumentAr[i] + ']').attr('selected', true);
+          }
+          $('#emailMemberInstrumentSelector').trigger('chosen:updated');
+          updateEmailRecipients();
+        }
+
+        $(document).on('ready', function() {
+          setInstrumentsForSelection('#emailMemberInstrumentSelector', next);
+        });
+      </script>
+    <% end %>
+    <div class="field emailFilter <<% if action_name == 'new' %>>startHidden<% end %>">
       <%= f.label :instruments, "Instrument (optional)" %>
       <%= f.collection_select :instruments, @instruments, :id, :instrument, { prompt: true }, { id: 'emailMemberInstrumentSelector', multiple: true } %>
     </div>
   </div>
 
-  <%= f.hidden_field :user_id, value: current_user.id %>
+  <br><h3 class="formHeader">(2) Verify These Members Will Be Emailed</h3>
 
-  <br><h3>Step Three: Verify These Members Will Be Emailed</h3>
-
-  <div class="indentMe">
+  <div class="field memberInfoBlock">
     <div id="roster">
       <% if action_name == 'edit' %>
-        <i>List can't be generated! Please re-select a performance set, status, and instruments to save.</i>
+        <i>List can't be generated yet! Please re-select a performance set, status, and instruments to save.</i>
       <% else %>
-        <i>List can't be generated! Please select a performance set and status.</i>
+        <i>List can't be generated yet! Please select a performance set and status.</i>
       <% end %>
     </div>
   </div>
 
+<br>
+  <h3 class="formHeader">(3) Email Title and Body</h3>
+  <div class="field memberInfoBlock">
+    <div class="field">
+      <b><%= f.label :email_title %></b>
+      <%= f.text_field :email_title %>
+    </div>
+
+    <div class="field">
+      <b><%= f.label :email_body %></b>
+      <%= f.text_area :email_body, cols: 100, rows: 15 %>
+    </div>
+  </div>
+
+  <%= f.hidden_field :user_id, value: current_user.id %>
+
   <% if (current_user.id == 1 && Rails.env == "production") || (current_user.id == 2 && Rails.env == "development") %>
-    <br><h3>Sending on behalf of someone?</h3>
-    <div class="indentMe">
+    <br><h3 class="formHeader">OPTIONAL: (3.5) Sending on behalf of someone?</h3>
+    <div class="field memberInfoBlock">
       <div class="field">
         <b><%= f.label :behalf_of_name, "Name" %></b>
         <%= f.text_field :behalf_of_name %>
@@ -73,10 +89,12 @@
       </div>
     </div>
   <% end %>
-
-  <h3>Step Four: Save and Preview Email</h3>
-  <h4 style='color: red;'>Email CANNOT be edited after it is saved!</h4>
-  <div class="actions">
-    <%= f.submit "Save and Preview Email", { disabled: true, id: 'email_preview_submit_button' } %>
+<br>
+  <h3 class="formHeader">(4) Save and Preview Email</h3>
+  <div class="field memberInfoBlock">
+    <div class="actions">
+      <%= f.submit "Save and Preview Email", { disabled: true, id: 'email_preview_submit_button' } %>
+    </div>
   </div>
 <% end %>
+<br>

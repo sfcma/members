@@ -3,6 +3,7 @@ class EmailsController < ApplicationController
   before_action :authenticate_user!
 
   include PerformanceSetsHelper
+  include EmailsHelper
 
   # GET /emails
   # GET /emails.json
@@ -22,7 +23,7 @@ class EmailsController < ApplicationController
   end
 
   def edit
-    @performance_sets = PerformanceSet.emailable
+    @performance_sets = emailable_performance_sets
     @statuses_for_email = Email.statuses_for_emails
     @instruments = []
     unless @email.sent_at.nil?
@@ -32,7 +33,7 @@ class EmailsController < ApplicationController
 
   # GET /emails/new
   def new
-    @performance_sets = PerformanceSet.emailable
+    @performance_sets = emailable_performance_sets
     @statuses_for_email = Email.statuses_for_emails
     @instruments = []
 
@@ -42,7 +43,7 @@ class EmailsController < ApplicationController
   # POST /emails
   # POST /emails.json
   def create
-    @performance_sets = PerformanceSet.emailable
+    @performance_sets = emailable_performance_sets
     @statuses_for_email = Email.statuses_for_emails
     @instruments = []
     @email = Email.new(email_params)
