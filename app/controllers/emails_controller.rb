@@ -50,7 +50,7 @@ class EmailsController < ApplicationController
 
     respond_to do |format|
       if @email.save
-        format.html { redirect_to @email, notice: 'Email was successfully created.' }
+        format.html { redirect_to @email }
         format.json { render :show, status: :created, location: @email }
       else
         format.html { render :new }
@@ -66,7 +66,7 @@ class EmailsController < ApplicationController
     @statuses_for_email = Email.statuses_for_emails
     respond_to do |format|
       if @email.update(email_params)
-        format.html { redirect_to @email, notice: 'Email successfully created – not yet sent.' }
+        format.html { redirect_to @email, notice: 'Email successfully updated – not yet sent.' }
         format.json { render :show, status: :ok, location: @email }
       else
         format.html { render :edit }
