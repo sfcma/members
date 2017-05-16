@@ -23,6 +23,12 @@ body {
 body.top-anonymous {
   background: $button-hover-blue;
 
+  div.logo-anonymous {
+    width: 100%;
+    text-align: center;
+    height: 162px;
+  }
+
   h1.h1-anonymous {
     font-size: 1.2em;
     text-align: center;
@@ -89,10 +95,14 @@ html {
 
 h1 {
   background: $header-green;
-  color: #ddd;
+  color: white;
   margin-top: 0;
   margin-bottom: 0;
-  padding: 25px;
+  padding-left: 25px;
+  i {
+    display: inline-block;
+    vertical-align: 120%;
+  }
 }
 
 div.pageHeader {

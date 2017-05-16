@@ -9,7 +9,9 @@
   </head>
 
   <body class="top-anonymous">
-    <h1 class="h1-anonymous">Civic Symphony Association <br>of<br>San Francisco</h1>
+    <div class="logo-anonymous">
+      <%= image_tag "SFCMA_Mark_White.png", height: 100 %>
+    </div>
     <% flash.each do |key, value| %>
       <div class="alert alert-<%= key %>">
         <a href="#" data-dismiss="alert" class="close">×</a>
