@@ -5,8 +5,14 @@ class PerformanceSetInstrumentsController < ApplicationController
   # GET /performance_set_instruments
   # GET /performance_set_instruments.json
   def index
+    if params[:include_conductor] == "true"
+      include_conductor = true
+    else
+      include_conductor = false
+    end
+    include_conductor = include_conductor ? nil : 'and instrument <> "conductor"'
     if params[:performance_set_id]
-      @performance_set_instruments = PerformanceSetInstrument.where(performance_set_id: params[:performance_set_id].to_i)
+      @performance_set_instruments = PerformanceSetInstrument.where("performance_set_id = ? #{include_conductor}", params[:performance_set_id].to_i)
       respond_to do |format|
         format.json { render json: @performance_set_instruments, status: :ok }
       end
@@ -83,7 +89,8 @@ class PerformanceSetInstrumentsController < ApplicationController
     params.require(:performance_set_instrument).permit(
       :performance_set_id,
       :instrument,
-      :limit
+      :limit,
+      :include_conductor
     )
   end
 end

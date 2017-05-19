@@ -336,12 +336,12 @@ var loadStuff = function() {
 
   // For MemberSet#new page
   $('.bigForm #member_set_performance_set_id').on('change', function() {
-    setInstrumentsForSelection('#member_set\\[new_performance_set_instrument_id\\]');
+    setInstrumentsForSelection('#member_set\\[new_performance_set_instrument_id\\]', null, false);
   });
 
   // For Member#signup page
   $('.bigForm #member_set_performance_set_id').on('change', function() {
-    setInstrumentsForSelection('#member_set\\[new_performance_set_instrument_id\\]');
+    setInstrumentsForSelection('#member_set\\[new_performance_set_instrument_id\\]', null, false);
   });
 
   // For member signup page
@@ -358,7 +358,7 @@ var loadStuff = function() {
 
   // For Emails page
   $('#emailForm #member_set_performance_set_id').on('change', function() {
-    setInstrumentsForSelection('#emailMemberInstrumentSelector');
+    setInstrumentsForSelection('#emailMemberInstrumentSelector', null, true);
   });
 
   // Get email recipients
@@ -419,11 +419,11 @@ function attachAC(id) {
   });
 }
 
-function setInstrumentsForSelection(instrumentSelectorId, functionToCall) {
+function setInstrumentsForSelection(instrumentSelectorId, functionToCall, includeConductor) {
   var rehearsalSel = $(instrumentSelectorId);
   var newOptions = "";
   var performanceSetId = $('#member_set_performance_set_id').val();
-  $.get('../../performance_set_instruments/?performance_set_id=' + performanceSetId).then(function(response) {
+  $.get('../../performance_set_instruments/?performance_set_id=' + performanceSetId + '&include_conductor=' + includeConductor).then(function(response) {
     $.each(response, function(instrument) {
       var inst = response[instrument].instrument;
       newOptions += '<option value="' + response[instrument].instrument.toLowerCase() + '">' + inst.toLowerCase() + '</option>';
