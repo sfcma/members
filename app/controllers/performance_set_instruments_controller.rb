@@ -10,7 +10,7 @@ class PerformanceSetInstrumentsController < ApplicationController
     else
       include_conductor = false
     end
-    include_conductor = include_conductor ? nil : 'and instrument <> "conductor"'
+    include_conductor = include_conductor ? nil : "and instrument <> 'conductor'"
     if params[:performance_set_id]
       @performance_set_instruments = PerformanceSetInstrument.where("performance_set_id = ? #{include_conductor}", params[:performance_set_id].to_i)
       respond_to do |format|
