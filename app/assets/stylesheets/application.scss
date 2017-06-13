@@ -72,6 +72,10 @@ body.top-anonymous {
   }
 }
 
+.clearOut {
+  visibility: hidden;
+}
+
 .performance_set_opt_in_message {
   margin-top: 25px !important;
   background: #eeeecc;
@@ -587,6 +591,23 @@ div {
   }
   input[type=submit] {
     margin-top: 25px;
+  }
+}
+
+.bigFormOverlay {
+  position: absolute;
+  background: #cceeff;
+  width: 50%;
+  margin: auto;
+  font-size: 18px;
+  padding-top: 20px;
+
+  .optInAnswer {
+    font-size: 28px;
+    display: inline-block;
+    margin: 25px;
+    padding: 10px;
+    background: $secondary-header-green;
   }
 }
 

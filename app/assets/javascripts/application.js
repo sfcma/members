@@ -370,6 +370,12 @@ var loadStuff = function() {
     width: "300px"
   });
 
+  // For opt in overlay
+  $('#optInYes').on('click', function() {
+    $('#bigFormOverlay').hide();
+    $('.clearOut').removeClass('clearOut');
+  })
+
   if (typeof(isNew) !== "undefined") {
     $('a[id^=removeMemberSet]').hide();
     $('a[id^=removeMemberInstrument]').hide();
