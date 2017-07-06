@@ -18,7 +18,11 @@
 
     <div class="field emailFilter" id="emailForm">
       <%= f.label :performance_set_id, "Performance Set" %>
-      <%= f.collection_select :performance_set_id, @performance_sets, :id, :extended_name, { prompt: true, selected: @performance_set_id }, { id: 'member_set_performance_set_id' } %>
+      <% if action_name == 'new' %>
+        <%= f.collection_select :performance_set_id, @performance_sets, :id, :extended_name, { prompt: true, selected: @performance_set_id }, { id: 'member_set_performance_set_id' } %>
+      <% else %>
+        <%= f.collection_select :performance_set_id, @performance_sets, :id, :extended_name, { prompt: true }, { id: 'member_set_performance_set_id' } %>
+      <% end %>
     </div>
 
     <div class="field emailFilter">
@@ -26,7 +30,7 @@
       <%= f.select :status, @statuses_for_email, { prompt: true }, { id: 'emailMemberStatusSelector' } %>
     </div>
 
-    <% unless action_name == 'new' %>
+    <% if action_name != 'new' %>
       <script>
         var next = function() {
           var instrumentAr = JSON.parse('<%= JSON.parse(@email.instruments).compact.reject!(&:empty?).to_s.html_safe %>');
@@ -36,7 +40,17 @@
           $('#emailMemberInstrumentSelector').trigger('chosen:updated');
           updateEmailRecipients();
         }
-
+        $(document).on('ready', function() {
+          setInstrumentsForSelection('#emailMemberInstrumentSelector', next, true);
+        });
+      </script>
+    <% end %>
+    <% if params[:performance_set_id].to_i > 0 %>
+      <script>
+        var next = function() {
+          $('#emailMemberInstrumentSelector').trigger('chosen:updated');
+          updateEmailRecipients();
+        }
         $(document).on('ready', function() {
           setInstrumentsForSelection('#emailMemberInstrumentSelector', next, true);
         });
