@@ -34,9 +34,11 @@ class EmailsController < ApplicationController
   # GET /emails/new
   def new
     @performance_sets = emailable_performance_sets
+    if params[:performance_set_id].to_i > 0
+      @performance_set_id = params[:performance_set_id].to_i
+    end
     @statuses_for_email = Email.statuses_for_emails
     @instruments = []
-
     @email = Email.new
   end
 

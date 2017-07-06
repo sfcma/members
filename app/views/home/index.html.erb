@@ -5,7 +5,8 @@
     <div class="setBlock">
       <h3><%= link_to ps.extended_name, roster_performance_set_path(ps) %></h3>
       <%= link_to "Roster", roster_performance_set_path(ps) %><br>
-      <%= link_to "Absences", absences_path(set: ps.id) %>
+      <%= link_to "Absences", absences_path(set: ps.id) %><br>
+      <%= link_to "Send Email", new_email_path(performance_set_id: ps.id) %>
     </div>
   <% end %><br>
 

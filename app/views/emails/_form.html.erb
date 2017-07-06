@@ -18,7 +18,7 @@
 
     <div class="field emailFilter" id="emailForm">
       <%= f.label :performance_set_id, "Performance Set" %>
-      <%= f.collection_select :performance_set_id, @performance_sets, :id, :extended_name, { prompt: true }, { id: 'member_set_performance_set_id' } %>
+      <%= f.collection_select :performance_set_id, @performance_sets, :id, :extended_name, { prompt: true, selected: @performance_set_id }, { id: 'member_set_performance_set_id' } %>
     </div>
 
     <div class="field emailFilter">
