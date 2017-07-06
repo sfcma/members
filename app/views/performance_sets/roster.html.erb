@@ -15,7 +15,7 @@
 <br>
 Total members listed in roster: <%= @instrument_groups.values.flatten.count %>
 
-<% @instrument_groups.keys.sort.each do |k, i| %>
+<% @instrument_groups.keys.each do |k, i| %>
   <% j = 0 %>
   <h4><%= k.capitalize.pluralize %> (<%= (@instrument_groups[k].count) %>)</h4>
   <% @instrument_groups[k].each do |ms| %>

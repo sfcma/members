@@ -382,6 +382,7 @@ var loadStuff = function() {
   }
 };
 
+// also in rails, but lowercased and with V1 and V2 broken out
 var instruments =
   [ "Piccolo",
     "Flute",
@@ -402,11 +403,12 @@ var instruments =
     "Timpani",
     "Percussion",
     "Piano",
+    "Harp",
     "Violin",
     "Viola",
     "Cello",
     "String Bass"
-  ]
+  ];
 
 function attachAC(id) {
   $(id).autoComplete({

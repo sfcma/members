@@ -1,4 +1,6 @@
+require 'instruments'
 module PerformanceSetsHelper
+  include Instruments
 
   def organize_members_by_instrument(performance_set, member_sets)
     @instrument_groups = {}
@@ -12,6 +14,6 @@ module PerformanceSetsHelper
       @instrument_groups[instrument] << ms
     end
 
-    @instrument_groups
+    @instrument_groups.sort_by { |e, v| Instruments.instruments.index(e) || Instruments.instruments.length }.to_h
   end
 end
