@@ -1,24 +1,19 @@
 
 <% if user_signed_in? %>
+  <h2>Active Sets</h2><br>
+  <% PerformanceSet.now_or_future.each do |ps| %>
+    <div class="setBlock">
+      <h3><%= link_to ps.extended_name, roster_performance_set_path(ps) %></h3>
+      <%= link_to "Roster", roster_performance_set_path(ps) %><br>
+      <%= link_to "Absences", absences_path(set: ps.id) %>
+    </div>
+  <% end %><br>
+
+
   <b>Members</b>
   <br><br>
   <%= link_to 'Add New Member', new_member_path %><br>
   <%= link_to 'View Member List', members_path %>
-
-  <br><br>
-  <b>Sets</b>
-  <br><br>
-  Current Set Rosters: <br>
-  <% PerformanceSet.now_or_future.each do |ps| %>
-    <b><%= ps.extended_name %></b> —
-    <%= link_to "Confirmed Members Only", roster_performance_set_path(ps) %> —
-    <%= link_to "All Members", roster_performance_set_path(id: ps.id, 'all': "true") %>
-    <% if current_user.global_admin? %>
-      — <%= link_to "Email List: All Members", email_roster_performance_set_path(id: ps.id) %>
-    <% end %><br>
-  <% end %><br>
-  <%= link_to 'Add New Performance Set', new_performance_set_path %><br>
-  <%= link_to 'View Performance Set List', performance_sets_path %>
 
   <br><br>
   <b>Absences</b>
@@ -27,18 +22,22 @@
   <%= link_to 'Record new Absence', new_absence_path %>
 
   <br><br>
+  <b>Emails <sup style='color: red'>BETA</sup></b>
+  <br><br>
+  <%= link_to 'Send New Email', new_email_path %><br>
+  <%= link_to 'View Emails', emails_path %>
+
+  <br><br>
+  <b>Performance Sets</b>
+  <br><br>
+  <%= link_to 'Add New Performance Set', new_performance_set_path %><br>
+  <%= link_to 'View Performance Set List', performance_sets_path %>
+
+  <br><br>
   <b>Ensembles</b>
   <br><br>
   <%= link_to 'View Ensemble List', ensembles_path %><br>
   <%= link_to 'Performance Set Rehearsal Dates', performance_set_dates_path %>
-
-  <br><br>
-
-  <b>Emails <sup style='color: red'>BETA</sup></b>
-  <br><br>
-  <%= link_to 'Send New Email', new_email_path %><br>
-  <%= link_to 'View Emails', emails_path %><br>
-
 
   <% if current_user.global_admin? %>
     <br><br>

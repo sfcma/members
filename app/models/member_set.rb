@@ -28,6 +28,8 @@ class MemberSet < ApplicationRecord
       ['Opted in for this set', 'Playing']
     when 2    # any that are or might be playing
       ['Interested in playing this set, unconfirmed', 'Playing', 'Subbing', 'Opted in for this set']
+    when 3    # any at all
+      statuses.keys.map(&:to_s).map(&:capitalize)
     else
       throw 'Unexpected email status id'
     end

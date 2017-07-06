@@ -285,9 +285,24 @@ var loadStuff = function() {
     window.location.href = location.protocol + '//' + window.location.hostname + (location.port ? ':'+location.port: '') + '/absences?set=' + e.target.value;
   });
 
+  $('#memberEmailStatusesAbsenceSelector').on('change', function(e) {
+    var perfSetId = location.href.split('set=')[1].split('&')[0];
+    if (perfSetId) {
+      window.location.href = location.protocol + '//' + window.location.hostname + (location.port ? ':'+location.port: '') + '/absences?set=' + perfSetId + '&e_status=' + e.target.value;
+    }
+  });
+
   // PerformanceSetDates#index
   $('#setSelectorPerfSetDates').on('change', function(e) {
     window.location.href = location.protocol + '//' + window.location.hostname + (location.port ? ':'+location.port: '') + '/performance_set_dates?set=' + e.target.value;
+  });
+
+  // PerformanceSet#Roster
+  $('#memberEmailStatusesRosterSelector').on('change', function(e) {
+    var perfSetId = location.href.split('sets/')[1].split('/')[0];
+    if (perfSetId) {
+      window.location.href = location.protocol + '//' + window.location.hostname + (location.port ? ':'+location.port: '') + '/performance_sets/' + Number(perfSetId) + '/roster?e_status=' + e.target.value;
+    }
   });
 
 

@@ -1,15 +1,10 @@
 <div class='pageHeader'><h2>Absences</h2> &emsp; <%= link_to 'New Absence', new_absence_path, class: 'button' %></div>
 
 <div class='listDescription'>
-  <%= select_tag :sets, options_for_select(@performance_sets, selected: @performance_set), id: 'setSelectorAbsence' %>
+  Performance Set: <%= select_tag :sets, options_for_select(@performance_sets, selected: @performance_set), id: 'setSelectorAbsence' %>
   &nbsp;&emsp;&nbsp;&middot;&nbsp;&emsp;&nbsp;
-  <% if @showing_all %>
-    Showing All Members Interested in <%= @performance_sets[@performance_set.to_i][0] %>&nbsp;&emsp;&nbsp;&middot;&nbsp;&emsp;&nbsp;
-    <b><%= link_to "Show only confirmed members", absences_path(:set => @performance_set_id) %></b>
-  <% else %>
-    Showing Only Confirmed Playing Members in  <%= @performance_sets[@performance_set.to_i][0] %>&nbsp;&emsp;&nbsp;&middot;&nbsp;&emsp;&nbsp;
-    <b><%= link_to "Show All Members", absences_path(:all => "true", :set => @performance_set_id) %></b>
-  <% end %>
+
+  Showing these members: <%= select_tag :member_email_statuses, options_for_select(@member_email_statuses, selected: @email_status), id: 'memberEmailStatusesAbsenceSelector' %>
 </div>
 
 <% if @performance_set %>

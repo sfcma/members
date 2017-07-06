@@ -89,13 +89,10 @@ class PerformanceSetsController < ApplicationController
   end
 
   def roster
-    if params[:all]
-      @member_sets = MemberSet.includes(:member).where(performance_set_id: @performance_set.id).to_a
-      @showing_all = true
-    else
-      @member_sets = MemberSet.includes(:member).where(performance_set_id: @performance_set.id, set_status: 'Playing').to_a
-      @showing_all = false
-    end
+    @member_email_statuses = Email.statuses_for_general_use
+    @email_status = params[:e_status] || 2
+    @email_status_name = @member_email_statuses[@email_status]
+    @member_sets = MemberSet.filtered_by_criteria(@performance_set.id, @email_status)
   end
 
   def email_roster

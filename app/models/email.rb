@@ -16,4 +16,8 @@ class Email < ApplicationRecord
                             "Confirmed Playing and Opted-In",
                             "Confirmed Playing, Opted-In, Interested, and Subbing"]
 
+  def self.statuses_for_general_use
+    statuses_for_emails.merge("All, including those who are not playing": 3)
+  end
+
 end

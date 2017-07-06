@@ -8,25 +8,24 @@ class AbsencesController < ApplicationController
     unless current_user
       redirect_to new_absence_url
     end
+
+    @member_email_statuses = Email.statuses_for_general_use
+    @email_status = params[:e_status] || 2
+    @email_status_name = @member_email_statuses[@email_status]
+
+
     @performance_sets = PerformanceSet.all.map { |ps| [ps.extended_name, ps.id] }
     @performance_sets = @performance_sets.unshift(['All Sets', 0])
 
     if params[:set]
       if PerformanceSet.where('id = ?', params[:set]).count > 0
+        @member_sets = MemberSet.filtered_by_criteria(params[:set].to_i, @email_status)
         @perf_set = PerformanceSet.where('id = ?', params[:set]).first
         @performance_set_id = @perf_set.id
-        @members = @perf_set.members
-        if params[:all]
-          @member_sets = @perf_set.member_sets.where('member_id != 0')
-          @showing_all = true
-        else
-          @member_sets = @perf_set.member_sets.where("member_id != 0 AND set_status = 'Playing'")
-          @showing_all = false
-        end
 
         @set_rehearsal_dates = @perf_set.performance_set_dates
 
-        @performance_set = params[:set]
+        @performance_set = params[:set].to_i
         @performance_set_label = @performance_set
       end
     end

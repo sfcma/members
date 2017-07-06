@@ -2,18 +2,11 @@
 <div class='pageHeader'><h2>Roster for <%= @performance_set.extended_name %></h2></div>
 
 <div class='listDescription'>
-
-<% if @showing_all %>
-  Showing All Members Interested in <%= @performance_set.extended_name %>&nbsp;&emsp;&nbsp;&middot;&nbsp;&emsp;&nbsp;
-  <b><%= link_to "Show only confirmed members", roster_performance_set_path %></b>
-<% else %>
-  Showing Only Confirmed Playing Members in  <%= @performance_set.extended_name %>&nbsp;&emsp;&nbsp;&middot;&nbsp;&emsp;&nbsp;
-  <b><%= link_to "Show All Members", roster_performance_set_path(:all => "true") %></b>
-<% end %>
-
+Showing these members: <%= select_tag :member_email_statuses, options_for_select(@member_email_statuses, selected: @email_status), id: 'memberEmailStatusesRosterSelector' %>
 </div>
 <br>
-Total members listed in roster: <%= @instrument_groups.values.flatten.count %>
+
+<b><%= @instrument_groups.values.flatten.count %> Members Shown</b>
 
 <% @instrument_groups.keys.each do |k, i| %>
   <% j = 0 %>
