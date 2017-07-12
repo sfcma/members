@@ -36,6 +36,17 @@ class Member < ApplicationRecord
     MemberSet.filtered_by_criteria(performance_set_id, status_id, instruments).map(&:member)
   end
 
+  def self.all_by_instrument(instruments)
+    MemberSet.all_sets_by_instrument(instruments).map(&:member).compact.uniq
+  end
+
+  def self.all_members_by_instrument(instruments)
+    if instruments.include?('violin 1') || instruments.include?('violin 2')
+      raise "Violin 1 and Violin 2 cannot be queried for this method"
+    end
+    MemberInstrument.where(instrument: instruments).map(&:member).compact.uniq
+  end
+
   def to_s
     return program_name if program_name.present?
     return first_name + " " + last_name

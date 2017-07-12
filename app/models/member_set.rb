@@ -70,4 +70,27 @@ class MemberSet < ApplicationRecord
     end
   end
 
+  def self.all_sets_by_instrument(instruments)
+    use_variant_instruments = false
+    if (instruments.include?('violin 1') || instruments.include?('violin 2')) && !instruments.include?('violin')
+      use_variant_instruments = true
+    end
+    if use_variant_instruments
+      actual_member_set_ids =
+        SetMemberInstrument
+        .includes(:member_instrument)
+        .where('variant in (?) OR member_instruments.instrument in (?)', instruments, instruments)
+        .references(:member_instruments)
+        .map(&:member_set_id)
+    else
+      actual_member_set_ids =
+        SetMemberInstrument
+        .includes(:member_instrument)
+        .where('member_instruments.instrument' => instruments)
+        .references(:member_instruments)
+        .map(&:member_set_id)
+    end
+    MemberSet.where(id: actual_member_set_ids)
+  end
+
 end
