@@ -1,6 +1,13 @@
 class MemberSet < ApplicationRecord
   audited associated_with: :member
   acts_as_paranoid
+  enum set_status_id: [ :interested,
+                        :rehearsing,
+                        :performing,
+                        :stopped_by_self,
+                        :stopped_by_us,
+                        :substituting,
+                        :uninterested ]
 
   has_many :set_member_instruments, dependent: :destroy
   belongs_to :member
@@ -15,10 +22,6 @@ class MemberSet < ApplicationRecord
                   :subbing,
                   'Not Interested in this set',
                   'Opted in for this set']
-
-  # TODO
-  # :interested, :playing, :stopped, :prevented, :subbing, :uninterested, :optedin
-  # then we can do MemberSet.playing, etc
 
   def self.email_status_to_status(email_status_id)
     case email_status_id.to_i
