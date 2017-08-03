@@ -87,6 +87,7 @@ class EmailsController < ApplicationController
   end
 
   def send_email
+    Rails.logger.info "Sending email"
     unless @email.sent_at.nil?
       respond_to do |format|
         format.html { redirect_to email_url(@email), notice: 'Cannot re-send email already sent.' }
@@ -106,6 +107,7 @@ class EmailsController < ApplicationController
 
     members.each do |member|
       begin
+        Rails.logger.info "Sending email #{@email.id} to #{member.id}"
         member_insts = MemberInstrument.where(member_id: member.id)
         smi = SetMemberInstrument.where(member_instrument_id: member_insts.map(&:id), member_set_id: MemberSet.where(member_id: member.id, performance_set_id: @email.performance_set.id))
         if member.email_1.present?
