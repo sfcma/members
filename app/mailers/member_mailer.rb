@@ -45,10 +45,20 @@ class MemberMailer < ApplicationMailer
     mail(to: to_email,
          from: 'SF Civic Music <no-reply@mail.sfcivicmusic.org>',
          subject: "New Member interested in joining the orchestra",
-         body: "A new member has signed up! <br><br>
-                Name: #{member.first_name} #{member.last_name}<br>
-                Introduction: #{member.introduction}<br><br>
+         body: "A new member has signed up!
+
+                Name: #{member.first_name} #{member.last_name}
+
+                Introduction: #{member.introduction}
+
                 View them at https://members.sfcivicsymphony.org/members/#{member.id}")
   end
 
+  def email_finished_email(to_email, email_title, recipient_count)
+    mail(to: to_email,
+         from: 'SFCMA Membership System <no-reply@mail.sfcivicmusic.org>',
+         subject: 'Email Sent Successfully',
+         body: "You email titled #{email_title} was sent to #{recipient_count} members successfully.")
+
+  end
 end
