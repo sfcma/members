@@ -16,4 +16,11 @@ module PerformanceSetsHelper
 
     @instrument_groups.sort_by { |e, v| Instruments.instruments.index(e) || Instruments.instruments.length }.to_h
   end
+
+  def setup_performance_set(performance_set)
+    performance_set.performance_set_instruments = Array.new(20, PerformanceSetInstrument.new)
+    performance_set.performance_set_dates = Array.new(10, PerformanceSetDate.new)
+    performance_set
+  end
+
 end

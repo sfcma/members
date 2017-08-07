@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170725031225) do
+ActiveRecord::Schema.define(version: 20170807050349) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -226,6 +226,12 @@ ActiveRecord::Schema.define(version: 20170725031225) do
     t.index ["password_archivable_type", "password_archivable_id"], name: "index_password_archivable"
   end
 
+  create_table "opt_in_messages", force: :cascade do |t|
+    t.string   "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "performance_pieces", force: :cascade do |t|
     t.integer  "performance_set_id"
     t.string   "title",              null: false
@@ -262,10 +268,13 @@ ActiveRecord::Schema.define(version: 20170725031225) do
 
   create_table "performance_set_instruments", force: :cascade do |t|
     t.integer  "performance_set_id"
-    t.string   "instrument",         null: false
+    t.string   "instrument",          null: false
     t.integer  "limit"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.boolean  "available_to_opt_in"
+    t.string   "opt_in_message_type"
+    t.decimal  "opt_in_message_id"
     t.index ["performance_set_id"], name: "index_performance_set_instruments_on_performance_set_id"
   end
 
@@ -273,12 +282,14 @@ ActiveRecord::Schema.define(version: 20170725031225) do
     t.integer  "ensemble_id"
     t.date     "start_date"
     t.date     "end_date"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
     t.string   "name"
     t.datetime "deleted_at"
     t.string   "description"
     t.text     "opt_in_message"
+    t.datetime "opt_in_start_date"
+    t.datetime "opt_in_end_date"
     t.index ["deleted_at"], name: "index_performance_sets_on_deleted_at"
     t.index ["ensemble_id"], name: "index_performance_sets_on_ensemble_id"
   end

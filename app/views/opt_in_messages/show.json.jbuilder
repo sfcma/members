@@ -1,0 +1,1 @@
+json.partial! "opt_in_messages/opt_in_message", opt_in_message: @opt_in_message

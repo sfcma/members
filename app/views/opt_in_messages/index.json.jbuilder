@@ -1,0 +1,1 @@
+json.array! @opt_in_messages, partial: 'opt_in_messages/opt_in_message', as: :opt_in_message

@@ -19,6 +19,7 @@ class PerformanceSetsController < ApplicationController
     unless current_user.global_admin?
       redirect_to performance_sets_url, notice: 'You do not have permissions to add performance sets' and return
     end
+    @opt_in_messages = OptInMessage.all
     @performance_set = PerformanceSet.new
     @ensembles = Ensemble.all
   end
@@ -28,6 +29,7 @@ class PerformanceSetsController < ApplicationController
     unless current_user.global_admin?
       redirect_to @performance_set, notice: 'You do not have permissions to edit performance sets' and return
     end
+    @opt_in_messages = OptInMessage.all
     @ensembles = Ensemble.all
   end
 
@@ -41,6 +43,7 @@ class PerformanceSetsController < ApplicationController
 
     # @performance_set.start_date = performance_set_params.start_date.to_time.to_i
     # @performance_set.end_date = performance_set_params.end_date.to_time.to_i
+    @opt_in_messages = OptInMessage.all
     @ensembles = Ensemble.all
     respond_to do |format|
       if @performance_set.save
@@ -59,6 +62,7 @@ class PerformanceSetsController < ApplicationController
     unless current_user.global_admin?
       redirect_to @performance_set, notice: 'You do not have permissions to edit performance sets' and return
     end
+    @opt_in_messages = OptInMessage.all
     @ensembles = Ensemble.all
     respond_to do |format|
       if @performance_set.update(performance_set_params)
@@ -118,7 +122,21 @@ class PerformanceSetsController < ApplicationController
       :description,
       :end_date,
       :name,
-      :opt_in_message
+      :opt_in_message,
+      performance_set_instruments_attributes: [
+        :id,
+        :performance_set_id,
+        :instrument,
+        :limit,
+        :available_to_opt_in,
+        :opt_in_message_type,
+        :opt_in_message_id
+      ],
+      performance_set_dates_attributes: [
+        :id,
+        :performance_set_id,
+        :date
+      ],
     )
   end
 end

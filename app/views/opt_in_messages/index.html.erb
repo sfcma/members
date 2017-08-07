@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Opt In Messages</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Message</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @opt_in_messages.each do |opt_in_message| %>
+      <tr>
+        <td><%= opt_in_message.message %></td>
+        <td><%= link_to 'Show', opt_in_message %></td>
+        <td><%= link_to 'Edit', edit_opt_in_message_path(opt_in_message) %></td>
+        <td><%= link_to 'Destroy', opt_in_message, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Opt In Message', new_opt_in_message_path %>

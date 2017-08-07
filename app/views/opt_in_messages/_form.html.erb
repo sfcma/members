@@ -1,0 +1,22 @@
+<%= form_for(opt_in_message) do |f| %>
+  <% if opt_in_message.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(opt_in_message.errors.count, "error") %> prohibited this opt_in_message from being saved:</h2>
+
+      <ul>
+      <% opt_in_message.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :message %>
+    <%= f.text_area :message, cols: 50, rows: 5 %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

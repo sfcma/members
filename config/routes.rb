@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :opt_in_messages
   resources :member_community_nights
   resources :community_nights
   resources :emails do

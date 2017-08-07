@@ -1,0 +1,2 @@
+module OptInMessagesHelper
+end

@@ -1,0 +1,2 @@
+class OptInMessage < ApplicationRecord
+end

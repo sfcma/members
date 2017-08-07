@@ -1,0 +1,9 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Message:</strong>
+  <%= @opt_in_message.message %>
+</p>
+
+<%= link_to 'Edit', edit_opt_in_message_path(@opt_in_message) %> |
+<%= link_to 'Back', opt_in_messages_path %>

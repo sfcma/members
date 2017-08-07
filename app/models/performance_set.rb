@@ -5,6 +5,8 @@ class PerformanceSet < ApplicationRecord
   has_many :performance_set_dates
   has_many :performance_set_instruments
 
+  accepts_nested_attributes_for :performance_set_dates, :performance_set_instruments
+
   # This maybe should be a has_and_belongs_to_many association
   has_many :members, through: :member_sets
   belongs_to :ensemble
