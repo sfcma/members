@@ -1,6 +1,9 @@
-<h1>Editing Performance Set Instrument</h1>
+<div class='pageHeader'><h2>Editing Performance Set Instrument</h2></div>
 
 <%= render 'form', performance_set_instrument: @performance_set_instrument %>
 
 <%= link_to 'Show', @performance_set_instrument %> |
-<%= link_to 'Back', performance_set_instruments_path %>
+<%= link_to 'Cancel', performance_set_instruments_path %>
+
+<br><br>
+<%= link_to 'Delete Rehearsal Instrument', @performance_set_instrument, method: :delete, data: { confirm: 'Are you sure you want to delete this performance set instrument?' } %>

@@ -30,18 +30,20 @@ class PerformanceSetInstrumentsController < ApplicationController
   def new
     @performance_sets = PerformanceSet.all
     @performance_set_instrument = PerformanceSetInstrument.new
+    @opt_in_messages = OptInMessage.all
   end
 
   # GET /performance_set_instruments/1/edit
   def edit
     @performance_sets = PerformanceSet.all
+    @opt_in_messages = OptInMessage.all
   end
 
   # POST /performance_set_instruments
   # POST /performance_set_instruments.json
   def create
     @performance_set_instrument = PerformanceSetInstrument.new(performance_set_instrument_params)
-
+    @opt_in_messages = OptInMessage.all
     respond_to do |format|
       if @performance_set_instrument.save
         format.html { redirect_to @performance_set_instrument, notice: 'Performance Set Instrument was successfully created.' }
@@ -56,6 +58,7 @@ class PerformanceSetInstrumentsController < ApplicationController
   # PATCH/PUT /performance_set_instruments/1
   # PATCH/PUT /performance_set_instruments/1.json
   def update
+    @opt_in_messages = OptInMessage.all
     respond_to do |format|
       if @performance_set_instrument.update(performance_set_instrument_params)
         format.html { redirect_to @performance_set_instrument, notice: 'Performance Set Instrument was successfully updated.' }
@@ -90,7 +93,9 @@ class PerformanceSetInstrumentsController < ApplicationController
       :performance_set_id,
       :instrument,
       :limit,
-      :include_conductor
+      :include_conductor,
+      :available_to_opt_in,
+      :opt_in_message_id
     )
   end
 end

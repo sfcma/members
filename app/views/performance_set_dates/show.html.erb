@@ -21,3 +21,5 @@ Absences</h2> &emsp; &emsp; <%= @performance_set_date.performance_set.name %> â€
 <br><br>
 <%= link_to 'Edit Rehearsal Date', edit_performance_set_date_path(@performance_set_date) %> |
 <%= link_to 'View All Rehearsal Dates', performance_set_dates_path %>
+<br><br>
+<%= link_to 'Delete Rehearsal Date', @performance_set_date, method: :delete, data: { confirm: 'Are you sure you want to delete this performance set date?' } %>

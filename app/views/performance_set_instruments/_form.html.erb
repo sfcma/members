@@ -26,6 +26,16 @@
     <%= f.text_field :limit %>
   </div>
 
+  <div class="field">
+    <%= f.label :available_to_opt_in, "Don't allow opt-ins on this instrument" %>
+    <%= f.check_box :available_to_opt_in %>
+  </div>
+
+  <div class="field">
+    <%= f.label :opt_in_message_id, "Which custom message should be displayed after the user presses 'submit'?" %>
+    <%= f.collection_select :opt_in_message_id, @opt_in_messages, :id, :title, { prompt: true } %>  <%= link_to "(See All)", opt_in_messages_path %>
+  </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>
