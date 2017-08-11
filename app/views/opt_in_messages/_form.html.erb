@@ -12,6 +12,11 @@
   <% end %>
 
   <div class="field">
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+  </div>
+
+  <div class="field">
     <%= f.label :message %>
     <%= f.text_area :message, cols: 50, rows: 5 %>
   </div>

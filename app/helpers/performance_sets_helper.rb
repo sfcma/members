@@ -18,8 +18,10 @@ module PerformanceSetsHelper
   end
 
   def setup_performance_set(performance_set)
-    performance_set.performance_set_instruments = Array.new(20, PerformanceSetInstrument.new)
-    performance_set.performance_set_dates = Array.new(10, PerformanceSetDate.new)
+    if performance_set.new_record?
+      performance_set.performance_set_instruments = Array.new(20, PerformanceSetInstrument.new)
+      performance_set.performance_set_dates = Array.new(10, PerformanceSetDate.new)
+    end
     performance_set
   end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170807050349) do
+ActiveRecord::Schema.define(version: 20170811062715) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -230,6 +230,7 @@ ActiveRecord::Schema.define(version: 20170807050349) do
     t.string   "message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "title"
   end
 
   create_table "performance_pieces", force: :cascade do |t|

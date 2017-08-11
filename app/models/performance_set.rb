@@ -5,7 +5,10 @@ class PerformanceSet < ApplicationRecord
   has_many :performance_set_dates
   has_many :performance_set_instruments
 
-  accepts_nested_attributes_for :performance_set_dates, :performance_set_instruments
+  accepts_nested_attributes_for :performance_set_dates,
+    :reject_if => proc { |att| att[:date].blank? }
+  accepts_nested_attributes_for :performance_set_instruments,
+    :reject_if => proc { |att| att[:instrument].blank? }
 
   # This maybe should be a has_and_belongs_to_many association
   has_many :members, through: :member_sets

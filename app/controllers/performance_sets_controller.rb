@@ -45,6 +45,7 @@ class PerformanceSetsController < ApplicationController
     # @performance_set.end_date = performance_set_params.end_date.to_time.to_i
     @opt_in_messages = OptInMessage.all
     @ensembles = Ensemble.all
+
     respond_to do |format|
       if @performance_set.save
         format.html { redirect_to @performance_set, notice: 'Performance set was successfully created.' }
@@ -121,6 +122,8 @@ class PerformanceSetsController < ApplicationController
       :start_date,
       :description,
       :end_date,
+      :opt_in_start_date,
+      :opt_in_end_date,
       :name,
       :opt_in_message,
       performance_set_instruments_attributes: [

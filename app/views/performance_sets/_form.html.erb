@@ -1,4 +1,3 @@
-<% return unless action_name == 'new' %>
 <%= form_for(setup_performance_set(performance_set)) do |f| %>
   <% if performance_set.errors.any? %>
     <div id="error_explanation">
@@ -54,43 +53,69 @@
   </div>
 
   <h3 class="formHeader">Rehearsal Dates</h3>
-  <%= f.fields_for :performance_set_dates do |psd_f| %>
-    <div class="field memberInfoBlock">
-      <div class="field">
-        <%= psd_f.label :date, "Rehearsal Date  (use date picker or in format YYYY-MM-DD)" %>
-        <%= date_field :performance_set_date, :date %>
-      </div>
-    </div>
-  <% end %>
+  <div class="field memberInfoBlock">
+    <% if @performance_set.new_record? %>
+      Use Date Picker or format YYYY-MM-DD.
+      <% i = 0 %>
+      <%= f.fields_for :performance_set_dates do |psd_f| %>
+        <div class="field">
+          <%= date_field "performance_set[performance_set_dates_attributes][#{i}]", :date %>
+        </div>
+        <% i += 1%>
+      <% end %>
+    <% else %>
+      <% if @performance_set.performance_set_dates.present? %>
+        <i>Click on a date to edit or delete it.</i>
+        <br />
+        <% @performance_set.performance_set_dates.each do |psd| %>
+          <%= link_to psd.date, edit_performance_set_date_path(psd) %>
+        <% end %>
+        <br /><br />
+      <% end %>
+      <i><%= link_to "Add new rehearsal date", new_performance_set_date_path %></i>
+    <% end %>
+  </div>
 
   <h3 class="formHeader">Instruments</h3>
-  <%= f.fields_for :performance_set_instruments do |psi_f| %>
+  <% if @performance_set.new_record? %>
+    <%= f.fields_for :performance_set_instruments do |psi_f| %>
 
+      <div class="field memberInfoBlock">
+        <div class="field inlineField" style='padding-right: 15px; border-right: 1px solid black;'>
+          <%= psi_f.label :instrument, "Instrument Name" %>
+          <%= psi_f.text_field :instrument %>
+        </div>
+
+        <div class="field inlineField" style='padding-right: 15px; border-right: 1px solid black;'>
+          <%= psi_f.label :limit, "Limit (0 for unlimited)" %>
+          <%= psi_f.text_field :limit, size: 5 %>
+        </div>
+
+        <div class="fiel inlineField" style='padding-right: 15px; border-right: 1px solid black;'>
+          <%= psi_f.label :available_to_opt_in, "Don't allow opt-ins on this instrument" %>
+          <%= psi_f.check_box :available_to_opt_in %>
+        </div>
+
+        <div class="field inlineField">
+          <%= psi_f.label :opt_in_message_id, "Which custom message should be displayed after the user presses 'submit'?" %>
+          <%= psi_f.collection_select :opt_in_message_id, @opt_in_messages, :id, :title, { prompt: true } %>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
     <div class="field memberInfoBlock">
-      <div class="field inlineField">
-        <%= psi_f.label :instrument, "Instrument Name" %>
-        <%= psi_f.text_field :instrument %>
-      </div>
-
-      <div class="field inlineField">
-        <%= psi_f.label :limit, "Limit (0 for unlimited)" %>
-        <%= psi_f.text_field :limit %>
-      </div>
-
-      <div class="fiel inlineField">
-        <%= psi_f.label :available_to_opt_in, "Don't allow opt-ins on this instrument" %>
-        <%= psi_f.check_box :available_to_opt_in %>
-      </div>
-  <%#
-      <div class="field inlineField">
-        <%= psi_f.label :opt_in_message_type, "(leave blank)" %>
-        <%# psi_f.text_field :opt_in_message_type
-      </div> %>
-
-      <div class="field inlineField">
-        <%= psi_f.label :opt_in_message_id, "Which custom message id should be displayed after the user presses 'submit'?" %>
-        <%= psi_f.collection_select :opt_in_message_id, @opt_in_messages, :id, :message, { prompt: true } %>
-      </div>
+      <% if @performance_set.performance_set_instruments.present? %>
+        <i>Click on an instrument to edit or delete it.</i><br />
+        <% @performance_set.performance_set_instruments.each do |psi| %>
+          <br />
+          <%= link_to psi.instrument, edit_performance_set_instrument_path(psi) %> ·
+          <%= psi.limit.present? ? "Limit #{psi.limit}" : "" %> ·
+          <%= psi.available_to_opt_in ? "Opt-In Unavailable" : "Opt-In Available" %> ·
+          <%= psi.opt_in_message_id ? OptInMessage.find(psi.opt_in_message_id).title : "No Custom Message" %>
+        <% end %>
+        <br /><br />
+      <% end %>
+      <i><%= link_to "Add new rehearsal instrument", new_performance_set_instrument_path %></i>
     </div>
   <% end %>
 

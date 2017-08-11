@@ -69,6 +69,6 @@ class OptInMessagesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def opt_in_message_params
-      params.require(:opt_in_message).permit(:message)
+      params.require(:opt_in_message).permit(:message, :title)
     end
 end
