@@ -25,7 +25,7 @@ class MemberSetsController < ApplicationController
     if !member
       respond_to do |format|
         Bugsnag.notify("Unable to find and opt-in member - email not found")
-        format.html { redirect_to new_member_set_url, notice: "That email address doesn't have a member attached to it!<br><br>Please enter the email address you gave us, or contact membership@sfcivicsymphony.org for help." }
+        format.html { redirect_to new_member_set_url, notice: "We were unable to find a member with that email address.<br><br>Please enter the email address you gave us, or contact membership@sfcivicsymphony.org for help.<br><br>If you have not played with us before, please fill out <a href='#{new_member_path}'>this form</a>." }
       end
     else
       @member_set.set_status = 'Opted in for this set'
@@ -36,6 +36,22 @@ class MemberSetsController < ApplicationController
         end
       else
         @performance_sets = PerformanceSet.now_or_future
+
+        psi = PerformanceSetInstrument.find_by(instrument: instrument.downcase, performance_set_id: msparams[:performance_set_id])
+        if psi
+          # THIS IS NAMED BACKWARDS
+          if psi.available_to_opt_in
+            respond_to do |format|
+              format.html { redirect_to new_member_set_url, notice: OptInMessage.find_by_id(psi.opt_in_message_id).message || "You are unable to opt in on this instrument. Contact your section leader or membership@sfcivicsymphony.org for assistance." }
+            end
+            return
+          end
+
+          opt_in_message = OptInMessage.find_by_id(psi.opt_in_message_id)
+          opt_in_message = opt_in_message.present? ? "#{opt_in_message.message}<br><br>" : "Thank you for submitting your interest in #{PerformanceSet.find_by_id(msparams[:performance_set_id]).extended_name}.<br><br>"
+        else
+          return_failure
+        end
 
         if @member_set.save
           @member_instrument = MemberInstrument.where(member_id: member.id, instrument: instrument.downcase).first_or_initialize do |mi|
@@ -50,9 +66,9 @@ class MemberSetsController < ApplicationController
               respond_to do |format|
                 if @member_set.save
                   if !current_user
-                    format.html { redirect_to new_member_set_url, notice: "Thank you for submitting your interest in #{@member_set.performance_set.extended_name}.<br><br>Ready to make your donation for this set? You can do that now via our <a href='http://sfcivicmusic.org/give-now'>online donations page</a>.<br><br>Need to report an absence? You can do that now via <a href='http://missing.sfcivicsymphony.org'>missing.sfcivicsymphony.org</a>.".html_safe }
+                    format.html { redirect_to new_member_set_url, notice: "#{opt_in_message}Ready to make your donation for this set? You can do that now via our <a href='http://sfcivicmusic.org/give-now'>online donations page</a>.<br><br>Need to report an absence? You can do that now via <a href='http://missing.sfcivicsymphony.org'>missing.sfcivicsymphony.org</a>.".html_safe }
                   else
-                    format.html { redirect_to new_member_set_url, notice: "Thank you for submitting your interest in #{@member_set.performance_set.extended_name}.<br><br>Ready to make your donation for this set? You can do that now via our <a href='http://sfcivicmusic.org/give-now'>online donations page</a>.<br><br>Need to report an absence? You can do that now via <a href='http://missing.sfcivicsymphony.org'>missing.sfcivicsymphony.org</a>.".html_safe }
+                    format.html { redirect_to new_member_set_url, notice: "#{opt_in_message}Ready to make your donation for this set? You can do that now via our <a href='http://sfcivicmusic.org/give-now'>online donations page</a>.<br><br>Need to report an absence? You can do that now via <a href='http://missing.sfcivicsymphony.org'>missing.sfcivicsymphony.org</a>.".html_safe }
                     format.json { render :show, status: :created, location: @member_set }
                   end
                 else

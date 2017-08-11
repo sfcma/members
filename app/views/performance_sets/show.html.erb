@@ -1,3 +1,10 @@
+      <div class='pageHeader'><h2><%= link_to @performance_set.extended_name, roster_performance_set_path(@performance_set) %></h2></div>
+
+      <br>
+      <h3>Links: <%= link_to "Roster", roster_performance_set_path(@performance_set) %> &emsp;
+      <%= link_to "Absences", absences_path(set: @performance_set.id) %> &emsp;
+      <%= link_to "Send Email", new_email_path(performance_set_id: @performance_set.id) %></h3>
+
 <p>
   <strong>Ensemble:</strong>
   <%= Ensemble.find(@performance_set.ensemble_id).name %>
@@ -29,7 +36,7 @@
 </p>
 
 <p>
-  <strong>Dates:</strong>
+  <strong>Rehearsal Dates:</strong>
   <% @performance_set.performance_set_dates.each do |psd| %>
     <%= link_to psd.date, edit_performance_set_date_path(psd) %>
   <% end %>
@@ -37,9 +44,18 @@
 
 <p>
   <strong>Instruments:</strong>
-  <% @performance_set.performance_set_instruments.each do |psi| %>
-    <%= link_to psi.instrument, edit_performance_set_instrument_path(psi) %>
-  <% end %>
+  <div class="field memberInfoBlock">
+    <% @performance_set.performance_set_instruments.each do |psi| %>
+
+        <%= link_to psi.instrument, edit_performance_set_instrument_path(psi), { target: "_new" } %> ·
+        <%= psi.limit.present? ? "Limit #{psi.limit}" : "" %> ·
+        <%= psi.available_to_opt_in ? "Opt-In Unavailable" : "Opt-In Available" %> ·
+        Message: <%= psi.opt_in_message_id ? link_to(OptInMessage.find(psi.opt_in_message_id).title, OptInMessage.find(psi.opt_in_message_id)).html_safe : "No Custom Message" %>
+        <br />
+    <% end %>
+    <br />
+    <i><%= link_to "Add new rehearsal instrument", new_performance_set_instrument_path, { target: "_new" } %></i>
+  </div>
 </p>
 
 <%= link_to 'Edit', edit_performance_set_path(@performance_set) %>
