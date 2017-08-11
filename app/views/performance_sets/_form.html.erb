@@ -78,6 +78,7 @@
 
   <h3 class="formHeader">Instruments</h3>
   <% if @performance_set.new_record? %>
+    <% psin = 0 %>
     <%= f.fields_for :performance_set_instruments do |psi_f| %>
 
       <div class="field memberInfoBlock">
@@ -85,6 +86,7 @@
           <%= psi_f.label :instrument, "Instrument Name" %>
           <%= psi_f.text_field :instrument %>
         </div>
+        <script>$(document).on('ready', function() { attachAC("#performance_set_performance_set_instruments_attributes_<%=psin%>_instrument", true); });</script>
 
         <div class="field inlineField" style='padding-right: 15px; border-right: 1px solid black;'>
           <%= psi_f.label :limit, "Limit (0 for unlimited)" %>
@@ -101,6 +103,7 @@
           <%= psi_f.collection_select :opt_in_message_id, @opt_in_messages, :id, :title, { prompt: true } %>
         </div>
       </div>
+      <% psin += 1 %>
     <% end %>
   <% else %>
     <div class="field memberInfoBlock">

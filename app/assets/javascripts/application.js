@@ -47,7 +47,7 @@ var loadStuff = function() {
     div += "&emsp;<i><a style='display: none;' href='#' class='removeLink' id='removeMemberInstrument" + instCount + "'>Remove</a><b id='instErr_" + instCount + "' class='instErr'></b></i></div>";
 
     $('#memberInstrumentsBlock').append(div)
-    attachAC('#' + $(div).children().first('input').attr('id'));
+    attachAC('#' + $(div).children().first('input').attr('id'), false);
     instCount++;
     return false;
   });
@@ -425,12 +425,14 @@ var instruments =
     "String Bass"
   ];
 
-function attachAC(id) {
+var instrumentsWithSplitViolins = instruments.concat(["Violin 1", "Violin 2"]).filter(function(e) { console.log(e); return e !== 'Violin' });
+
+function attachAC(id, splitViolins) {
   $(id).autoComplete({
     minChars: 1,
     source: function(term, suggest) {
       term = term.toLowerCase();
-      var choices = instruments;
+      var choices = splitViolins ? instrumentsWithSplitViolins : instruments;
       var matches = [];
       for (i=0; i<choices.length; i++) {
         if (~choices[i].toLowerCase().indexOf(term)) {

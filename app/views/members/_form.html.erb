@@ -189,7 +189,7 @@
               <div class="field">
                 <%= instrument_f.text_field :instrument, disabled: true, class: 'savedInstrument' %>&emsp;<i><a href='#' class='removeLink' id='removeMemberInstrument<%=i%>'>Remove</a>
                 <b id='instErr_<%=i%>' class="instErr"></b></i>
-                <script>$(document).on('ready', function() { attachAC("#member_member_instruments_attributes_<%=i%>_instrument"); });</script>
+                <script>$(document).on('ready', function() { attachAC("#member_member_instruments_attributes_<%=i%>_instrument", false); });</script>
               </div>
             <% end %>
             <% i += 1; %>
