@@ -561,5 +561,4 @@ function updateEmailRecipients() {
   });
 }
 
-
 $(document).ready(loadStuff);
