@@ -36,7 +36,7 @@ class EmailJob
         end
 
         if member.email_1.present?
-          MemberMailer.standard_member_email(member, email.email_title, email.email_body, current_user, email.id, member.id, email.performance_set&.extended_name, email.instruments, email.status, smi, ensemble_id).deliver_now
+          MemberMailer.standard_member_email(member, email.email_title, email.email_body, current_user, email.id, member.id, email.performance_set && email.performance_set.extended_name, email.instruments, email.status, smi, ensemble_id).deliver_now
         else
           Bugsnag.notify("No email address available for member: #{member.id}")
         end
