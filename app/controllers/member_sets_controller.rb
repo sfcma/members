@@ -25,7 +25,7 @@ class MemberSetsController < ApplicationController
     if !member
       respond_to do |format|
         Bugsnag.notify("Unable to find and opt-in member - email not found")
-        format.html { redirect_to new_member_set_url, notice: "We were unable to find a member with that email address.<br><br>Please enter the email address you gave us, or contact membership@sfcivicsymphony.org for help.<br><br>If you have not played with us before, please fill out <a href='#{new_member_path}'>this form</a>." }
+        format.html { redirect_to new_member_set_url, notice: "We were unable to find a member with that email address.<br><br>Please enter the email address you gave us, or contact membership@sfcivicsymphony.org for help.<br><br>If you have not played with us before, please fill out <b><a href='#{new_member_path}'>this form</a></b>." }
       end
     else
       @member_set.set_status = 'Opted in for this set'
