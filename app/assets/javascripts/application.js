@@ -502,10 +502,14 @@ function updateEmailRecipients() {
     ensemble_search = true;
   }
   if ($('#member_set_ensemble_id').val() !== null ||
-      ($('#emailMemberStatusSelector').val() !== "" && $('#member_set_performance_set_id').val() !== "")) {
+      ($('#emailMemberStatusSelector').val() !== "" && $('#member_set_performance_set_id').val() !== null)) {
     $('#roster').html("<i>Working...</i>");
+  } else if ($('#member_set_performance_set_id').val() !== null) {
+    $('#roster').html("<i>Please select a status so that member list can show here</i>");
+    return;
   } else {
     $('#roster').html("");
+    return;
   }
 
   var queryString;

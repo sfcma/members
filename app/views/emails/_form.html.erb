@@ -56,7 +56,7 @@
           <% if @email.ensemble %>
             ensembleIdSelected();
           <% elsif @email.performance_set %>
-            performanceSetIdSelected();
+            perfSetIdSelected();
           <% end %>
         });
       </script>
@@ -69,7 +69,7 @@
         }
         $(document).on('ready', function() {
           setInstrumentsForSelection('#emailMemberInstrumentSelector', next, true);
-          performanceSetIdSelected();
+          perfSetIdSelected();
         });
       </script>
     <% end %>
