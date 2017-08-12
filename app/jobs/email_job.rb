@@ -27,9 +27,16 @@ class EmailJob
       begin
         Rails.logger.info "Sending email #{email.id} to #{member.id}"
         member_insts = MemberInstrument.where(member_id: member.id)
-        smi = SetMemberInstrument.where(member_instrument_id: member_insts.map(&:id), member_set_id: MemberSet.where(member_id: member.id, performance_set_id: email.performance_set.id))
+
+        # SetMemberInstrument doesn't matter on full-ensemble emails; not used in that case
+        if email.performance_set
+          smi = SetMemberInstrument.where(member_instrument_id: member_insts.map(&:id), member_set_id: MemberSet.where(member_id: member.id, performance_set_id: email.performance_set.id))
+        elsif email.ensemble
+          ensemble_id = email.ensemble.id
+        end
+
         if member.email_1.present?
-          MemberMailer.standard_member_email(member, email.email_title, email.email_body, current_user, email.id, member.id, email.performance_set.extended_name, email.instruments, email.status, smi).deliver_now
+          MemberMailer.standard_member_email(member, email.email_title, email.email_body, current_user, email.id, member.id, email.performance_set&.extended_name, email.instruments, email.status, smi, ensemble_id).deliver_now
         else
           Bugsnag.notify("No email address available for member: #{member.id}")
         end

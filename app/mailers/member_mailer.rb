@@ -1,7 +1,7 @@
 class MemberMailer < ApplicationMailer
   include ActionView::Helpers::TextHelper
 
-  def standard_member_email(member, subject, body, sending_user, email_id, member_id, perf_set_name, inst, status, set_member_instrument)
+  def standard_member_email(member, subject, body, sending_user, email_id, member_id, perf_set_name, inst, status, set_member_instrument, ensemble_id)
     @body = simple_format(body)
     @subject = subject
     @sending_user = sending_user
@@ -22,12 +22,17 @@ class MemberMailer < ApplicationMailer
     end
     @instruments = inst.gsub(/[\"\]\[]/,"").split(",").reject!(&:blank?) || []
     @instruments = @instruments.map(&:strip)
-    if status == 0
-      @status_text = "are playing in"
-    elsif status == 1
-      @status_text = "are playing in or opted into"
+    if ensemble_id
+      @status_text = "played in the ensemble #{Ensemble.find(ensemble_id).name} in the last year"
+      @perf_set_name = ""
     else
-      @status_text = "are playing in or attending rehearsals for"
+      if status == 0
+        @status_text = "are playing in"
+      elsif status == 1
+        @status_text = "are playing in or opted into"
+      else
+        @status_text = "are playing in or attending rehearsals for"
+      end
     end
     if @instruments.present?
       @instrument = set_member_instrument.first.member_instrument.instrument
@@ -58,7 +63,9 @@ class MemberMailer < ApplicationMailer
     mail(to: to_email,
          from: 'SFCMA Membership System <no-reply@mail.sfcivicmusic.org>',
          subject: 'Email Sent Successfully',
-         body: "You email titled #{email_title} was sent to #{recipient_count} members successfully.")
+         body: "Your email, titled \"#{email_title}\", was sent to #{recipient_count} members successfully.
+
+                Thanks for using the Membership System to keep our members informed!")
 
   end
 end

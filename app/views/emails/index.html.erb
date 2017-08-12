@@ -9,7 +9,11 @@
     <% end %>
     <% sent_at = email.sent_at.nil? ? "Unsent" : "Sent at #{email.sent_at.in_time_zone('Pacific Time (US & Canada)')}" %>
     <b>Title:</b> <%= email.email_title %><br>
-    <b>Performance Set:</b> <%= email.performance_set.extended_name %><br>
+    <% if email.performance_set %>
+      <b>Performance Set:</b> <%= email.performance_set.extended_name %><br>
+    <% elsif email.ensemble %>
+      <b>Ensemble:</b> <%= email.ensemble.name %><br>
+    <% end %>
     <b>Instruments:</b> <%= inst_to_display %><br>
     <% if email.sent_at.nil? %>
       UNSENT<br>
@@ -31,7 +35,11 @@
     <% end %>
     <% sent_at = email.sent_at.nil? ? "Unsent" : "Sent at #{email.sent_at.in_time_zone('Pacific Time (US & Canada)')}" %>
     <b>Title:</b> <%= email.email_title %><br>
-    <b>Performance Set:</b> <%= email.performance_set.extended_name %><br>
+    <% if email.performance_set %>
+      <b>Performance Set:</b> <%= email.performance_set.extended_name %><br>
+    <% elsif email.ensemble %>
+      <b>Ensemble:</b> <%= email.ensemble.name %><br>
+    <% end %>
     <b>Instruments:</b> <%= inst_to_display %><br>
     <% if email.sent_at.nil? %>
       UNSENT<br>

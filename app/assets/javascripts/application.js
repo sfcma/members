@@ -372,8 +372,12 @@ var loadStuff = function() {
   });
 
   // For Emails page
-  $('#emailForm #member_set_performance_set_id').on('change', function() {
-    setInstrumentsForSelection('#emailMemberInstrumentSelector', null, true);
+  $('#emailForm #member_set_performance_set_id').on('change', function(ev) {
+    perfSetIdSelected();
+  });
+
+  $('#emailForm #member_set_ensemble_id').on('change', function(ev) {
+    ensembleIdSelected();
   });
 
   // Get email recipients
@@ -425,7 +429,7 @@ var instruments =
     "String Bass"
   ];
 
-var instrumentsWithSplitViolins = instruments.concat(["Violin 1", "Violin 2"]).filter(function(e) { console.log(e); return e !== 'Violin' });
+var instrumentsWithSplitViolins = instruments.concat(["Violin 1", "Violin 2"]).filter(function(e) { return e !== 'Violin' });
 
 function attachAC(id, splitViolins) {
   $(id).autoComplete({
@@ -471,14 +475,48 @@ function setInstrumentsForSelection(instrumentSelectorId, functionToCall, includ
   });
 }
 
+// Email (set/ensemble selector) form functionality
+function ensembleIdSelected() {
+  setInstrumentsForSelection('#emailMemberInstrumentSelector', null, true);
+  $('#emailForm #member_set_performance_set_id').val([]);
+  $('#email_selected_note').show();
+  $('#status_perf_set').hide();
+  $('#status_ensemble').show();
+  $('#instruments_ensemble').show();
+  $('#instruments_perf_set').hide();
+}
+
+function perfSetIdSelected() {
+  setInstrumentsForSelection('#emailMemberInstrumentSelector', null, true);
+  $('#emailForm #member_set_ensemble_id').val([]);
+  $('#email_selected_note').hide();
+  $('#status_perf_set').show();
+  $('#status_ensemble').hide();
+  $('#instruments_ensemble').hide();
+  $('#instruments_perf_set').show();
+}
+
 function updateEmailRecipients() {
-  if ($('#emailMemberStatusSelector').val() === "" || $('#member_set_performance_set_id').val() === "") {
-    return;
-  } else {
-    $('#roster').html("<i>Working...</i>");
+  var ensemble_search = false;
+  if ($('#member_set_ensemble_id').val() !== null) {
+    ensemble_search = true;
   }
-  var queryString = 'performance_set_id=' + $('#member_set_performance_set_id').val();
-  queryString += '&status=' + $('#emailMemberStatusSelector').val();
+  if ($('#member_set_ensemble_id').val() !== null ||
+      ($('#emailMemberStatusSelector').val() !== "" && $('#member_set_performance_set_id').val() !== "")) {
+    $('#roster').html("<i>Working...</i>");
+  } else {
+    $('#roster').html("");
+  }
+
+  var queryString;
+  if (ensemble_search) {
+    queryString = 'ensemble_id=' + $('#member_set_ensemble_id').val();
+    queryString += '&status=3';
+  } else {
+    queryString = 'performance_set_id=' + $('#member_set_performance_set_id').val();
+    queryString += '&status=' + $('#emailMemberStatusSelector').val();
+  }
+
   if ($('#emailMemberInstrumentSelector').val() != "all") {
     queryString += '&instruments=' + $('#emailMemberInstrumentSelector').val();
   }
@@ -500,18 +538,21 @@ function updateEmailRecipients() {
       } else {
         memberListByInst[instrument] = [member.first_name + " " + member.last_name]
       }
+      memberListByInst[instrument] = memberListByInst[instrument].filter(function(v,i,self) { return self.indexOf(v) === i })
     });
     var out = "";
     var orderedKeys = Object.keys(memberListByInst).sort();
     var memberCount = 0;
+    var memberNameList = [];
     $.each(orderedKeys, function(_, instName) {
       var members = memberListByInst[instName];
       out += "<b>" + instName.charAt(0).toUpperCase() + instName.slice(1) + " (" + members.length + ")</b><br>";
-      memberCount += members.length;
+      memberNameList.push(...members);
       out += members.join(", ");
       out += "<br><br>"
     })
-    $('#roster').html("<i>" + memberCount + " members being emailed.<br><br>" + out + "</i>");
+    memberCount = memberNameList.filter(function(v,i,self) { return self.indexOf(v) === i }).length
+    $('#roster').html("<i>" + memberCount + " members being emailed. (Members may appear below on multiple instruments; they will only get 1 email)<br><br>" + out + "</i>");
     if (memberCount > 0) {
       $('#email_preview_submit_button').prop('disabled', false);
     } else {

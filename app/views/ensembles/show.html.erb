@@ -8,6 +8,12 @@
   <%= @ensemble.description %>
 </p>
 
+<p>
+  <% PerformanceSet.where(ensemble: @ensemble).each do |ps| %>
+    <%= link_to ps, ps %><br>
+  <% end %>
+</p>
+
 <%= link_to 'Edit', edit_ensemble_path(@ensemble) %> |
 <%= link_to 'See All Ensembles', ensembles_path %> |
 <%= link_to 'Delete Ensemble', @ensemble, method: :delete, data: { confirm: 'Are you sure?' } %>

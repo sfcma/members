@@ -48,9 +48,7 @@ class MemberSet < ApplicationRecord
         use_variant_instruments = true
       end
       statuses = MemberSet.email_status_to_status(status_id)
-      potential_members =
-        Member
-        .in_set_with_status(performance_set_id, statuses)
+      potential_members = Member.in_set_with_status(performance_set_id, statuses)
       potential_member_set_ids = potential_members.map(&:member_set_ids).flatten
       if use_variant_instruments
         actual_member_set_ids =

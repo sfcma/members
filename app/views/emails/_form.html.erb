@@ -17,18 +17,29 @@
     <b>Select the members you would like to email by Performance Set, Status, and optionally Instrument.</b>
 
     <div class="field emailFilter" id="emailForm">
-      <%= f.label :performance_set_id, "Performance Set" %>
+      <%= f.label :performance_set_id, "Performance Set OR Entire Ensemble" %>
       <% if action_name == 'new' %>
-        <%= f.collection_select :performance_set_id, @performance_sets, :id, :extended_name, { prompt: true, selected: @performance_set_id }, { id: 'member_set_performance_set_id' } %>
+        <%= f.collection_select :performance_set_id, @performance_sets, :id, :extended_name, { prompt: "Select a Single Performance Set", selected: @performance_set_id }, { id: 'member_set_performance_set_id' } %>
+        <%= f.collection_select :ensemble_id, @ensembles, :id, :name, { prompt: "Select an Ensemble", selected: @ensemble_id }, { id: 'member_set_ensemble_id' } %>
+        <i id='email_selected_note' style='display: none; font-weight: bold;'><br>Selecting an ensemble will email all members who have played in that ensemble in the last year</i>
       <% else %>
-        <%= f.collection_select :performance_set_id, @performance_sets, :id, :extended_name, { prompt: true }, { id: 'member_set_performance_set_id' } %>
+        <%= f.collection_select :performance_set_id, @performance_sets, :id, :extended_name, { prompt: "Select a Single Performance Set" }, { id: 'member_set_performance_set_id' } %>
+        <%= f.collection_select :ensemble_id, @ensembles, :id, :name, { prompt: "Select an Ensemble" }, { id: 'member_set_ensemble_id' } %>
+        <i id='email_selected_note' style='display: none; font-weight: bold;'><br>Selecting an ensemble will email all members who have played in that ensemble in the last year</i>
       <% end %>
     </div>
 
-    <div class="field emailFilter">
+    <hr />
+    <div class="field emailFilter" id='status_perf_set'>
       <%= f.label :status, "Status" %>
       <%= f.select :status, @statuses_for_email, { prompt: true }, { id: 'emailMemberStatusSelector' } %>
     </div>
+
+    <div class="field emailFilter" id="status_ensemble" style="display: none;">
+      <i>This email will be sent to members with <b>any status</b> – Interested, Performing, Stopped, Substituting, Uninterested</i>
+    </div>
+
+    <hr />
 
     <% if action_name != 'new' %>
       <script>
@@ -42,6 +53,11 @@
         }
         $(document).on('ready', function() {
           setInstrumentsForSelection('#emailMemberInstrumentSelector', next, true);
+          <% if @email.ensemble %>
+            ensembleIdSelected();
+          <% elsif @email.performance_set %>
+            performanceSetIdSelected();
+          <% end %>
         });
       </script>
     <% end %>
@@ -56,9 +72,12 @@
         });
       </script>
     <% end %>
-    <div class="field emailFilter <<% if action_name == 'new' %>>startHidden<% end %>">
+    <div class="field emailFilter <<% if action_name == 'new' %>>startHidden<% end %>" id="instruments_perf_set">
       <%= f.label :instruments, "Instrument (optional)" %>
       <%= f.collection_select :instruments, @instruments, :id, :instrument, { prompt: true }, { id: 'emailMemberInstrumentSelector', multiple: true } %>
+    </div>
+    <div class="field emailFilter" id="instruments_ensemble" style="display: none;">
+      <i>This email will be sent to all instruments.</i>
     </div>
   </div>
 

@@ -2,7 +2,7 @@ require 'instruments'
 module PerformanceSetsHelper
   include Instruments
 
-  def organize_members_by_instrument(performance_set, member_sets)
+  def organize_members_by_instrument(member_sets)
     @instrument_groups = {}
     member_sets.each do |ms|
       if ms.set_member_instruments.present?

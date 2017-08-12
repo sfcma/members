@@ -3,6 +3,7 @@ class Email < ApplicationRecord
   acts_as_paranoid
   belongs_to :user
   belongs_to :performance_set
+  belongs_to :ensemble
 
   validates :email_body, presence: true
   validates :email_title, presence: true

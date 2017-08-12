@@ -251,11 +251,20 @@ class MembersController < ApplicationController
   def get_filtered_member_info
     instruments = params[:instruments] || ""
     performance_set_id = params[:performance_set_id]
+    ensemble_id = params[:ensemble_id]
     status_id = params[:status]
 
     instruments = "" if instruments == "null"
-
-    member_sets = MemberSet.filtered_by_criteria(performance_set_id, status_id, instruments.split(','))
+    puts performance_set_id
+    if performance_set_id
+      member_sets = MemberSet.filtered_by_criteria(performance_set_id, status_id, instruments.split(','))
+    elsif ensemble_id
+      performance_set_ids = PerformanceSet
+        .where('end_date > ?', 1.year.ago.strftime('%F'))
+        .where(ensemble_id: ensemble_id)
+        .map(&:id)
+      member_sets = MemberSet.where(performance_set_id: performance_set_ids, member_id: Member.played_with_ensemble_last_year(ensemble_id))
+    end
     respond_to do |format|
       format.json { render json: member_sets.to_json(include: [:set_member_instruments, member: {include: [:member_instruments] }]), status: :ok }
     end

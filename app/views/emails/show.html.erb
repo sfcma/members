@@ -17,12 +17,22 @@
 <br>
 <h3 class="formHeader">Who are we sending this email to?</h3>
 <div class="field memberInfoBlock">
-  <b>Performance Set:</b> <%= @email.performance_set.extended_name %>
-  <br><br>
-  <b>Statuses:</b> <%= Email.statuses_for_emails[@email.status.to_i] %>
-  <br><br>
-  <b>Instruments:</b> <%= @instruments.present? ? @instruments.join(',') : 'All' %>
-  <br><br>
+  <% if @email.performance_set %>
+    <b>Performance Set:</b> <%= @email.performance_set.extended_name %>
+    <br><br>
+    <b>Statuses:</b> <%= Email.statuses_for_emails[@email.status.to_i] %>
+    <br><br>
+    <b>Instruments:</b> <%= @instruments.present? ? @instruments.join(',') : 'All' %>
+    <br><br>
+  <% else %>
+    <b>Ensemble:</b> <%= @email.ensemble.name %>
+    <br><br>
+    <b>Statuses:</b> All
+    <br><br>
+    <b>Instruments:</b> All
+    <br><br>
+    <i>All members who have played in this ensemble in the last year</i>
+  <% end %>
 </div>
 
 <% if @email.behalf_of_name.present? && @email.behalf_of_email.present? %>
@@ -36,16 +46,19 @@
 
 <% recipients = [] %>
 <% if @email.sent_at.nil? %>
-  <br><h3 class="formHeader">Specific Recipients of This Email (<%= @instrument_groups.values.flatten.count %>)</h3>
+  <br><h3 class="formHeader">Specific Recipients of This Email (<%= @instrument_groups.values.flatten.map(&:member).map(&:id).uniq.count %>)</h3>
   <div class="field memberInfoBlock">
+    <i>Members may appear below on multiple instruments; they will only get 1 email</i>
     <% @instrument_groups.keys.sort.each do |k, i| %>
       <% j = 0 %>
-      <h4><%= k.capitalize.pluralize %> (<%= (@instrument_groups[k].count) %>)</h4>
+      <h4><%= k.capitalize.pluralize %> (<%= (@instrument_groups[k].map(&:member).map(&:id).uniq.count) %>)</h4>
+      <% member_ids_on_inst = [] %>
       <% @instrument_groups[k].each do |ms| %>
-        <% if ms %>
-          <%= link_to ms.member, ms.member %> <% if @showing_all %> &emsp;&emsp;&emsp;<i style='color: gray'><%= ms.set_status %></i> <% end %> <br>
+        <% if ms && !member_ids_on_inst.include?(ms.member.id) %>
+          <%= link_to ms.member, ms.member %>,
           <% recipients << ms.member.id %>
         <% end %>
+        <% member_ids_on_inst.push(ms.member.id) %>
       <% end %>
     <% end %>
   </div>
