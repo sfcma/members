@@ -547,7 +547,7 @@ function updateEmailRecipients() {
     $.each(orderedKeys, function(_, instName) {
       var members = memberListByInst[instName];
       out += "<b>" + instName.charAt(0).toUpperCase() + instName.slice(1) + " (" + members.length + ")</b><br>";
-      memberNameList.push(...members);
+      memberNameList = memberNameList.concat(members);
       out += members.join(", ");
       out += "<br><br>"
     })
