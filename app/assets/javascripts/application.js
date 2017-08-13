@@ -372,17 +372,39 @@ var loadStuff = function() {
   });
 
   // For Emails page
-  $('#emailForm #member_set_performance_set_id').on('change', function(ev) {
-    perfSetIdSelected();
+  $('#email_type_selector').on('change', function(ev) {
+    if (!window.auto_loading) {
+      $('#member_set_performance_set_id').val([]).change;
+      $('#member_set_ensemble_id').val([]).change;
+    }
+    emailTypeSelected(ev.target.value);
   });
 
-  $('#emailForm #member_set_ensemble_id').on('change', function(ev) {
-    ensembleIdSelected();
+  $('#member_set_performance_set_id').on('change', function() {
+    $('#email_for_step_three').show();
+    if (!window.auto_loading) {
+      $('#emailMemberStatusSelector').val([]).change;
+      $('#emailMemberInstrumentSelector').val([]).change;
+    }
+    setInstrumentsForSelection('#emailMemberInstrumentSelector', null, true);
+  });
+
+  $('#member_set_ensemble_id').on('change', function() {
+    if (!window.auto_loading) {
+      $('#emailMemberStatusSelector').val([]).change;
+      $('#emailMemberInstrumentSelector').val([]).change;
+    }
+  });
+
+  $('#email_for_step_three').on('change', function() {
+    $('#email_for_step_four').show();
   });
 
   // Get email recipients
-  $(document).on('change', '.emailFilter select', function() {
-    updateEmailRecipients();
+  $(document).on('change', '#emailFilter select', function() {
+    if(!window.auto_loading) {
+      updateEmailRecipients();
+    }
   });
 
   $('#emailMemberInstrumentSelector').chosen({
@@ -476,33 +498,43 @@ function setInstrumentsForSelection(instrumentSelectorId, functionToCall, includ
 }
 
 // Email (set/ensemble selector) form functionality
-function ensembleIdSelected() {
-  setInstrumentsForSelection('#emailMemberInstrumentSelector', null, true);
-  $('#emailForm #member_set_performance_set_id').val([]);
-  $('#email_selected_note').show();
-  $('#status_perf_set').hide();
-  $('#status_ensemble').show();
-  $('#instruments_ensemble').show();
-  $('#instruments_perf_set').hide();
-}
-
-function perfSetIdSelected() {
-  setInstrumentsForSelection('#emailMemberInstrumentSelector', null, true);
-  $('#emailForm #member_set_ensemble_id').val([]);
-  $('#email_selected_note').hide();
-  $('#status_perf_set').show();
-  $('#status_ensemble').hide();
-  $('#instruments_ensemble').hide();
-  $('#instruments_perf_set').show();
+function emailTypeSelected(typeId) {
+  if (typeId == 0) {
+    $('#emailForm #member_set_ensemble_id').val([]);
+    $('#status_perf_set').show();
+    $('#status_ensemble').hide();
+    $('#instruments_ensemble').hide();
+    $('#instruments_perf_set').show();
+    $('#email_for_step_two_ensembles').hide();
+    $('#email_for_step_two_perf_sets').show();
+    $('#email_for_step_three').hide();
+    $('#email_for_step_four').hide();
+  } else if (typeId == 1) {
+    $('#emailForm #member_set_performance_set_id').val([]);
+    $('#status_perf_set').hide();
+    $('#status_ensemble').show();
+    $('#instruments_ensemble').show();
+    $('#instruments_perf_set').hide();
+    $('#email_for_step_two_ensembles').show();
+    $('#email_for_step_two_perf_sets').hide();
+    $('#email_for_step_three').hide();
+    $('#email_for_step_four').hide();
+  }
 }
 
 function updateEmailRecipients() {
   var ensemble_search = false;
-  if ($('#member_set_ensemble_id').val() !== null) {
+  if ($('#member_set_ensemble_id').val() !== null && $('#member_set_ensemble_id').val() !== "") {
     ensemble_search = true;
   }
+  if ($('#member_set_ensemble_id').val() == null &&
+    $('#member_set_performance_set_id').val() == null) {
+      $('#roster').html('List can\'t be generated yet! Please fill out "Email Recipient" fields above.')
+    return;
+  }
+
   if ($('#member_set_ensemble_id').val() !== null ||
-      ($('#emailMemberStatusSelector').val() !== "" && $('#member_set_performance_set_id').val() !== null)) {
+      ($('#emailMemberStatusSelector').val() !== null && $('#member_set_performance_set_id').val() !== null)) {
     $('#roster').html("<i>Working...</i>");
   } else if ($('#member_set_performance_set_id').val() !== null) {
     $('#roster').html("<i>Please select a status so that member list can show here</i>");
@@ -556,7 +588,7 @@ function updateEmailRecipients() {
       out += "<br><br>"
     })
     memberCount = memberNameList.filter(function(v,i,self) { return self.indexOf(v) === i }).length
-    $('#roster').html("<i>" + memberCount + " members being emailed. (Members may appear below on multiple instruments; they will only get 1 email)<br><br>" + out + "</i>");
+    $('#roster').html("<i>" + memberCount + " members being emailed.<br><br>" + out + "</i>");
     if (memberCount > 0) {
       $('#email_preview_submit_button').prop('disabled', false);
     } else {

@@ -63,7 +63,7 @@
     <% end %>
   </div>
   <br><br>
-  <%= link_to 'Confirm and Send Email', send_email_email_url(member_ids: recipients.join(",")), class: 'button' %>
+  <%= link_to 'Send Email', send_email_email_url(member_ids: recipients.join(",")), class: 'button' %>
 <% else %>
   <br><h3 class="formHeader">Specific Recipients</h3>
   <div class="field memberInfoBlock">
