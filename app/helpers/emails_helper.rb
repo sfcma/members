@@ -11,7 +11,7 @@ module EmailsHelper
     if current_user.global_admin?
       Ensemble.all
     else
-      Ensemble.find_by(UserEnsemble.where(user_id: current_user.id).map(&:ensemble_id))
+      Ensemble.find_by(id: UserEnsemble.where(user_id: current_user.id).map(&:ensemble_id))
     end
   end
 end
