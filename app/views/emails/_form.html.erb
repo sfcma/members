@@ -21,7 +21,13 @@
         <option value="-1" selected></option>
         <option value=0>Members Currently Playing in a Performance Set</option>
         <option value=1>All Members Playing in an Ensemble in the Last Twelve Months</option>
+        <% if current_user.global_admin? %><option value=2>All Members Participating in the Last Twelve Months</option><% end %>
       </select>
+    </div>
+
+    <div id="email_for_step_two_all" style="display: none;">
+      <br>
+      <b>This will email all members who have played in any of our ensembles in the last twelve months</b>
     </div>
 
     <div id="email_for_step_two_ensembles" style="display: none;">
@@ -52,7 +58,7 @@
 
     <% if action_name != 'new' %>
       <script>
-        var emailType = <%= @email.performance_set ? 0 : @email.ensemble ? 1 : -1 %>;
+        var emailType = <%= @email.performance_set ? 0 : @email.ensemble ? 1 : 2 %>;
         var next = function() {
           var instrumentAr = JSON.parse('<%= JSON.parse(@email.instruments).compact.reject!(&:empty?).to_s.html_safe %>');
           for(var i = 0; i < instrumentAr.length; i++) {

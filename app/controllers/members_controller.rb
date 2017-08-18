@@ -253,9 +253,9 @@ class MembersController < ApplicationController
     performance_set_id = params[:performance_set_id]
     ensemble_id = params[:ensemble_id]
     status_id = params[:status]
+    all = params[:all]
 
     instruments = "" if instruments == "null"
-    puts performance_set_id
     if performance_set_id
       member_sets = MemberSet.filtered_by_criteria(performance_set_id, status_id, instruments.split(','))
     elsif ensemble_id
@@ -264,6 +264,11 @@ class MembersController < ApplicationController
         .where(ensemble_id: ensemble_id)
         .map(&:id)
       member_sets = MemberSet.where(performance_set_id: performance_set_ids, member_id: Member.played_with_ensemble_last_year(ensemble_id))
+    elsif all
+      performance_set_ids = PerformanceSet
+        .where('end_date > ?', 1.year.ago.strftime('%F'))
+        .map(&:id)
+      member_sets = MemberSet.where(performance_set_id: performance_set_ids, member_id: Member.played_with_any_ensemble_last_year)
     end
     respond_to do |format|
       format.json { render json: member_sets.to_json(include: [:set_member_instruments, member: {include: [:member_instruments] }]), status: :ok }

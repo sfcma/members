@@ -24,7 +24,7 @@
     <br><br>
     <b>Instruments:</b> <%= @instruments.present? ? @instruments.join(',') : 'All' %>
     <br><br>
-  <% else %>
+  <% elsif @email.ensemble %>
     <b>Ensemble:</b> <%= @email.ensemble.name %>
     <br><br>
     <b>Statuses:</b> All
@@ -32,6 +32,14 @@
     <b>Instruments:</b> All
     <br><br>
     <i>All members who have played in this ensemble in the last year</i>
+  <% else %>
+    <b>Ensemble:</b> Any in the last year
+    <br><br>
+    <b>Statuses:</b> All
+    <br><br>
+    <b>Instruments:</b> All
+    <br><br>
+    <i>All members who have played in any ensemble in the last year</i>
   <% end %>
 </div>
 

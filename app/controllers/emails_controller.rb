@@ -21,14 +21,21 @@ class EmailsController < ApplicationController
     @status_id = @email.status
     if @performance_set
       @member_sets = MemberSet.filtered_by_criteria(@performance_set.id, @status_id, @instruments)
+      @instrument_groups = organize_members_by_instrument(@member_sets)
     elsif @ensemble
       performance_set_ids = PerformanceSet
         .where('end_date > ?', 1.year.ago.strftime('%F'))
         .where(ensemble_id: @ensemble.id)
         .map(&:id)
       @member_sets = MemberSet.where(performance_set_id: performance_set_ids, member_id: Member.played_with_ensemble_last_year(@ensemble.id))
+      @instrument_groups = organize_members_by_instrument(@member_sets)
+    else
+      performance_set_ids = PerformanceSet
+        .where('end_date > ?', 1.year.ago.strftime('%F'))
+        .map(&:id)
+      @instrument_groups = { "(Any Instrument)" => MemberSet.where(performance_set_id: performance_set_ids, member_id: Member.played_with_any_ensemble_last_year) }
     end
-    @instrument_groups = organize_members_by_instrument(@member_sets)
+
   end
 
   def edit

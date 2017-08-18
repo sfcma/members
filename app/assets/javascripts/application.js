@@ -509,6 +509,7 @@ function emailTypeSelected(typeId) {
     $('#email_for_step_two_perf_sets').show();
     $('#email_for_step_three').hide();
     $('#email_for_step_four').hide();
+    $('#email_for_step_two_all').hide();
   } else if (typeId == 1) {
     $('#emailForm #member_set_performance_set_id').val([]);
     $('#status_perf_set').hide();
@@ -519,22 +520,33 @@ function emailTypeSelected(typeId) {
     $('#email_for_step_two_perf_sets').hide();
     $('#email_for_step_three').hide();
     $('#email_for_step_four').hide();
+    $('#email_for_step_two_all').hide();
+  } else if (typeId == 2) {
+    $('#emailForm #member_set_performance_set_id').val([]);
+    $('#status_perf_set').hide();
+    $('#status_ensemble').hide();
+    $('#instruments_ensemble').hide();
+    $('#instruments_perf_set').hide();
+    $('#email_for_step_two_ensembles').hide();
+    $('#email_for_step_two_perf_sets').hide();
+    $('#email_for_step_three').hide();
+    $('#email_for_step_four').hide();
+    $('#email_for_step_two_all').show();
   }
 }
 
 function updateEmailRecipients() {
   var ensemble_search = false;
+  var perf_set_search = false;
   if ($('#member_set_ensemble_id').val() !== null && $('#member_set_ensemble_id').val() !== "") {
     ensemble_search = true;
-  }
-  if ($('#member_set_ensemble_id').val() == null &&
-    $('#member_set_performance_set_id').val() == null) {
-      $('#roster').html('List can\'t be generated yet! Please fill out "Email Recipient" fields above.')
-    return;
+  } else if ($('#member_set_performance_set_id').val() !== null && $('#member_set_ensemble_id').val() !== "") {
+    perf_set_search = true;
   }
 
   if ($('#member_set_ensemble_id').val() !== null ||
-      ($('#emailMemberStatusSelector').val() !== null && $('#member_set_performance_set_id').val() !== null)) {
+      ($('#emailMemberStatusSelector').val() !== null && $('#member_set_performance_set_id').val() !== null) ||
+      $('#email_type_selector').val() === "2") {
     $('#roster').html("<i>Working...</i>");
   } else if ($('#member_set_performance_set_id').val() !== null) {
     $('#roster').html("<i>Please select a status so that member list can show here</i>");
@@ -548,9 +560,11 @@ function updateEmailRecipients() {
   if (ensemble_search) {
     queryString = 'ensemble_id=' + $('#member_set_ensemble_id').val();
     queryString += '&status=3';
-  } else {
+  } else if (perf_set_search) {
     queryString = 'performance_set_id=' + $('#member_set_performance_set_id').val();
     queryString += '&status=' + $('#emailMemberStatusSelector').val();
+  } else {
+    queryString = 'all=true'
   }
 
   if ($('#emailMemberInstrumentSelector').val() != "all") {

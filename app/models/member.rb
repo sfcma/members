@@ -40,6 +40,16 @@ class Member < ApplicationRecord
     members.flatten.uniq
   end
 
+  def self.played_with_any_ensemble_last_year()
+    performance_set_ids = PerformanceSet
+      .where('end_date > ?', 1.year.ago.strftime('%F'))
+      .map(&:id)
+    members = []
+    performance_set_ids.each do |perf_set_id|
+      members << Member.in_set(perf_set_id)
+    end
+    members.flatten.uniq
+  end
 
   def self.in_set_with_status(performance_set_id, statuses)
     Member.in_set(performance_set_id).where('member_sets.set_status' => statuses)
