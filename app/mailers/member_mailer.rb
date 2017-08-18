@@ -25,7 +25,7 @@ class MemberMailer < ApplicationMailer
     if ensemble_id
       @status_text = "played in the ensemble #{Ensemble.find(ensemble_id).name} in the last year"
       @perf_set_name = ""
-    else
+    elsif perf_set_name
       if status == 0
         @status_text = "are playing in"
       elsif status == 1
@@ -33,7 +33,11 @@ class MemberMailer < ApplicationMailer
       else
         @status_text = "are playing in or attending rehearsals for"
       end
+    else
+      @status_text = "participated in an SF Civic Music ensemble in the last year"
+      @perf_set_name = ""
     end
+
     if @instruments.present?
       @instrument = set_member_instrument.first.member_instrument.instrument
     else
