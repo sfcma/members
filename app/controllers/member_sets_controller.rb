@@ -43,12 +43,12 @@ class MemberSetsController < ApplicationController
           # THIS IS NAMED BACKWARDS
           if psi.available_to_opt_in
             respond_to do |format|
-              format.html { redirect_to new_member_set_url, notice: OptInMessage.find_by_id(psi.opt_in_message_id)&.message || "You are unable to opt in on this instrument. Contact your section leader or membership@sfcivicsymphony.org for assistance." }
+              format.html { redirect_to new_member_set_url, notice: OptInMessage.find_by_id(psi.opt_in_message_id) && OptInMessage.find_by_id(psi.opt_in_message_id).message || "You are unable to opt in on this instrument. Contact your section leader or membership@sfcivicsymphony.org for assistance." }
             end
             return
           elsif psi_limit > 0 && MemberSet.filtered_by_criteria(msparams[:performance_set_id], 4, instrument).count >= (psi_limit + psi.standby_limit)
             respond_to do |format|
-              format.html { redirect_to new_member_set_url, notice: OptInMessage.find_by_id(psi.opt_in_message_id)&.message || "Sorry, this section is full for #{PerformanceSet.find_by_id(msparams[:performance_set_id]).extended_name}! <br><br>Please contact your section leader or membership@sfcivicsymphony.org for assistance." }
+              format.html { redirect_to new_member_set_url, notice: OptInMessage.find_by_id(psi.opt_in_message_id) && OptInMessage.find_by_id(psi.opt_in_message_id).message || "Sorry, this section is full for #{PerformanceSet.find_by_id(msparams[:performance_set_id]).extended_name}! <br><br>Please contact your section leader or membership@sfcivicsymphony.org for assistance." }
             end
             return
           elsif psi_limit > 0 && MemberSet.filtered_by_criteria(msparams[:performance_set_id], 4, instrument).count >= psi_limit
