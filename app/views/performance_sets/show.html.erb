@@ -49,7 +49,7 @@
 
         <%= link_to psi.instrument, edit_performance_set_instrument_path(psi), { target: "_new" } %> ·
         <%= psi.limit.present? ? "Limit #{psi.limit}  · " : "" %>
-        <%= psi.standby_limit > 0 ? "Standby Limit #{psi.limit}  · " : "" %>
+        <%= psi.standby_limit > 0 ? "Standby Limit #{psi.standby_limit}  · " : "" %>
         <%= psi.available_to_opt_in ? "Opt-In Unavailable" : "Opt-In Available" %> ·
         Message: <%= psi.opt_in_message_id ? link_to(OptInMessage.find(psi.opt_in_message_id).title, OptInMessage.find(psi.opt_in_message_id)).html_safe : "No Custom Message" %>
         <br />
