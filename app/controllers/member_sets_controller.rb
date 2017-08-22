@@ -39,16 +39,25 @@ class MemberSetsController < ApplicationController
 
         psi = PerformanceSetInstrument.find_by(instrument: instrument.downcase, performance_set_id: msparams[:performance_set_id])
         if psi
+          psi_limit = psi.limit || 10000 # if there is no limit, make it a lot
           # THIS IS NAMED BACKWARDS
           if psi.available_to_opt_in
             respond_to do |format|
-              format.html { redirect_to new_member_set_url, notice: OptInMessage.find_by_id(psi.opt_in_message_id).message || "You are unable to opt in on this instrument. Contact your section leader or membership@sfcivicsymphony.org for assistance." }
+              format.html { redirect_to new_member_set_url, notice: OptInMessage.find_by_id(psi.opt_in_message_id)&.message || "You are unable to opt in on this instrument. Contact your section leader or membership@sfcivicsymphony.org for assistance." }
             end
             return
+          elsif psi_limit > 0 && MemberSet.filtered_by_criteria(msparams[:performance_set_id], 4, instrument).count >= (psi_limit + psi.standby_limit)
+            respond_to do |format|
+              format.html { redirect_to new_member_set_url, notice: OptInMessage.find_by_id(psi.opt_in_message_id)&.message || "Sorry, this section is full for #{PerformanceSet.find_by_id(msparams[:performance_set_id]).extended_name}! <br><br>Please contact your section leader or membership@sfcivicsymphony.org for assistance." }
+            end
+            return
+          elsif psi_limit > 0 && MemberSet.filtered_by_criteria(msparams[:performance_set_id], 4, instrument).count >= psi_limit
+            @member_set.standby_player = true
+            opt_in_message = "Thank you for opting in as a standby player for #{PerformanceSet.find_by_id(msparams[:performance_set_id]).extended_name} this set.<br><br>"
+          else
+            opt_in_message = OptInMessage.find_by_id(psi.opt_in_message_id)
+            opt_in_message = opt_in_message.present? ? "#{opt_in_message.message}<br><br>" : "Thank you for submitting your interest in #{PerformanceSet.find_by_id(msparams[:performance_set_id]).extended_name}.<br><br>"
           end
-
-          opt_in_message = OptInMessage.find_by_id(psi.opt_in_message_id)
-          opt_in_message = opt_in_message.present? ? "#{opt_in_message.message}<br><br>" : "Thank you for submitting your interest in #{PerformanceSet.find_by_id(msparams[:performance_set_id]).extended_name}.<br><br>"
         else
           return_failure
         end
@@ -65,10 +74,14 @@ class MemberSetsController < ApplicationController
               @member_set.set_member_instruments = [@set_member_instrument]
               respond_to do |format|
                 if @member_set.save
+                  money_message = ""
+                  unless @member_set.standby_player
+                    money_message = "Ready to make your donation for this set? You can do that now via our <a href='http://sfcivicmusic.org/give-now'>online donations page</a>.<br><br>"
+                  end
                   if !current_user
-                    format.html { redirect_to new_member_set_url, notice: "#{opt_in_message}Ready to make your donation for this set? You can do that now via our <a href='http://sfcivicmusic.org/give-now'>online donations page</a>.<br><br>Need to report an absence? You can do that now via <a href='http://missing.sfcivicsymphony.org'>missing.sfcivicsymphony.org</a>.".html_safe }
+                    format.html { redirect_to new_member_set_url, notice: "#{opt_in_message}#{money_message}Need to report an absence? You can do that now via <a href='http://missing.sfcivicsymphony.org'>missing.sfcivicsymphony.org</a>.".html_safe }
                   else
-                    format.html { redirect_to new_member_set_url, notice: "#{opt_in_message}Ready to make your donation for this set? You can do that now via our <a href='http://sfcivicmusic.org/give-now'>online donations page</a>.<br><br>Need to report an absence? You can do that now via <a href='http://missing.sfcivicsymphony.org'>missing.sfcivicsymphony.org</a>.".html_safe }
+                    format.html { redirect_to new_member_set_url, notice: "#{opt_in_message}#{money_message}Need to report an absence? You can do that now via <a href='http://missing.sfcivicsymphony.org'>missing.sfcivicsymphony.org</a>.".html_safe }
                     format.json { render :show, status: :created, location: @member_set }
                   end
                 else

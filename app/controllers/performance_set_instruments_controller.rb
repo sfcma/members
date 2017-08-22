@@ -93,6 +93,7 @@ class PerformanceSetInstrumentsController < ApplicationController
       :performance_set_id,
       :instrument,
       :limit,
+      :standby_limit,
       :include_conductor,
       :available_to_opt_in,
       :opt_in_message_id

@@ -24,7 +24,12 @@
 
   <div class="field">
     <%= f.label :limit, "Limit (optional)" %>
-    <%= f.text_field :limit %>
+    <%= f.text_field :limit, size: 5 %>
+  </div>
+
+  <div class="field">
+    <%= f.label :standby_limit, "Standby Player Limit (optional)" %>
+    <%= f.text_field :standby_limit, size: 5 %>
   </div>
 
   <%# THIS FIELD IS NAMED BACKWARDS  %>

@@ -76,7 +76,7 @@ body.top-anonymous {
   visibility: hidden;
 }
 
-.performance_set_opt_in_message {
+.performance_set_opt_in_message, .performance_set_inst_limit_message {
   margin-top: 25px !important;
   background: #eeeecc;
   padding: 10px;
@@ -91,7 +91,13 @@ body.top-anonymous {
   ul, li {
     font-size: 14px;
   }
+
+  .over_limit, .standby_only {
+    display: none;
+  }
 }
+
+
 
 html {
   margin: 0;

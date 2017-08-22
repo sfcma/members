@@ -1,6 +1,6 @@
 class PerformanceSetsController < ApplicationController
-  before_action :set_performance_set, only: [:show, :edit, :update, :destroy, :rehearsal_dates, :roster, :email_roster]
-  before_action :authenticate_user!, except: [:rehearsal_dates]
+  before_action :set_performance_set, only: [:show, :edit, :update, :destroy, :rehearsal_dates, :roster, :email_roster, :check_instrument_limit]
+  before_action :authenticate_user!, except: [:rehearsal_dates, :check_instrument_limit]
 
   # GET /performance_sets
   # GET /performance_sets.json
@@ -108,6 +108,29 @@ class PerformanceSetsController < ApplicationController
     end
   end
 
+  def check_instrument_limit
+    instrument = params[:instrument]
+    psi = PerformanceSetInstrument.find_by("performance_set_id=#{@performance_set.id} and lower(instrument)=?", instrument.downcase)
+    psi_limit = psi.limit || 10000
+    over_limit = psi_limit > 0 && MemberSet.filtered_by_criteria(@performance_set.id, 4, instrument).count >= (psi_limit + psi.standby_limit)
+    if over_limit
+      respond_to do |format|
+        format.json { render json: { status: "over_limit" } }
+      end
+    else
+      at_standby = MemberSet.filtered_by_criteria(@performance_set.id, 4, instrument).count >= psi_limit
+      if at_standby
+        respond_to do |format|
+          format.json { render json: { status: "standby_only" } }
+        end
+      else
+        respond_to do |format|
+          format.json { render json: { status:  "ok" } }
+        end
+      end
+    end
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.
@@ -133,7 +156,8 @@ class PerformanceSetsController < ApplicationController
         :limit,
         :available_to_opt_in,
         :opt_in_message_type,
-        :opt_in_message_id
+        :opt_in_message_id,
+        :standby_limit
       ],
       performance_set_dates_attributes: [
         :id,

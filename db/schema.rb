@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170820060606) do
+ActiveRecord::Schema.define(version: 20170822070304) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -176,10 +176,11 @@ ActiveRecord::Schema.define(version: 20170820060606) do
     t.string   "string"
     t.boolean  "rotating"
     t.boolean  "boolean"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.datetime "deleted_at"
-    t.integer  "set_status_id",      default: 0, null: false
+    t.integer  "set_status_id",      default: 0,     null: false
+    t.boolean  "standby_player",     default: false
     t.index ["deleted_at"], name: "index_member_sets_on_deleted_at"
     t.index ["member_id", "performance_set_id"], name: "index_member_sets_on_member_id_and_performance_set_id", unique: true
     t.index ["member_id"], name: "index_member_sets_on_member_id"
@@ -270,13 +271,14 @@ ActiveRecord::Schema.define(version: 20170820060606) do
 
   create_table "performance_set_instruments", force: :cascade do |t|
     t.integer  "performance_set_id"
-    t.string   "instrument",          null: false
+    t.string   "instrument",                      null: false
     t.integer  "limit"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.boolean  "available_to_opt_in"
     t.string   "opt_in_message_type"
     t.decimal  "opt_in_message_id"
+    t.integer  "standby_limit",       default: 0
     t.index ["performance_set_id"], name: "index_performance_set_instruments_on_performance_set_id"
   end
 

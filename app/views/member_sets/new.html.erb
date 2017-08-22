@@ -46,6 +46,26 @@
 
   <input type='hidden' id='member_set_id'></input>
 
+  <div class='performance_set_inst_limit_message' id='performance_set_inst_limit_message'>
+    <span class='over_limit' id='over_limit'>
+      Thanks for expressing an interest in playing in this set! Unfortunately, at this
+      time this set is full on <b id='instrument_specified'></b>. Please use the dropdown above or contact
+      membership@sfcivicsymphony.org for other playing opportunities.
+    </span>
+    <span class='standby_only' id='standby_only'>
+      <b>Interested in Being a Standby Player?</b><br><br>
+      This section (<b id='instrument_specified_2'></b>) is currently full. <br><br>
+      However, we often have a few musicians who drop out during the set for
+      various reasons.
+      By opting-in to a standby seat, you will join us during rehearsals, and
+      will join us for the concert if another musician has dropped out.<br><br>
+      It is likely you would be able to join us, but we cannot guarantee a place
+      in the concert.
+      <br><br>
+      Contact membership@sfcivicsymphony.org with any questions about being a standby player.
+    </span>
+  </div>
+
   <% @performance_sets.each do |ps| %>
     <div class='performance_set_opt_in_message' id='performance_set_opt_in_message_<%=ps.id%>'>
       <h3><%= ps.extended_name %></h3>

@@ -93,6 +93,11 @@
           <%= psi_f.text_field :limit, size: 5 %>
         </div>
 
+        <div class="field inlineField" style='padding-right: 15px; border-right: 1px solid black;'>
+          <%= psi_f.label :standby_limit, "Standby Player Limit" %>
+          <%= psi_f.text_field :standby_limit, size: 5 %>
+        </div>
+
         <%# THIS FIELD IS NAMED BACKWARDS %>
         <div class="field inlineField" style='padding-right: 15px; border-right: 1px solid black;'>
           <%= psi_f.label :available_to_opt_in, "Don't allow opt-ins on this instrument" %>
@@ -113,9 +118,10 @@
         <% @performance_set.performance_set_instruments.each do |psi| %>
           <br />
           <%= link_to psi.instrument, edit_performance_set_instrument_path(psi), { target: "_new" } %> ·
-          <%= psi.limit.present? ? "Limit #{psi.limit}" : "" %> ·
+          <%= psi.limit.present? ? "Limit #{psi.limit} · " : "" %>
+          <%= psi.standby_limit > 0 ? "Standby Limit #{psi.limit} · " : "" %>
           <%= psi.available_to_opt_in ? "Opt-In Unavailable" : "Opt-In Available" %> ·
-          Message: <%= psi.opt_in_message_id ? link_to(OptInMessage.find(psi.opt_in_message_id).title, OptInMessage.find(psi.opt_in_message_id)).html_safe : "No Custom Message" %>
+          Message: <%= psi.opt_in_message_id ? link_to(OptInMessage.find(psi.opt_in_message_id).title, OptInMessage.find(psi.opt_in_message_id)).html_safe : "(No Custom Message)" %>
         <% end %>
         <br /><br />
       <% end %>

@@ -33,6 +33,7 @@ Rails.application.routes.draw do
       get :rehearsal_dates
       get :roster, as: :roster
       get :email_roster, as: :email_roster
+      get :check_instrument_limit
     end
   end
   resources :ensembles

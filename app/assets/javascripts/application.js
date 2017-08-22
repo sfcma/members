@@ -354,6 +354,10 @@ var loadStuff = function() {
     setInstrumentsForSelection('#member_set\\[new_performance_set_instrument_id\\]', null, false);
   });
 
+  $('.bigForm #member_set\\[new_performance_set_instrument_id\\]').on('change', function() {
+    checkInstrumentOptInStatus('#member_set\\[new_performance_set_instrument_id\\]');
+  });
+
   // For Member#signup page
   $('.bigForm #member_set_performance_set_id').on('change', function() {
     setInstrumentsForSelection('#member_set\\[new_performance_set_instrument_id\\]', null, false);
@@ -490,11 +494,38 @@ function setInstrumentsForSelection(instrumentSelectorId, functionToCall, includ
     } else {
       rehearsalSel.prop('disabled', false);
     }
+    checkInstrumentOptInStatus(instrumentSelectorId);
 
     if(functionToCall) {
       functionToCall();
     }
   });
+}
+
+function checkInstrumentOptInStatus(instrumentSelectorId) {
+  var performanceSetId = $('#member_set_performance_set_id').val();
+  var instrument = $(instrumentSelectorId).val();
+  $.get('../performance_sets/' + performanceSetId + '/check_instrument_limit?instrument=' + instrument)
+    .then(function(response) {
+      if (response.status == "over_limit") {
+        $('.performance_set_inst_limit_message').show();
+        $('.over_limit').show();
+        $('#instrument_specified').html(instrument);
+        $('#instrument_specified_2').html(instrument);
+        $('.standby_only').hide();
+        $('#opt_in_button').prop('disabled', true);
+      } else if (response.status == "standby_only") {
+        $('.performance_set_inst_limit_message').show();
+        $('.over_limit').hide();
+        $('#instrument_specified').html(instrument);
+        $('#instrument_specified_2').html(instrument);
+        $('.standby_only').show();
+        $('#opt_in_button').prop('disabled', false);
+      } else if (response.status == "ok") {
+        $('.performance_set_inst_limit_message').hide();
+        $('#opt_in_button').prop('disabled', false);
+      }
+    }).fail(function (err) { console.log("ERR", err); });
 }
 
 // Email (set/ensemble selector) form functionality

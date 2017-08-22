@@ -112,6 +112,9 @@
         <% else %>
           Not rotating
         <% end %>
+        <% if ms.standby_player %>
+          <br><b>Standby</b>
+        <% end %>
         <% if ms.set_member_instruments.present? %>
           <br><%= ms.set_member_instruments[0].instrument_name_with_variant.capitalize %>
         <% end %>

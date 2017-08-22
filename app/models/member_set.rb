@@ -33,6 +33,8 @@ class MemberSet < ApplicationRecord
       ['Interested in playing this set, unconfirmed', 'Playing', 'Subbing', 'Opted in for this set']
     when 3    # any at all
       statuses.keys.map(&:to_s).map(&:capitalize)
+    when 4    # temporary, used for opt-in limit checking plz remove
+      ['Interested in playing this set, unconfirmed', 'Playing', 'Opted in for this set']
     else
       throw 'Unexpected email status id'
     end
