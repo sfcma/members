@@ -112,13 +112,13 @@ class PerformanceSetsController < ApplicationController
     instrument = params[:instrument]
     psi = PerformanceSetInstrument.find_by("performance_set_id=#{@performance_set.id} and lower(instrument)=?", instrument.downcase)
     psi_limit = psi.limit || 10000
-    over_limit = psi_limit > 0 && MemberSet.filtered_by_criteria(@performance_set.id, 4, instrument).count >= (psi_limit + psi.standby_limit)
+    over_limit = psi_limit > 0 && MemberSet.filtered_by_criteria(@performance_set.id, 4, [instrument]).count >= (psi_limit + psi.standby_limit)
     if over_limit
       respond_to do |format|
         format.json { render json: { status: "over_limit" } }
       end
     else
-      at_standby = MemberSet.filtered_by_criteria(@performance_set.id, 4, instrument).count >= psi_limit
+      at_standby = MemberSet.filtered_by_criteria(@performance_set.id, 4, [instrument]).count >= psi_limit
       if at_standby
         respond_to do |format|
           format.json { render json: { status: "standby_only" } }

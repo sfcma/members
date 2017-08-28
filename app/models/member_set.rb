@@ -41,6 +41,7 @@ class MemberSet < ApplicationRecord
   end
 
   def self.filtered_by_criteria(performance_set_id, status_id, instruments = [])
+    throw "Instruments must be an array, passed in #{instruments}" unless instruments.is_a?(Array)
     if instruments.length.zero?
       statuses = MemberSet.email_status_to_status(status_id)
       MemberSet.where(performance_set_id: performance_set_id, set_status: statuses)
