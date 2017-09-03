@@ -1,24 +1,35 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is the Membership Management System ("the system") used by the San Francisco Civic Music Association. It is a fairly basic Rails app, with a few standard gems on top of it. It is made to run on a single Heroku dyno, plus database.
 
-Things you may want to cover:
+Note that there is no current JS pre-processing that occurs.
 
-* Ruby version
+## Purpose
 
-* System dependencies
+The system is used for several key areas of SFCMA's activities:
 
-* Configuration
+1. Having a central repository for all member contact information
+2. Recording which members are playing in which groups, and having that be accessible to all relevant parties
+3. Being able to contact current lists of members in each group through email
+4. Allowing members to opt into playing
+5. Allowing members to record their absences, and for the musical leadership to know these absences in advance
+6. Collecting data to be used in reporting to the Board, membership, and for grants/funding.
 
-* Database creation
+Here is a basic overview of the data model:
 
-* Database initialization
+![Data Model](https://user-images.githubusercontent.com/3664475/30000971-c3951742-9033-11e7-8709-fdc3e3703e5c.png)
 
-* How to run the test suite
+## Key Models:
 
-* Services (job queues, cache servers, search engines, etc.)
+*Members* is the core model, representing the players.
 
-* Deployment instructions
+*Users* are the login accounts. While there is a large overlap with members, we have chosen to not link the two
 
-* ...
+*Ensembles* represent each of the ensembles in SFCMA, such as the Civic Symphony.
+
+*PerformanceSets* represent a single set of rehersals and concerts where an ensemble plays the same music with the same group of musicians. Most Performance Sets in SFCMA ensembles have a eight rehearsals and a single concert, but that is not always the case.
+
+*MemberSet* is the join table between members and the performance sets that they participate in. Additional data about the player's participation is stored in this table, except the instrument.
+
+*SetMemberInstrument* is an additional table that records the instruments played by the member for a given performance set, since there can be more than one.
+
