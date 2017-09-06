@@ -409,6 +409,7 @@ class MembersController < ApplicationController
         :performance_set_id,
         :status,
         :rotating,
+        :standby_player,
         :set_status,
         :_destroy,
         set_member_instruments_attributes: [:member_instrument_id],

@@ -107,13 +107,8 @@
         <b><%= ms.performance_set.extended_name %></b>&emsp;
         <span class='grays'>(<%= ms.performance_set.start_date.to_datetime.strftime('%B %e, %Y') %> – <%= ms.performance_set.end_date.to_datetime.strftime('%B %e, %Y')  %>)</span><br>
         <i><%= ms.set_status %></i><br>
-        <% if ms.rotating %>
-          <b>Rotating</b>
-        <% else %>
-          Not rotating
-        <% end %>
         <% if ms.standby_player %>
-          <br><b>Standby</b>
+          <b>Standby Player</b>
         <% end %>
         <% if ms.set_member_instruments.present? %>
           <br><%= ms.set_member_instruments[0].instrument_name_with_variant.capitalize %>
