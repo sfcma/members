@@ -467,11 +467,11 @@ div {
     background: lightgray;
   }
 
-  &.rotating {
+  &.standby_player {
     &::after {
       background: red;
       color: white;
-      content: "\00a0R\00a0";
+      content: "\00a0Standby\00a0";
       font-weight: bold;
       font-size: 17px;
       display: inline-block;

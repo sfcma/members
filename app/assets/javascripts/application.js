@@ -129,9 +129,9 @@ var loadStuff = function() {
             <select name='member[member_sets_attributes][" + setCount +"][set_status]' id='member_member_sets_attributes_" + setCount +"_set_status'> \
             " + playStatuses + "</select> \
             <span class='setStatusModalOpener button'>What Does This Mean?</span><br> \
-            &emsp;Rotating this set? \
-            <input name='member[member_sets_attributes][" + setCount +"][rotating]' value='0' type='hidden'> \
-            <input value='1' name='member[member_sets_attributes][" + setCount +"][rotating]' id='member_member_sets_attributes_" + setCount +"_rotating' type='checkbox'> \
+            &emsp;Standby Player this set? \
+            <input name='member[member_sets_attributes][" + setCount +"][standby_player]' value='0' type='hidden'> \
+            <input value='1' name='member[member_sets_attributes][" + setCount +"][standby_player]' id='member_member_sets_attributes_" + setCount +"_standby_player' type='checkbox'> \
             <br> \
             &emsp;Instruments played this set: \
             <select name='member[member_sets_attributes][" + setCount +"][set_member_instruments_attributes][0][member_instrument_id]'  \

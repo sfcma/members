@@ -215,7 +215,7 @@
               &emsp;Playing Status:
               <%= set_f.select :set_status, MemberSet.statuses.keys.map(&:humanize).to_a %>
               <span class="setStatusModalOpener button">What Does This Mean?</span><br>
-              &emsp;Rotating this set? <%= set_f.check_box :rotating %>
+              &emsp;Standby Player this set? <%= set_f.check_box :standby_player %>
               <br>
               &emsp;Instruments played this set:
               <% x = 0 %>
