@@ -29,7 +29,7 @@ class MemberMailer < ApplicationMailer
       if status == 0
         @status_text = "are playing in"
       elsif status == 1
-        @status_text = "are playing in or opted into"
+        @status_text = "are playing in or considering playing in"
       else
         @status_text = "are playing in or attending rehearsals for"
       end

@@ -1,13 +1,13 @@
 class MemberSet < ApplicationRecord
   audited associated_with: :member
   acts_as_paranoid
-  enum set_status_id: [ :interested,
-                        :rehearsing,
-                        :performing,
-                        :stopped_by_self,
-                        :stopped_by_us,
-                        :substituting,
-                        :uninterested ]
+  # enum set_status_id: [ :interested,
+  #                       :performing,
+  #                       :rehearsing,
+  #                       :stopped_by_self,
+  #                       :stopped_by_us,
+  #                       :substituting,
+  #                       :uninterested ]
 
   has_many :set_member_instruments, dependent: :destroy
   belongs_to :member
@@ -15,26 +15,56 @@ class MemberSet < ApplicationRecord
   accepts_nested_attributes_for :set_member_instruments, allow_destroy: true
   validates :performance_set, presence: true
 
-  enum statuses: ['Interested in playing this set, unconfirmed',
-                  :playing,
-                  'Stopped playing, due to member\'s own decision',
-                  'Unable to play, not due to Member\'s decision',
-                  :subbing,
-                  'Not Interested in this set',
-                  'Opted in for this set']
+  enum statuses: [:interested,
+                  :performing,
+                  :rehearsing,
+                  :stopped_by_self,
+                  :stopped_by_us,
+                  :substituting,
+                  :uninterested]
+
+  def self.set_status_array
+    ["Interested in playing this set",
+    "Committed to perfoming in this set",
+    "Attending rehearsals this set, not yet committed to concert",
+    "Chose to stop playing this set",
+    "Was asked to stop playing this set",
+    "Substituting for another member this set",
+    "Not interested in playing this set"]
+  end
+
+  def self.set_status_text(set_status)
+    if set_status == 'interested'
+      "Interested in playing this set"
+    elsif set_status == 'performing'
+      "Committed to perfoming in this set"
+    elsif set_status == 'rehearsing'
+      "Attending rehearsals this set, not yet committed to concert"
+    elsif set_status == 'stopped_by_self'
+      "Chose to stop playing this set"
+    elsif set_status == 'stopped_by_us'
+      "Was asked to stop playing this set"
+    elsif set_status == 'substituting'
+      "Substituting for another member this set"
+    elsif set_status == 'uninterested'
+      "Not interested in playing this set"
+    else
+      "Invalid Status"
+    end
+  end
 
   def self.email_status_to_status(email_status_id)
     case email_status_id.to_i
     when 0    # playing only
-      ['Playing']
+      [:performing, :rehearsing]
     when 1    # playing or opt in
-      ['Opted in for this set', 'Playing']
+      [:performing, :rehearsing, :interested]
     when 2    # any that are or might be playing
-      ['Interested in playing this set, unconfirmed', 'Playing', 'Subbing', 'Opted in for this set']
+      [:performing, :rehearsing, :interested, :substituting]
     when 3    # any at all
-      statuses.keys.map(&:to_s).map(&:capitalize)
+      statuses.keys.map(&:to_s)
     when 4    # temporary, used for opt-in limit checking plz remove
-      ['Interested in playing this set, unconfirmed', 'Playing', 'Opted in for this set']
+      [:performing, :rehearsing, :interested]
     else
       throw 'Unexpected email status id'
     end

@@ -76,11 +76,11 @@
         <br><br>
         <b><%= ms.performance_set.extended_name %></b>&emsp;
         <span class='grays'>(<%= ms.performance_set.start_date.to_datetime.strftime('%B %e, %Y') %> – <%= ms.performance_set.end_date.to_datetime.strftime('%B %e, %Y')  %>)</span><br>
-        <i><%= ms.set_status %></i><br>
+        <i><%= MemberSet.set_status_text(ms.set_status) %></i><br>
         <% if ms.standby_player %>
-          <b>Standby Player</b>
+          <b>Standby Player</b><br>
         <% end %>
-        <br><%= ms.set_member_instruments[0].instrument_name_with_variant.capitalize %>
+        <%= ms.set_member_instruments[0].instrument_name_with_variant.capitalize %>
       <% end %>
 
       <br><br>

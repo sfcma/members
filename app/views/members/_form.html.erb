@@ -203,7 +203,8 @@
       <div id="setMaster">
         <script>var setCount = <%= @member.member_sets.count %>;</script>
         <script>var setsForDropdown = <%= @performance_sets.map{|set| [set.id, set.extended_name]}.to_json.html_safe %>;</script>
-        <script>var playStatusesForDropdown = <%= MemberSet.statuses.keys.map(&:humanize).to_json.html_safe %>;</script>
+        <script>var playStatusesForDropdown = <%= MemberSet.statuses.keys.to_json.html_safe %>;</script>
+        <script>var playStatusTextForDropdown = <%= MemberSet.set_status_array.to_json.html_safe %>;</script>
         <h3 class="formHeader">Sets</h3>
         <% j = 0 %>
         <%= f.fields_for :member_sets do |set_f| %>
@@ -213,7 +214,7 @@
               &emsp;&emsp;<i><a href='#' class='removeLink' id='removeMemberSet<%=j%>'>Remove Member from Set</a></i>
               <br>
               &emsp;Playing Status:
-              <%= set_f.select :set_status, MemberSet.statuses.keys.map(&:humanize).to_a %>
+              <%= set_f.select :set_status, MemberSet.statuses.keys.map { |e| [MemberSet.set_status_text(e), e] } %>
               <span class="setStatusModalOpener button">What Does This Mean?</span><br>
               &emsp;Standby Player this set? <%= set_f.check_box :standby_player %>
               <br>
@@ -280,17 +281,16 @@
 <div class='modal' id='setStatusModal'>
   <h2>Definition of Set Statuses</h2>
 
-  <h3>Interested in playing this set</h3>
+  <h3>Interested</h3>
     Expressed an interest in playing this set, potentially has shown up to
-    rehearsals, but has not confirmed that they are playing in the concert.
-    <br><br>
-    <i>When a member is added to a set, this is the default status.</i>
+    rehearsals, but has not confirmed that they are continuing to rehearse with us
+    or playing in the concert. We should aim to get members out of this status quickly.
 
-  <h3>Playing</h3>
-    Member is playing this set, and has confirmed they are playing in the concert.
+  <h3>Rehearsing</h3>
+    Rehearsing with us this set, has not committed to the concert
 
-  <h3>Opted In for this set</h3>
-    Member has opted in for this set, but has not yet confirmed or appeared at a rehearsal.
+  <h3>Performing</h3>
+    Member is committed to playing this set, and has confirmed they are playing in the concert.
 
   <h3>Stopped playing, due to member's own decision</h3>
     Member is unable to play in this set, and made that decision on their own.
@@ -300,13 +300,8 @@
     of an administrative or musical decision, made by the Music Director,
     Section Leader, or other individual who is not the member.
 
-  <h3>Subbing</h3>
+  <h3>Substituting</h3>
     This member is only subbing this set.
-
-  <h3>Rolled over from last set — Unconfirmed</h3>
-    This member has been automatically added to this set because they
-    played in this ensemble last set. They have not been confirmed to be
-    attending or not.
 
   <h3>Not Interested in this set</h3>
     This member is not interested in playing this set, but we still want to
@@ -317,29 +312,6 @@
 </div>
 
 <div class='modal' id='playerStatusModal'>
-  <h2>Definition of Player Statuses</h2>
-
-  <h3>Untriaged</h3>
-    This member has contacted us about playing, but has not yet joined any set.
-    <br><br>
-    <i>When a member signs up through the website, this is their default status.</i>
-
-  <h3>Placed in Group</h3>
-    This member has contacted us and been able to join a performance ensemble.
-
-  <h3>Waitlist</h3>
-    This member has contacted us and is interested in playing, but is unable to
-    join any group because of other players ahead of them in line.
-
-  <h3>Sub Only</h3>
-    This member is interested in playing, but only as a substitute.
-
-  <h3>Inactive</h3>
-    This member used to play with us, but no longer wishes to or is able to
-    participate.
-    <br><br>
-    <i>Members should never be removed from the database, as this is a permanent
-      record of who played in each concert</i>
-  <br><br>
+  this field is unused
   <button class='closeHelp'>Close</button>
 </div>

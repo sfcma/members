@@ -13,9 +13,9 @@ class Email < ApplicationRecord
 
   accepts_nested_attributes_for :email_logs
 
-  enum statuses_for_email: ["Confirmed Playing ONLY",
-                            "Confirmed Playing and Opted-In",
-                            "Confirmed Playing, Opted-In, Interested, and Subbing"]
+  enum statuses_for_email: ["Confirmed Playing",
+                            "Confirmed Playing or Interested",
+                            "Confirmed Playing, Interested, or Subbing"]
 
   def self.statuses_for_general_use
     statuses_for_emails.merge("All, including those who are not playing": 3)

@@ -13,7 +13,7 @@ Showing these members: <%= select_tag :member_email_statuses, options_for_select
   <h4><%= k.capitalize.pluralize %> (<%= (@instrument_groups[k].count) %>)</h4>
   <% @instrument_groups[k].each do |ms| %>
     <% if ms %>
-      <%= link_to ms.member, ms.member %> &emsp;&emsp;&emsp;<i style='color: gray'><%= ms.set_status %><%= ms.standby_player ? " – Standby" : "" %></i> <br>
+      <%= link_to ms.member, ms.member %> &emsp;&emsp;&emsp;<i style='color: gray'><%= MemberSet.set_status_text(ms.set_status) %><%= ms.standby_player ? " – Standby" : "" %></i> <br>
     <% end %>
   <% end %>
 <% end %>

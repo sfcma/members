@@ -117,7 +117,7 @@ var loadStuff = function() {
     }
     playStatuses = "";
     for (ps in playStatusesForDropdown) {
-      playStatuses += "<option value='" + playStatusesForDropdown[ps].replace("'", "&apos;") + "'>" + playStatusesForDropdown[ps] + "</option>";
+      playStatuses += "<option value='" + playStatusesForDropdown[ps] + "'>" + playStatusTextForDropdown[ps] + "</option>";
     }
     var div = "<div class='field memberInfoBlock'> \
            <select name='member[member_sets_attributes][" + setCount +"][performance_set_id]' id='member_member_sets_attributes_" + setCount +"_performance_set_id'> \

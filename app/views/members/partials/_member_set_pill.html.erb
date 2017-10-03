@@ -5,17 +5,17 @@
        next
      end
 
-     if member_set.set_status == 'Interested in playing this set' || member_set.set_status == 'Opted in for this set'
+     if member_set.set_status == 'interested'
        class_name = 'interested'
-     elsif member_set.set_status == 'Playing'
+     elsif member_set.set_status == 'performing' || member_set.set_status == 'rehearsing'
        class_name = 'playing'
-     elsif member_set.set_status == 'Stopped playing, due to member\'s own decision'
+     elsif member_set.set_status == 'stopped_by_self'
        class_name = 'not-playing-own'
-     elsif member_set.set_status == 'Unable to play, not due to member\'s decision'
+     elsif member_set.set_status == 'stopped_by_us'
        class_name = 'not-playing-not-own'
-     elsif member_set.set_status == 'Subbing'
+     elsif member_set.set_status == 'substituting'
        class_name = 'subbing'
-     elsif member_set.set_status == 'Not interested in this set'
+     elsif member_set.set_status == 'uninterested'
        class_name = 'not-interested'
      end
 
@@ -29,7 +29,7 @@
     <div class='member-set-pill-tooltip'>
       <b><%= member_set.member.first_name %> <%= member_set.member.last_name %><br></b>
       in <%= @performance_sets[member_set.performance_set_id].name %> &emsp; <i>(<%= @performance_sets[member_set.performance_set_id].start_date %> - <%= @performance_sets[member_set.performance_set_id].end_date %>)</i><br>
-      has status <b><%= member_set.set_status %></b><br>
+      has status <b><%= MemberSet.set_status_text(member_set.set_status) %></b><br>
       <% if member_set.standby_player %>
         <b>Standby Player</b>
       <% end %>
