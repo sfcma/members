@@ -29,7 +29,7 @@ class MemberSet < ApplicationRecord
     "Attending rehearsals this set, not yet committed to concert",
     "Chose to stop playing this set",
     "Was asked to stop playing this set",
-    "Substituting for another member this set",
+    "Subbing in rehearsals this set; not playing the concert",
     "Not interested in playing this set"]
   end
 
@@ -45,7 +45,7 @@ class MemberSet < ApplicationRecord
     elsif set_status == 'stopped_by_us'
       "Was asked to stop playing this set"
     elsif set_status == 'substituting'
-      "Substituting for another member this set"
+      "Subbing in rehearsals this set; not playing the concert"
     elsif set_status == 'uninterested'
       "Not interested in playing this set"
     else
