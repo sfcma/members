@@ -44,6 +44,11 @@ class MemberMailer < ApplicationMailer
       @instrument = ""
     end
 
+    email.attachments.each do |attachment|
+      attachments[attachment.file_file_name] = { mime_type: attachment.file_content_type,
+                                                   content: File.read(attachment.file.path) }
+    end
+
     mail(to: "#{member.to_s} <#{member.email_1}>",
           reply_to: "#{reply_to_user_name} <#{reply_to_email}>",
           from: "#{reply_to_user_name} via SF Civic Music <no-reply@mail.sfcivicmusic.org>",

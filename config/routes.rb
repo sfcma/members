@@ -55,6 +55,8 @@ Rails.application.routes.draw do
   resources :users
   resources :performance_set_instruments
 
+  resources :attachments, only: [:destroy]
+
   resources :member_sets, only: [:new, :create]
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

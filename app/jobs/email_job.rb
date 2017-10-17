@@ -1,6 +1,3 @@
-
-
-
 class EmailJob
   include SuckerPunch::Job
 

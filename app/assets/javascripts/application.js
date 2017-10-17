@@ -404,6 +404,10 @@ var loadStuff = function() {
     $('#email_for_step_four').show();
   });
 
+  $("[class^='delAttach'").bind('ajax:success', function() {
+    $(this).closest('div').html('Removed');
+  });
+
   // Get email recipients
   $(document).on('change', '#emailFilter select', function() {
     if(!window.auto_loading) {

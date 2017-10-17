@@ -10,6 +10,7 @@ class Email < ApplicationRecord
   validates :user, presence: true
 
   has_many :email_logs
+  has_many :attachments, dependent: :destroy
 
   accepts_nested_attributes_for :email_logs
 

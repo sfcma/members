@@ -74,6 +74,16 @@ class EmailsController < ApplicationController
 
     respond_to do |format|
       if @email.save
+        if params[:files]
+          params[:files].each { |file|
+            if (a = Attachment.new(file: file)).save
+              @email.attachments << a
+            else
+              flash.now[:error] = '<img height=40 src="https://cdn0.iconfinder.com/data/icons/shift-free/32/Error-128.png"> Unable to attach that file. <br> Please try a different file. <br><br>Attachments must be: PDF, Images, Excel, or Word Documents only, and must be under 5MB.'.html_safe
+              format.html { render :edit }
+            end
+          }
+        end
         format.html { redirect_to @email }
         format.json { render :show, status: :created, location: @email }
       else
@@ -89,6 +99,7 @@ class EmailsController < ApplicationController
     @performance_sets = emailable_performance_sets
     @ensembles = emailable_ensembles
     @statuses_for_email = Email.statuses_for_emails
+    @instruments = []
 
     if email_params.has_key?(:ensemble_id) && !email_params.has_key?(:performance_set_id)
       @email.update(performance_set_id: nil)
@@ -98,6 +109,16 @@ class EmailsController < ApplicationController
 
     respond_to do |format|
       if @email.update(email_params)
+        if params[:files]
+          params[:files].each { |file|
+            if (a = Attachment.new(file: file)).save
+              @email.attachments << a
+            else
+              flash.now[:error] = '<img height=40 src="https://cdn0.iconfinder.com/data/icons/shift-free/32/Error-128.png"> Unable to attach that file. <br> Please try a different file. <br><br>Attachments must be: PDF, Images, Excel, or Word Documents only, and must be under 5MB.'.html_safe
+              format.html { render :edit }
+            end
+          }
+        end
         format.html { redirect_to @email, notice: 'Email successfully updated – not yet sent.' }
         format.json { render :show, status: :ok, location: @email }
       else
@@ -142,6 +163,7 @@ class EmailsController < ApplicationController
         :user_id,
         :behalf_of_name,
         :behalf_of_email,
+        :files,
         :instruments => []
       )
     end

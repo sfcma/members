@@ -14,6 +14,15 @@
   </div>
 </div>
 
+<% if @email.attachments.present? %>
+  <br><h3 class="formHeader">Attachments (<%= @email.attachments.count %>)</h3>
+  <div class="field memberInfoBlock">
+    <% @email.attachments.each do |attachment| %>
+      <a href='<%= URI.join(request.url, attachment.file.url) %>'><%= attachment.file_file_name %></a>,
+    <% end %>
+  </div>
+<% end %>
+
 <br>
 <h3 class="formHeader">Who are we sending this email to?</h3>
 <div class="field memberInfoBlock">

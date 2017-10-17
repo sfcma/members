@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170822070304) do
+ActiveRecord::Schema.define(version: 20171017045120) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -33,6 +33,17 @@ ActiveRecord::Schema.define(version: 20170822070304) do
     t.datetime "updated_at", null: false
     t.index ["member_id"], name: "index_action_logs_on_member_id"
     t.index ["user_id"], name: "index_action_logs_on_user_id"
+  end
+
+  create_table "attachments", force: :cascade do |t|
+    t.integer  "user_id"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.string   "file_file_name"
+    t.string   "file_content_type"
+    t.integer  "file_file_size"
+    t.datetime "file_updated_at"
+    t.integer  "email_id",          default: 0, null: false
   end
 
   create_table "audits", force: :cascade do |t|
@@ -206,8 +217,8 @@ ActiveRecord::Schema.define(version: 20170822070304) do
     t.string   "emergency_relation"
     t.string   "emergency_phone"
     t.string   "playing_status"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",                                                 null: false
+    t.datetime "updated_at",                                                 null: false
     t.datetime "initial_date"
     t.datetime "waiver_signed"
     t.datetime "deleted_at"
@@ -217,6 +228,10 @@ ActiveRecord::Schema.define(version: 20170822070304) do
     t.integer  "reply_user_id"
     t.boolean  "source_website"
     t.string   "source_other"
+    t.boolean  "interested_in_large_ensemble_opportunities", default: true
+    t.boolean  "interested_in_chamber_opportunities",        default: true
+    t.boolean  "unsubscribe_from_all_emails",                default: false
+    t.boolean  "no_contact",                                 default: false
     t.index ["deleted_at"], name: "index_members_on_deleted_at"
   end
 
