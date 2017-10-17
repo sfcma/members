@@ -118,12 +118,14 @@
       <% end %>
       <div class="field">
         Add more attachments:
-        <%= file_field_tag "files[]", type: :file, multiple: true %>
+        <%= file_field_tag "files[]", type: :file, multiple: true %><br><br>
+        <i>After selecting files, please "Save Draft" at the bottom of the page before selecting any more</i>
       </div>
     <% else %>
       <div class="field">
         Add attachments (can select multiple):
-        <%= file_field_tag "files[]", type: :file, multiple: true %>
+        <%= file_field_tag "files[]", type: :file, multiple: true %><br><br>
+        <i>After selecting files, please "Save Draft" at the bottom of the page before selecting any more</i>
       </div>
     <% end %>
   </div>
