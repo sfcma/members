@@ -612,9 +612,9 @@ function updateEmailRecipients() {
       var memberInsts = member.member_instruments;
       var instrument;
       $.each(memberInsts, function(i, mi) {
-        if (member_set.set_member_instruments[0].variant != null) {
+        if (member_set.set_member_instruments[0] && member_set.set_member_instruments[0].variant != null) {
           instrument = member_set.set_member_instruments[0].variant
-        } else if (member_set.set_member_instruments[0].member_instrument_id === mi.id) {
+        } else if (member_set.set_member_instruments[0] && member_set.set_member_instruments[0].member_instrument_id === mi.id) {
           instrument = mi.instrument;
         }
       });
