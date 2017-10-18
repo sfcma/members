@@ -8,7 +8,7 @@ class EmailsController < ApplicationController
   # GET /emails
   # GET /emails.json
   def index
-    @emails = Email.all.order('sent_at DESC')
+    @emails = Email.all.includes(:ensemble, :performance_set).order('sent_at DESC')
   end
 
   # GET /emails/1
