@@ -404,7 +404,7 @@ var loadStuff = function() {
     $('#email_for_step_four').show();
   });
 
-  $("[class^='delAttach'").bind('ajax:success', function() {
+  $("[class^='delAttach']").bind('ajax:success', function() {
     $(this).closest('div').html('Removed');
   });
 
