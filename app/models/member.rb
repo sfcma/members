@@ -5,13 +5,16 @@ class Member < ApplicationRecord
   has_many :member_instruments, dependent: :destroy
   has_many :member_sets, dependent: :destroy
   has_many :member_notes, dependent: :destroy
+  has_many :member_community_nights, dependent: :destroy
 
   # This maybe should be a has_and_belongs_to_many
   has_many :performance_sets, through: :member_sets
+  has_many :community_nights, through: :member_community_nights
 
   accepts_nested_attributes_for :member_instruments, allow_destroy: true
   accepts_nested_attributes_for :member_sets, allow_destroy: true
   accepts_nested_attributes_for :member_notes, allow_destroy: true
+  accepts_nested_attributes_for :member_community_nights, allow_destroy: true
 
   validates :first_name, presence: true
   validates_associated :member_sets, message: -> (_obj, _data) { 'Please include an instrument and set name on each set added.' }
@@ -20,6 +23,10 @@ class Member < ApplicationRecord
   validates_date :waiver_signed, allow_blank: true
 
   enum statuses: [:untriaged, :placed_in_group, :waitlist, :sub_only, :inactive]
+
+  def last_played
+    self.performance_sets.map(&:end_date).sort.last.end_date
+  end
 
   def self.in_set(performance_set_id)
     Member

@@ -1,5 +1,74 @@
-<h1>New Member Community Night</h1>
+<div class='pageHeader'><h2>Opt-in to a Community Night</h2></div>
 
-<%= render 'form', member_community_night: @member_community_night %>
+<div class="bigFormCommunityNight">
+<%= form_for(@member_community_night) do |f| %>
+  <% if @member_community_night.errors.any? %>
+    <div id="error_explanation">
+      <h2>This opt-in could not be recorded:</h2>
 
-<%= link_to 'Back', member_community_nights_path %>
+      <ul>
+      <% @member_community_night.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% unless current_user %>
+    <i>Please use this form to opt-in to an upcoming community night.</i>
+  <% end %>
+
+  <div class="field">
+    <%= f.fields_for :members do |member_f| %>
+      <%= member_f.label :email_1, "Your Email Address" %>
+      <%= member_f.text_field :email_1 %>
+    <% end %>
+  </div>
+
+  <div class="field">
+    <%= f.label :community_night_id, "Which community night are you planning to join?" %>
+    <%= f.collection_select :community_night_id, @community_nights, :id, :name, { prompt: true } %>
+  </div>
+
+  <div class="field">
+    <label id='member_community_night_new_performance_set_instrument_id_label'>What instrument are you planning to play?</label>
+    <select name='member_community_night[new_performance_set_instrument_id]' id='member_community_night[new_performance_set_instrument_id]' disabled><option>Please Select</option></select>
+  </div>
+
+  <input type='hidden' id='member_community_night_id'></input>
+
+  <div class='performance_set_inst_limit_message' id='performance_set_inst_limit_message'>
+    <span class='over_limit' id='over_limit'>
+      Thanks for expressing an interest in playing in this community night! Unfortunately, at this
+      time this community night is full on <b id='instrument_specified'></b>. Please use the dropdown above or contact
+      membership@sfcivicsymphony.org for other playing opportunities.
+    </span>
+    <span class='standby_only' id='standby_only'>
+      <b>Interested in Being a Standby Player?</b><br><br>
+      This section (<b id='instrument_specified_2'></b>) is currently full. <br><br>
+      However, we often have a few musicians who drop out during the set for
+      various reasons.
+      By opting-in to a standby seat, you will join us during rehearsals, and
+      will join us for the concert if another musician has dropped out.<br><br>
+      It is likely you would be able to join us, but we cannot guarantee a place
+      in the concert.
+      <br><br>
+      Contact membership@sfcivicsymphony.org with any questions about being a standby player.
+    </span>
+  </div>
+
+  <% @community_nights.each do |ps| %>
+    <div class='performance_set_opt_in_message' id='performance_set_opt_in_message_<%=ps.id%>'>
+      <h3><%= ps.name %></h3>
+      By opting into this community night, you are agreeing to abide by our <b><a href="https://sfcivicmusic.org/code-of-conduct/">Code of Conduct</a></b> for all musicians.
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit "Opt into community night", class: 'button', id: 'opt_in_button', disabled: true %>
+  </div>
+<% end %>
+</div>
+
+<i class='form-disclaimer'>If you have any questions or issues with this form,
+  please contact membership@sfcivicsymphony.org</i>

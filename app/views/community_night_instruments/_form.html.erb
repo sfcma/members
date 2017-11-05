@@ -1,0 +1,17 @@
+<%= form_for(community_night_instrument) do |f| %>
+  <% if community_night_instrument.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(community_night_instrument.errors.count, "error") %> prohibited this community_night_instrument from being saved:</h2>
+
+      <ul>
+      <% community_night_instrument.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

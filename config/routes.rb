@@ -1,7 +1,13 @@
 Rails.application.routes.draw do
   resources :opt_in_messages
   resources :member_community_nights
-  resources :community_nights
+  resources :community_nights do
+    member do
+      get :roster, as: :roster
+      get :check_instrument_limit
+    end
+  end
+  resources :community_night_instruments
   resources :emails do
     member do
       get :send_email

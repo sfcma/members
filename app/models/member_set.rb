@@ -1,15 +1,9 @@
 class MemberSet < ApplicationRecord
   audited associated_with: :member
   acts_as_paranoid
-  # enum set_status_id: [ :interested,
-  #                       :performing,
-  #                       :rehearsing,
-  #                       :stopped_by_self,
-  #                       :stopped_by_us,
-  #                       :substituting,
-  #                       :uninterested ]
 
   has_many :set_member_instruments, dependent: :destroy
+  has_many :member_instruments, through: :set_member_instruments
   belongs_to :member
   belongs_to :performance_set, class_name: 'PerformanceSet'
   accepts_nested_attributes_for :set_member_instruments, allow_destroy: true
@@ -81,7 +75,7 @@ class MemberSet < ApplicationRecord
         use_variant_instruments = true
       end
       statuses = MemberSet.email_status_to_status(status_id)
-      potential_members = Member.in_set_with_status(performance_set_id, statuses)
+      potential_members = Member.in_set_with_status(performance_set_id, statuses).compact
       potential_member_set_ids = potential_members.map(&:member_set_ids).flatten
       if use_variant_instruments
         actual_member_set_ids =

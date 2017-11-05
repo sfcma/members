@@ -55,17 +55,23 @@ class MemberMailer < ApplicationMailer
           subject: subject)
   end
 
-  def member_signup_email(member, to_email)
+  def member_signup_email(member, community_night_referral, to_email)
+    if community_night_referral
+      referral_txt = " via the community night sign-up form.
+
+                      ***No need to reply***"
+    end
+    msg = "A new member has signed up#{referral_txt}
+
+                    Name: #{member.first_name} #{member.last_name}
+
+                    Introduction: #{member.introduction}
+
+                    View them at https://members.sfcivicsymphony.org/members/#{member.id}"
     mail(to: to_email,
          from: 'SF Civic Music <no-reply@mail.sfcivicmusic.org>',
          subject: "New Member interested in joining the orchestra",
-         body: "A new member has signed up!
-
-                Name: #{member.first_name} #{member.last_name}
-
-                Introduction: #{member.introduction}
-
-                View them at https://members.sfcivicsymphony.org/members/#{member.id}")
+         body: msg)
   end
 
   def email_finished_email(to_email, email_title, recipient_count)

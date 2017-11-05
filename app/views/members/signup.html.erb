@@ -45,6 +45,7 @@
 
   <%= f.hidden_field :source_website, value: false %>
   <%= f.hidden_field :from_signup, value: true %>
+  <%= f.hidden_field :community_night_referral, value: params[:return_community_night] %>
 
   <% unless Rails.env == 'development' %>
     <%= recaptcha_tags %>

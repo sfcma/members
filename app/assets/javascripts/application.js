@@ -351,16 +351,25 @@ var loadStuff = function() {
 
   // For MemberSet#new page
   $('.bigForm #member_set_performance_set_id').on('change', function() {
-    setInstrumentsForSelection('#member_set\\[new_performance_set_instrument_id\\]', null, false);
+    setInstrumentsForSelection('#member_set\\[new_performance_set_instrument_id\\]', null, false, 'performance_set');
   });
 
   $('.bigForm #member_set\\[new_performance_set_instrument_id\\]').on('change', function() {
-    checkInstrumentOptInStatus('#member_set\\[new_performance_set_instrument_id\\]');
+    checkInstrumentOptInStatus('#member_set\\[new_performance_set_instrument_id\\]', 'performance_set');
+  });
+
+  // For MemberCommunityNight#new page
+  $('.bigFormCommunityNight #member_community_night_community_night_id').on('change', function() {
+    setInstrumentsForSelection('#member_community_night\\[new_performance_set_instrument_id\\]', null, false, 'community_night');
+  });
+
+  $('.bigFormCommunityNight #member_set\\[new_performance_set_instrument_id\\]').on('change', function() {
+    checkInstrumentOptInStatus('member_community_night\\[new_performance_set_instrument_id\\]', 'community_night');
   });
 
   // For Member#signup page
   $('.bigForm #member_set_performance_set_id').on('change', function() {
-    setInstrumentsForSelection('#member_set\\[new_performance_set_instrument_id\\]', null, false);
+    setInstrumentsForSelection('#member_set\\[new_performance_set_instrument_id\\]', null, false, 'performance_set');
   });
 
   // For member signup page
@@ -390,7 +399,7 @@ var loadStuff = function() {
       $('#emailMemberStatusSelector').val([]).change;
       $('#emailMemberInstrumentSelector').val([]).change;
     }
-    setInstrumentsForSelection('#emailMemberInstrumentSelector', null, true);
+    setInstrumentsForSelection('#emailMemberInstrumentSelector', null, true, 'performance_set');
   });
 
   $('#member_set_ensemble_id').on('change', function() {
@@ -478,38 +487,88 @@ function attachAC(id, splitViolins) {
   });
 }
 
-function setInstrumentsForSelection(instrumentSelectorId, functionToCall, includeConductor) {
+function setInstrumentsForSelection(instrumentSelectorId, functionToCall, includeConductor, type) {
   var rehearsalSel = $(instrumentSelectorId);
   var newOptions = "";
-  var performanceSetId = $('#member_set_performance_set_id').val();
-  $.get('../../performance_set_instruments/?performance_set_id=' + performanceSetId + '&include_conductor=' + includeConductor).then(function(response) {
-    $.each(response, function(instrument) {
-      var inst = response[instrument].instrument;
-      newOptions += '<option value="' + response[instrument].instrument.toLowerCase() + '">' + inst.toLowerCase() + '</option>';
-    });
-    $('#opt_in_button').prop('disabled', false);
-    $('#opt_in_button').val('Opt Into ' + $('#member_set_performance_set_id option:selected').text());
-    rehearsalSel.empty().append($(newOptions));
-    $('.performance_set_opt_in_message').hide();
-    $('#performance_set_opt_in_message_' + performanceSetId).show();
-    if (instrumentSelectorId === "#emailMemberInstrumentSelector") {
-      $('.startHidden').show();
-      $(instrumentSelectorId).trigger('chosen:updated');
-    } else {
-      rehearsalSel.prop('disabled', false);
-    }
-    checkInstrumentOptInStatus(instrumentSelectorId);
+  var instrumentableId = $('#member_set_performance_set_id').val();
+  if (type === 'performance_set') {
+    $.get('../../performance_set_instruments/?performance_set_id=' + instrumentableId + '&include_conductor=' + includeConductor).then(function(response) {
+      $.each(response, function(instrument) {
+        var inst = response[instrument].instrument;
+        newOptions += '<option value="' + response[instrument].instrument.toLowerCase() + '">' + inst.toLowerCase() + '</option>';
+      });
+      $('#opt_in_button').prop('disabled', false);
+      $('#opt_in_button').val('Opt Into ' + $('#member_set_performance_set_id option:selected').text());
+      rehearsalSel.empty().append($(newOptions));
+      $('.performance_set_opt_in_message').hide();
+      $('#performance_set_opt_in_message_' + instrumentableId).show();
+      if (instrumentSelectorId === "#emailMemberInstrumentSelector") {
+        $('.startHidden').show();
+        $(instrumentSelectorId).trigger('chosen:updated');
+      } else {
+        rehearsalSel.prop('disabled', false);
+      }
+      checkInstrumentOptInStatus(instrumentSelectorId, type);
 
-    if(functionToCall) {
-      functionToCall();
-    }
-  });
+      if(functionToCall) {
+        functionToCall();
+      }
+    });
+  } else if (type === 'community_night') {
+    instrumentableId = $('#member_community_night_community_night_id').val();
+    $.get('../../community_night_instruments/?community_night_id=' + instrumentableId + '&include_conductor=' + includeConductor).then(function(response) {
+      $.each(response, function(instrument) {
+        var inst = response[instrument].instrument;
+        newOptions += '<option value="' + response[instrument].instrument.toLowerCase() + '">' + inst.toLowerCase() + '</option>';
+      });
+      $('#opt_in_button').prop('disabled', false);
+      $('#opt_in_button').val('Opt Into ' + $('#member_set_performance_set_id option:selected').text());
+      rehearsalSel.empty().append($(newOptions));
+      $('.performance_set_opt_in_message').hide();
+      $('#performance_set_opt_in_message_' + instrumentableId).show();
+      if (instrumentSelectorId === "#emailMemberInstrumentSelector") {
+        $('.startHidden').show();
+        $(instrumentSelectorId).trigger('chosen:updated');
+      } else {
+        rehearsalSel.prop('disabled', false);
+      }
+      checkInstrumentOptInStatus(instrumentSelectorId, type);
+
+      if(functionToCall) {
+        functionToCall();
+      }
+    });
+  }
 }
 
-function checkInstrumentOptInStatus(instrumentSelectorId) {
-  var performanceSetId = $('#member_set_performance_set_id').val();
+function checkInstrumentOptInStatus(instrumentSelectorId, type) {
+  var instrumentableId = $('#member_set_performance_set_id').val();
   var instrument = $(instrumentSelectorId).val();
-  $.get('../performance_sets/' + performanceSetId + '/check_instrument_limit?instrument=' + instrument)
+  if (type === 'performance_set') {
+    $.get('../performance_sets/' + instrumentableId + '/check_instrument_limit?instrument=' + instrument)
+      .then(function(response) {
+        if (response.status == "over_limit") {
+          $('.performance_set_inst_limit_message').show();
+          $('.over_limit').show();
+          $('#instrument_specified').html(instrument);
+          $('#instrument_specified_2').html(instrument);
+          $('.standby_only').hide();
+          $('#opt_in_button').prop('disabled', true);
+        } else if (response.status == "standby_only") {
+          $('.performance_set_inst_limit_message').show();
+          $('.over_limit').hide();
+          $('#instrument_specified').html(instrument);
+          $('#instrument_specified_2').html(instrument);
+          $('.standby_only').show();
+          $('#opt_in_button').prop('disabled', false);
+        } else if (response.status == "ok") {
+          $('.performance_set_inst_limit_message').hide();
+          $('#opt_in_button').prop('disabled', false);
+        }
+      }).fail(function (err) { console.log("ERR", err); });
+  } else if (type === 'community_night') {
+    instrumentableId = $('#member_community_night_community_night_id').val();
+    $.get('../community_nights/' + instrumentableId + '/check_instrument_limit?instrument=' + instrument)
     .then(function(response) {
       if (response.status == "over_limit") {
         $('.performance_set_inst_limit_message').show();
@@ -518,18 +577,12 @@ function checkInstrumentOptInStatus(instrumentSelectorId) {
         $('#instrument_specified_2').html(instrument);
         $('.standby_only').hide();
         $('#opt_in_button').prop('disabled', true);
-      } else if (response.status == "standby_only") {
-        $('.performance_set_inst_limit_message').show();
-        $('.over_limit').hide();
-        $('#instrument_specified').html(instrument);
-        $('#instrument_specified_2').html(instrument);
-        $('.standby_only').show();
-        $('#opt_in_button').prop('disabled', false);
       } else if (response.status == "ok") {
         $('.performance_set_inst_limit_message').hide();
         $('#opt_in_button').prop('disabled', false);
       }
     }).fail(function (err) { console.log("ERR", err); });
+  }
 }
 
 // Email (set/ensemble selector) form functionality

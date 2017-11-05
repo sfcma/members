@@ -1,2 +1,14 @@
 class CommunityNight < ApplicationRecord
+  audited
+  acts_as_paranoid
+  has_many :member_community_nights
+  has_many :community_night_instruments
+  has_many :members, through: :member_community_nights
+
+  accepts_nested_attributes_for :community_night_instruments,
+    :reject_if => proc { |att| att[:instrument].blank? }
+
+  scope :joinable, -> { where("start > ? and start < ?",
+                              3.hours.ago.strftime('%F'),
+                              2.months.from_now.strftime('%F'))}
 end

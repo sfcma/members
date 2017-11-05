@@ -1,0 +1,1 @@
+json.array! @community_night_instruments, partial: 'community_night_instruments/community_night_instrument', as: :community_night_instrument

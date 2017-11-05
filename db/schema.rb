@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171017045120) do
+ActiveRecord::Schema.define(version: 20171105094001) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -68,14 +68,28 @@ ActiveRecord::Schema.define(version: 20171017045120) do
     t.index ["user_id", "user_type"], name: "user_index"
   end
 
+  create_table "community_night_instruments", force: :cascade do |t|
+    t.integer  "community_night_id"
+    t.string   "instrument"
+    t.integer  "limit"
+    t.boolean  "available_to_opt_in"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
   create_table "community_nights", force: :cascade do |t|
     t.datetime "start"
     t.datetime "end"
     t.string   "type"
     t.string   "name"
     t.string   "description"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.datetime "deleted_at"
+    t.string   "leader_name"
+    t.string   "leader_email"
+    t.integer  "leader_user_id"
+    t.index ["deleted_at"], name: "index_community_nights_on_deleted_at"
   end
 
   create_table "email_logs", force: :cascade do |t|
@@ -150,11 +164,13 @@ ActiveRecord::Schema.define(version: 20171017045120) do
 
   create_table "member_community_nights", force: :cascade do |t|
     t.string   "status"
-    t.string   "instrument"
     t.integer  "member_id"
     t.integer  "community_night_id"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.integer  "member_instrument_id"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_member_community_nights_on_deleted_at"
   end
 
   create_table "member_instruments", force: :cascade do |t|

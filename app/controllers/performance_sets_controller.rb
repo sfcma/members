@@ -1,6 +1,7 @@
 class PerformanceSetsController < ApplicationController
-  before_action :set_performance_set, only: [:show, :edit, :update, :destroy, :rehearsal_dates, :roster, :email_roster, :check_instrument_limit]
+  before_action :set_performance_set, only: [:show, :edit, :update, :destroy, :rehearsal_dates, :roster, :email_roster, :check_instrument_limit, :free_members]
   before_action :authenticate_user!, except: [:rehearsal_dates, :check_instrument_limit]
+  include Instruments
 
   # GET /performance_sets
   # GET /performance_sets.json
@@ -135,6 +136,30 @@ class PerformanceSetsController < ApplicationController
         end
       end
     end
+  end
+
+  def free_members
+    # performance sets taking place during this set. want to exclude all
+    # members playing in them
+    perf_sets = PerformanceSet.where("start_date < '#{@performance_set.end_date}' and end_date > '#{@performance_set.start_date}'")
+    members_in_ps = []
+    perf_sets.each do |ps|
+      members_in_ps = members_in_ps.concat MemberSet.filtered_by_criteria(ps.id, 4).map(&:member)
+    end
+    members_currently_playing = members_in_ps.map(&:id).uniq
+    @members = Member.select('member_instruments.instrument, members.id, members.first_name, members.last_name, members.email_1').joins(:member_instruments).order('member_instruments.instrument').where(id: Member.played_with_any_ensemble_last_year.map(&:id) - members_currently_playing)
+    @instrument_groups = {}
+
+    @members = @members.each do |m|
+      instrument = m.instrument
+      @instrument_groups[instrument] ||= []
+      if params[:email] == "true"
+        @instrument_groups[instrument] << m.email_1
+      else
+        @instrument_groups[instrument] << "#{m.first_name} #{m.last_name}"
+      end
+    end
+    @instrument_groups.sort_by { |e, v| Instruments.instruments.index(e) || Instruments.instruments.length }.to_h
   end
 
   private
