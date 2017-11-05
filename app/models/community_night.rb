@@ -11,4 +11,9 @@ class CommunityNight < ApplicationRecord
   scope :joinable, -> { where("start > ? and start < ?",
                               3.hours.ago.strftime('%F'),
                               2.months.from_now.strftime('%F'))}
+
+  def name_with_date
+    "#{name} – #{start.strftime('%b %e %l:%M%P')}"
+  end
+
 end

@@ -82,7 +82,7 @@ class MemberCommunityNightsController < ApplicationController
             mi.save!
           end
           if @member_instrument.present?
-            @member_community_night.member_instrument_id = [@member_instrument.id]
+            @member_community_night.member_instrument_id = @member_instrument.id
             respond_to do |format|
               if @member_community_night.save
                 money_message = ""

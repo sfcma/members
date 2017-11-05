@@ -1,35 +1,12 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Community Nights</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Start</th>
-      <th>End</th>
-      <th>Type</th>
-      <th>Name</th>
-      <th>Description</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @community_nights.each do |community_night| %>
-      <tr>
-        <td><%= community_night.start %></td>
-        <td><%= community_night.end %></td>
-        <td><%= community_night.type %></td>
-        <td><%= community_night.name %></td>
-        <td><%= community_night.description %></td>
-        <td><%= link_to 'Show', community_night %></td>
-        <td><%= link_to 'Edit', edit_community_night_path(community_night) %></td>
-        <td><%= link_to 'Destroy', community_night, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class='pageHeader'><h2>Community Nights</h2></div>
 
 <br>
+<% @community_nights.each do |community_night| %>
+  <b><%= link_to community_night.name, community_night %></b> –
+  <%= community_night.start.strftime('%b %e %l:%M%P') %>
 
-<%= link_to 'New Community Night', new_community_night_path %>
+  <%= link_to 'View Roster', roster_community_night_url(community_night.id) %><br>
+<% end %>
+<br>

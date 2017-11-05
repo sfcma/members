@@ -63,7 +63,6 @@ class CommunityNightsController < ApplicationController
   end
 
   def roster
-    @member_community_nights = Member.CommunityNight.all
   end
 
   def check_instrument_limit

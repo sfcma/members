@@ -27,7 +27,7 @@
 
   <div class="field">
     <%= f.label :community_night_id, "Which community night are you planning to join?" %>
-    <%= f.collection_select :community_night_id, @community_nights, :id, :name, { prompt: true } %>
+    <%= f.collection_select :community_night_id, @community_nights, :id, :name_with_date, { prompt: true } %>
   </div>
 
   <div class="field">

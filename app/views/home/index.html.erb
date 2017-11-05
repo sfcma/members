@@ -41,6 +41,11 @@
   <%= link_to 'View Ensemble List', ensembles_path %><br>
   <%= link_to 'Performance Set Rehearsal Dates', performance_set_dates_path %>
 
+  <br><br>
+  <b>Community Nights <sup style='color: red'>BETA</sup></b>
+  <br><br>
+  <%= link_to 'View Community Night Rosters', community_nights_path %>
+
   <% if current_user.global_admin? %>
     <br><br>
     <b>Users</b>

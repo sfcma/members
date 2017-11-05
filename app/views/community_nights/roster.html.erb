@@ -1,9 +1,17 @@
-<% @instrument_groups = organize_members_by_instrument(@member_sets) %>
-<div class='pageHeader'><h2>Roster for <%= @performance_set.extended_name %></h2></div>
+<% @instrument_groups = {}
+    MemberCommunityNight.where(community_night_id: params[:id]).each do |mcn|
+      if mcn.member_instrument.present?
+        instrument = mcn.member_instrument.instrument
+      else
+        instrument = "None"
+      end
+      @instrument_groups[instrument] ||= []
+      @instrument_groups[instrument] << mcn
+    end
 
-<div class='listDescription'>
-Showing these members: <%= select_tag :member_email_statuses, options_for_select(@member_email_statuses, selected: @email_status), id: 'memberEmailStatusesRosterSelector' %>
-</div>
+    @instrument_groups = @instrument_groups.sort_by { |e, v| Instruments.instruments.index(e) || Instruments.instruments.length }.to_h %>
+<div class='pageHeader'><h2>Roster for <%= @community_night.name %></h2></div>
+
 <br>
 
 <b><%= @instrument_groups.values.flatten.count %> Members Shown</b>
@@ -13,7 +21,7 @@ Showing these members: <%= select_tag :member_email_statuses, options_for_select
   <h4><%= k.capitalize.pluralize %> (<%= (@instrument_groups[k].count) %>)</h4>
   <% @instrument_groups[k].each do |ms| %>
     <% if ms %>
-      <%= link_to ms.member, ms.member %> &emsp;&emsp;&emsp;<i style='color: gray'><%= MemberSet.set_status_text(ms.set_status) %><%= ms.standby_player ? " – Standby" : "" %></i> <br>
+      <%= link_to ms.member, ms.member %>  <br>
     <% end %>
   <% end %>
 <% end %>
