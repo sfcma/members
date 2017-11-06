@@ -41,6 +41,14 @@
     <b>Instruments:</b> All
     <br><br>
     <i>All members who have played in this ensemble in the last year</i>
+  <% elsif @email.email_audience_type == '3' %>
+    <b>Ensemble:</b> Any in the last year OR never played but signed up last six months
+    <br><br>
+    <b>Statuses:</b> All
+    <br><br>
+    <b>Instruments:</b> <%= @instruments.present? ? @instruments.join(',') : 'All' %>
+    <br><br>
+    <i>All members who have played in any ensemble in the last year</i>
   <% else %>
     <b>Ensemble:</b> Any in the last year
     <br><br>
@@ -63,19 +71,35 @@
 
 <% recipients = [] %>
 <% if @email.sent_at.nil? %>
-  <br><h3 class="formHeader">Specific Recipients of This Email (<%= @instrument_groups.values.flatten.map(&:member).map(&:id).uniq.count %>)</h3>
+  <% if @email.email_audience_type == '3' %>
+    <br><h3 class="formHeader">Specific Recipients of This Email (<%= @instrument_groups.values.flatten.map(&:id).uniq.count %>)</h3>
+  <% else %>
+    <br><h3 class="formHeader">Specific Recipients of This Email (<%= @instrument_groups.values.flatten.map(&:member).map(&:id).uniq.count %>)</h3>
+  <% end %>
   <div class="field memberInfoBlock">
     <i>Members may appear below on multiple instruments; they will only get 1 email</i>
     <% @instrument_groups.keys.sort.each do |k, i| %>
       <% j = 0 %>
-      <h4><%= k.capitalize.pluralize %> (<%= (@instrument_groups[k].map(&:member).map(&:id).uniq.count) %>)</h4>
+      <% if @email.email_audience_type == '3' %>
+        <h4><%= k.capitalize.pluralize %> (<%= (@instrument_groups[k].map(&:id).uniq.count) %>)</h4>
+      <% else %>
+        <h4><%= k.capitalize.pluralize %> (<%= (@instrument_groups[k].map(&:member).map(&:id).uniq.count) %>)</h4>
+      <% end %>
       <% member_ids_on_inst = [] %>
       <% @instrument_groups[k].each do |ms| %>
-        <% if ms && !member_ids_on_inst.include?(ms.member.id) %>
-          <%= link_to ms.member, ms.member %>,
-          <% recipients << ms.member.id %>
+        <% if @email.email_audience_type == '3' %>
+          <% if ms && !member_ids_on_inst.include?(ms.id) %>
+            <%= link_to ms, ms %>,
+            <% recipients << ms.id %>
+          <% end %>
+          <% member_ids_on_inst.push(ms.id) %>
+        <% else %>
+          <% if ms && !member_ids_on_inst.include?(ms.member.id) %>
+            <%= link_to ms.member, ms.member %>,
+            <% recipients << ms.member.id %>
+          <% end %>
+          <% member_ids_on_inst.push(ms.member.id) %>
         <% end %>
-        <% member_ids_on_inst.push(ms.member.id) %>
       <% end %>
     <% end %>
   </div>

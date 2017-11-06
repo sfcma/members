@@ -647,6 +647,7 @@ function emailTypeSelected(typeId) {
 function updateEmailRecipients() {
   var ensemble_search = false;
   var perf_set_search = false;
+  var chamber_search = false;
   if ($('#member_set_ensemble_id').val() !== null && $('#member_set_ensemble_id').val() !== "") {
     ensemble_search = true;
   } else if ($('#member_set_performance_set_id').val() !== null && $('#member_set_ensemble_id').val() !== "") {
@@ -686,16 +687,33 @@ function updateEmailRecipients() {
   $.get('../../members/get_filtered_member_info?' + queryString).then(function(response) {
     var memberListByInst = {};
     $.each(response, function(i, member_set) {
-      var member = member_set.member;
+      if (chamber_search) {
+        var member = member_set;
+      } else {
+        var member = member_set.member;
+      }
       var memberInsts = member.member_instruments;
       var instrument;
-      $.each(memberInsts, function(i, mi) {
-        if (member_set.set_member_instruments[0] && member_set.set_member_instruments[0].variant != null) {
-          instrument = member_set.set_member_instruments[0].variant
-        } else if (member_set.set_member_instruments[0] && member_set.set_member_instruments[0].member_instrument_id === mi.id) {
-          instrument = mi.instrument;
-        }
-      });
+      if (chamber_search) {
+        instrument = "None Listed"
+        member.member_instruments.map(function(mi) {
+          if (mi && $('#emailMemberInstrumentSelector').val()) {
+            if ($('#emailMemberInstrumentSelector').val().indexOf(mi.instrument.toLowerCase()) > -1) {
+              instrument = mi.instrument
+            }
+          } else if (mi) {
+            instrument = "Any"
+          }
+        })
+      } else {
+        $.each(memberInsts, function(i, mi) {
+          if (member_set.set_member_instruments[0] && member_set.set_member_instruments[0].variant != null) {
+            instrument = member_set.set_member_instruments[0].variant
+          } else if (member_set.set_member_instruments[0] && member_set.set_member_instruments[0].member_instrument_id === mi.id) {
+            instrument = mi.instrument;
+          }
+        });
+      }
       if (memberListByInst.hasOwnProperty(instrument)) {
         memberListByInst[instrument].push(member.first_name + " " + member.last_name);
       } else {

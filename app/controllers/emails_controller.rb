@@ -29,13 +29,39 @@ class EmailsController < ApplicationController
         .map(&:id)
       @member_sets = MemberSet.where(performance_set_id: performance_set_ids, member_id: Member.played_with_ensemble_last_year(@ensemble.id))
       @instrument_groups = organize_members_by_instrument(@member_sets)
+    elsif @email.email_audience_type == '3'
+      performance_set_ids = PerformanceSet
+        .where('end_date > ?', 1.year.ago.strftime('%F'))
+        .map(&:id)
+      performing_members = MemberSet.includes(member: [:member_instruments]).where('performance_set_id in (?) and member_id in (?)', performance_set_ids, Member.played_with_any_ensemble_last_year).map(&:member)
+      recent_members = Member.joined_last_six_months
+      all_to_email = (performing_members + recent_members).uniq
+      if @instruments.present?
+        all_to_email = all_to_email.select { |member| member.member_instruments.any? { |mi| @instruments.include?(mi.instrument) } }
+      end
+      @instrument_groups = {}
+
+      all_to_email.each do |m|
+        instrument = "None Listed"
+        m.member_instruments.count > 0 && m.member_instruments.map do |mi|
+          if mi && @instruments.present?
+            if @instruments.include?(mi.instrument.underscore)
+              instrument = mi.instrument
+            end
+          else
+            instrument = "Any"
+          end
+        end
+        @instrument_groups[instrument] ||= []
+        @instrument_groups[instrument] << m
+      end
+      @instrument_groups
     else
       performance_set_ids = PerformanceSet
         .where('end_date > ?', 1.year.ago.strftime('%F'))
         .map(&:id)
       @instrument_groups = { "(Any Instrument)" => MemberSet.where(performance_set_id: performance_set_ids, member_id: Member.played_with_any_ensemble_last_year) }
     end
-
   end
 
   def edit
@@ -164,6 +190,7 @@ class EmailsController < ApplicationController
         :behalf_of_name,
         :behalf_of_email,
         :files,
+        :email_audience_type,
         :instruments => []
       )
     end

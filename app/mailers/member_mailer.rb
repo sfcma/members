@@ -11,6 +11,7 @@ class MemberMailer < ApplicationMailer
     email = Email.find(@email_id)
     @behalf_name = email.behalf_of_name
     @behalf_email = email.behalf_of_email
+    @email_audience_type = email.email_audience_type
     @sent_by_label = sending_user.name
     if (@behalf_name.present? && @behalf_email.present?)
       reply_to_user_name = @behalf_name
@@ -33,12 +34,17 @@ class MemberMailer < ApplicationMailer
       else
         @status_text = "are playing in or attending rehearsals for"
       end
+    elsif @email_audience_type == '3'
+      @status_text = "participated in an SF Civic Music ensemble in the last year, or signed up in the last six months"
+      @perf_set_name = ""
     else
       @status_text = "participated in an SF Civic Music ensemble in the last year"
       @perf_set_name = ""
     end
 
-    if @instruments.present?
+    if @instruments.present? && @email_audience_type == '3'
+      @instrument = member.member_instruments.first && member.member_instruments.first.instrument
+    elsif @instruments.present?
       @instrument = set_member_instrument.first.member_instrument.instrument
     else
       @instrument = ""
