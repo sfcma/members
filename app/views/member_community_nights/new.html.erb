@@ -57,9 +57,10 @@
     </span>
   </div>
 
-  <% @community_nights.each do |ps| %>
-    <div class='performance_set_opt_in_message' id='performance_set_opt_in_message_<%=ps.id%>'>
-      <h3><%= ps.name %></h3>
+  <% @community_nights.each do |cn| %>
+    <div class='performance_set_opt_in_message' id='performance_set_opt_in_message_<%=cn.id%>'>
+      <h3><%= cn.name %></h3>
+      <%= cn.description %><br>
       By opting into this community night, you are agreeing to abide by our <b><a href="https://sfcivicmusic.org/code-of-conduct/">Code of Conduct</a></b> for all musicians.
     </div>
   <% end %>
