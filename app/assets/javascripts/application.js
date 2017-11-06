@@ -490,9 +490,14 @@ function attachAC(id, splitViolins) {
 function setInstrumentsForSelection(instrumentSelectorId, functionToCall, includeConductor, type) {
   var rehearsalSel = $(instrumentSelectorId);
   var newOptions = "";
-  var instrumentableId = $('#member_set_performance_set_id').val();
-  if (type === 'performance_set') {
+  if (type === 'global') {
+    var instrumentableId = -1;
+  } else {
+    var instrumentableId = $('#member_set_performance_set_id').val();
+  }
+  if (type === 'performance_set' || type === 'global') {
     $.get('../../performance_set_instruments/?performance_set_id=' + instrumentableId + '&include_conductor=' + includeConductor).then(function(response) {
+      console.log(response);
       $.each(response, function(instrument) {
         var inst = response[instrument].instrument;
         newOptions += '<option value="' + response[instrument].instrument.toLowerCase() + '">' + inst.toLowerCase() + '</option>';
@@ -598,6 +603,7 @@ function emailTypeSelected(typeId) {
     $('#email_for_step_three').hide();
     $('#email_for_step_four').hide();
     $('#email_for_step_two_all').hide();
+    $('#email_for_step_two_chamber').hide();
   } else if (typeId == 1) {
     $('#emailForm #member_set_performance_set_id').val([]);
     $('#status_perf_set').hide();
@@ -609,6 +615,7 @@ function emailTypeSelected(typeId) {
     $('#email_for_step_three').hide();
     $('#email_for_step_four').hide();
     $('#email_for_step_two_all').hide();
+    $('#email_for_step_two_chamber').hide();
   } else if (typeId == 2) {
     $('#emailForm #member_set_performance_set_id').val([]);
     $('#status_perf_set').hide();
@@ -620,6 +627,20 @@ function emailTypeSelected(typeId) {
     $('#email_for_step_three').hide();
     $('#email_for_step_four').hide();
     $('#email_for_step_two_all').show();
+    $('#email_for_step_two_chamber').hide();
+  } else if (typeId == 3) {
+    $('#emailForm #member_set_performance_set_id').val([]);
+    $('#status_perf_set').hide();
+    $('#status_ensemble').hide();
+    $('#instruments_ensemble').hide();
+    $('#instruments_perf_set').hide();
+    $('#email_for_step_two_ensembles').hide();
+    $('#email_for_step_two_perf_sets').hide();
+    $('#email_for_step_three').hide();
+    $('#email_for_step_four').show();
+    $('#email_for_step_two_all').hide();
+    $('#email_for_step_two_chamber').show();
+    setInstrumentsForSelection('#emailMemberInstrumentSelector', null, true, 'global')
   }
 }
 
@@ -630,11 +651,13 @@ function updateEmailRecipients() {
     ensemble_search = true;
   } else if ($('#member_set_performance_set_id').val() !== null && $('#member_set_ensemble_id').val() !== "") {
     perf_set_search = true;
+  } else if ($('#email_type_selector').val() == '3') {
+    chamber_search = true;
   }
 
   if ($('#member_set_ensemble_id').val() !== null ||
       ($('#emailMemberStatusSelector').val() !== null && $('#member_set_performance_set_id').val() !== null) ||
-      $('#email_type_selector').val() === "2") {
+      $('#email_type_selector').val() === "2" || $('#email_type_selector').val() === "3") {
     $('#roster').html("<i>Working...</i>");
   } else if ($('#member_set_performance_set_id').val() !== null) {
     $('#roster').html("<i>Please select a status so that member list can show here</i>");
@@ -651,8 +674,10 @@ function updateEmailRecipients() {
   } else if (perf_set_search) {
     queryString = 'performance_set_id=' + $('#member_set_performance_set_id').val();
     queryString += '&status=' + $('#emailMemberStatusSelector').val();
+  } else if (chamber_search) {
+    queryString = 'chamber=true';
   } else {
-    queryString = 'all=true'
+    queryString = 'all=true';
   }
 
   if ($('#emailMemberInstrumentSelector').val() != "all") {

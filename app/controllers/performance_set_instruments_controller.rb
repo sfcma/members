@@ -11,10 +11,15 @@ class PerformanceSetInstrumentsController < ApplicationController
       include_conductor = false
     end
     include_conductor = include_conductor ? nil : "and lower(instrument) <> 'conductor'"
-    if params[:performance_set_id]
+    if params[:performance_set_id] != '-1'
       @performance_set_instruments = PerformanceSetInstrument.where("performance_set_id = ? #{include_conductor}", params[:performance_set_id].to_i)
       respond_to do |format|
         format.json { render json: @performance_set_instruments, status: :ok }
+      end
+    elsif params[:performance_set_id] == '-1'
+      instrument_list = MemberInstrument.all.map(&:instrument).uniq.map { |mi| { instrument: mi } }
+      respond_to do |format|
+        format.json { render json: instrument_list, status: :ok }
       end
     else
       @performance_set_instruments = PerformanceSetInstrument.all

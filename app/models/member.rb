@@ -22,6 +22,8 @@ class Member < ApplicationRecord
   validates_date :initial_date, allow_blank: true
   validates_date :waiver_signed, allow_blank: true
 
+  scope :joined_last_six_months, -> { where("created_at > ?", 6.months.ago.strftime('%F')) }
+
   enum statuses: [:untriaged, :placed_in_group, :waitlist, :sub_only, :inactive]
 
   def last_played

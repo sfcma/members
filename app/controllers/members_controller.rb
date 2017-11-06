@@ -191,15 +191,15 @@ class MembersController < ApplicationController
     @member.initial_date = Time.now
     respond_to do |format|
       if (verify_recaptcha(model: @member) || ENV['RAILS_ENV'] != 'production') && @member.save
-        if (community_night_referral)
+        if (community_night_referral == 'true')
           return_url = new_member_community_night_url
           return_msg = 'Thank you for signing up for membership in the San Francisco Civic Music Association!<br><br>Please use this form to finish RSVP\'ing for the upcoming Community Night'.html_safe
         else
           return_url = signup_complete_members_url
           return_msg = 'Thank you for signing up for membership in the San Francisco Civic Music Association!<br><br>A representative from our Membership Committee will be in touch with you in the next few days to discuss our current openings and help find the best fit for you.'.html_safe
         end
-        MemberMailer.member_signup_email(@member, community_night_referral, 'dan@sfcivicsymphony.org').deliver_now
-        MemberMailer.member_signup_email(@member, community_night_referral, 'helentsang@tsangarchitects.com').deliver_now
+        MemberMailer.member_signup_email(@member, community_night_referral == 'true', 'dan@sfcivicsymphony.org').deliver_now
+        MemberMailer.member_signup_email(@member, community_night_referral == 'true', 'helentsang@tsangarchitects.com').deliver_now
         format.html { redirect_to(return_url, notice: return_msg) }
       else
         format.html { render(:signup, layout: 'anonymous', notice: 'Unfortunately, we were unable to save your record. Please try again or contact membership@sfcivicsymphony.org.') }
@@ -262,6 +262,7 @@ class MembersController < ApplicationController
     ensemble_id = params[:ensemble_id]
     status_id = params[:status]
     all = params[:all]
+    chamber = params[:chamber]
 
     instruments = "" if instruments == "null"
     if performance_set_id
@@ -278,9 +279,21 @@ class MembersController < ApplicationController
         .where('end_date > ?', 1.year.ago.strftime('%F'))
         .map(&:id)
       member_sets = MemberSet.includes(:set_member_instruments, member: [:member_instruments]).where(performance_set_id: performance_set_ids, member_id: Member.played_with_any_ensemble_last_year)
-    end
-    respond_to do |format|
-      format.json { render json: member_sets.to_json(include: [:set_member_instruments, member: {include: [:member_instruments] }]), status: :ok }
+    elsif chamber
+      performance_set_ids = PerformanceSet
+        .where('end_date > ?', 1.year.ago.strftime('%F'))
+        .map(&:id)
+      performing_members = MemberSet.includes(member: [:member_instruments]).where('performance_set_id in (?) and member_id in (?)', performance_set_ids, Member.played_with_any_ensemble_last_year).map(&:member)
+      recent_members = Member.joined_last_six_months
+      all_to_email = (performing_members + recent_members).uniq
+      respond_to do |format|
+        format.json { render json: all_to_email.to_json(include: [:member_instruments]), status: :ok }
+      end
+      return
+    else
+      respond_to do |format|
+        format.json { render json: member_sets.to_json(include: [:set_member_instruments, member: {include: [:member_instruments] }]), status: :ok }
+      end
     end
   end
 

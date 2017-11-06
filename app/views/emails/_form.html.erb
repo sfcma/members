@@ -22,12 +22,18 @@
         <option value=0>Members Currently Playing in a Performance Set</option>
         <option value=1>All Members Playing in an Ensemble in the Last Twelve Months</option>
         <% if current_user.global_admin? || current_user.id == 5 %><option value=2>All Members Participating in the Last Twelve Months</option><% end %>
+        <% if current_user.id == 1 || current_user.id == 2 %><option value=3>Chamber List (all members in last six months, or played with us last twelve months)</option><% end %>
       </select>
     </div>
 
     <div id="email_for_step_two_all" style="display: none;">
       <br>
       <b>This will email all members who have played in any of our ensembles in the last twelve months</b>
+    </div>
+
+    <div id="email_for_step_two_chamber" style="display: none;">
+      <br>
+      <b>This will email all members who have expressed an interest in joining in the last six months OR have played in any ensemble in the last twelve months</b>
     </div>
 
     <div id="email_for_step_two_ensembles" style="display: none;">
