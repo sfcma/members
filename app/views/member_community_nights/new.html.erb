@@ -1,10 +1,10 @@
-<div class='pageHeader'><h2>Opt-in to a Community Night</h2></div>
+<div class='pageHeader'><h2>RSVP to a Community Night</h2></div>
 
 <div class="bigFormCommunityNight">
 <%= form_for(@member_community_night) do |f| %>
   <% if @member_community_night.errors.any? %>
     <div id="error_explanation">
-      <h2>This opt-in could not be recorded:</h2>
+      <h2>This RSVP could not be recorded:</h2>
 
       <ul>
       <% @member_community_night.errors.full_messages.each do |message| %>
@@ -15,7 +15,7 @@
   <% end %>
 
   <% unless current_user %>
-    <i>Please use this form to opt-in to an upcoming community night.</i>
+    <i>Please use this form to RSVP to an upcoming community night.</i>
   <% end %>
 
   <div class="field">
@@ -61,12 +61,12 @@
     <div class='performance_set_opt_in_message' id='performance_set_opt_in_message_<%=cn.id%>'>
       <h3><%= cn.name %></h3>
       <%= cn.description.html_safe %><br><br>
-      By opting into this community night, you are agreeing to abide by our <b><a href="https://sfcivicmusic.org/code-of-conduct/">Code of Conduct</a></b> for all musicians.
+      By RSVP'ing to this community night, you are agreeing to abide by our <b><a href="https://sfcivicmusic.org/code-of-conduct/">Code of Conduct</a></b> for all musicians.
     </div>
   <% end %>
 
   <div class="actions">
-    <%= f.submit "Opt into community night", class: 'button', id: 'opt_in_button', disabled: true %>
+    <%= f.submit "RSVP for community night", class: 'button', id: 'opt_in_button', disabled: true %>
   </div>
 <% end %>
 </div>
