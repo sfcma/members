@@ -57,7 +57,7 @@ class MemberMailer < ApplicationMailer
 
     mail(to: "#{member.to_s} <#{member.email_1}>",
           reply_to: "#{reply_to_user_name} <#{reply_to_email}>",
-          from: "#{reply_to_user_name} via SF Civic Music <no-reply@mail.sfcivicmusic.org>",
+          from: "#{reply_to_user_name} via SF Civic Music <no-reply@membermail.sfcivicmusic.org>",
           subject: subject)
   end
 
@@ -75,14 +75,14 @@ class MemberMailer < ApplicationMailer
 
                     View them at https://members.sfcivicsymphony.org/members/#{member.id}"
     mail(to: to_email,
-         from: 'SF Civic Music <no-reply@mail.sfcivicmusic.org>',
+         from: 'SF Civic Music <no-reply@membermail.sfcivicmusic.org>',
          subject: "New Member interested in joining the orchestra",
          body: msg)
   end
 
   def email_finished_email(to_email, email_title, recipient_count)
     mail(to: to_email,
-         from: 'SFCMA Membership System <no-reply@mail.sfcivicmusic.org>',
+         from: 'SFCMA Membership System <no-reply@membermail.sfcivicmusic.org>',
          subject: 'Email Sent Successfully',
          body: "Your email, titled \"#{email_title}\", was sent to #{recipient_count} members successfully.
 
