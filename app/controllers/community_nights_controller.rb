@@ -6,7 +6,7 @@ class CommunityNightsController < ApplicationController
   # GET /community_nights
   # GET /community_nights.json
   def index
-    @community_nights = CommunityNight.all.order(start: :desc)
+    @community_nights = CommunityNight.all.order(start_datetime: :desc)
   end
 
   # GET /community_nights/1
@@ -107,8 +107,8 @@ class CommunityNightsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def community_night_params
       params.require(:community_night).permit(
-        :start,
-        :end,
+        :start_datetime,
+        :end_datetime,
         :type,
         :name,
         :description,

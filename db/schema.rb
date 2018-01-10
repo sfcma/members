@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171106041504) do
+ActiveRecord::Schema.define(version: 20180110195730) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -78,8 +78,8 @@ ActiveRecord::Schema.define(version: 20171106041504) do
   end
 
   create_table "community_nights", force: :cascade do |t|
-    t.datetime "start"
-    t.datetime "end"
+    t.datetime "start_datetime"
+    t.datetime "end_datetime"
     t.string   "type"
     t.string   "name"
     t.string   "description"

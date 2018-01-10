@@ -46,10 +46,10 @@
   <br><br>
   <%= link_to 'Add New Community Night', new_community_night_path %><br>
   <%= link_to 'View All Community Nights', community_nights_path %><br><br>
-  <% CommunityNight.now_or_future.order(start: :desc).each do |cm| %>
-      <b><%= cm.name %></b>: (<%= cm.start.strftime('%b %e %Y') %>)
+  <% CommunityNight.now_or_future.order(start_datetime: :desc).each do |cm| %>
+      <b><%= cm.name %></b>: (<%= cm.start_datetime.strftime('%b %e %Y') %>)
       <%= link_to "Roster", roster_community_night_path(cm) %>
-      <%= link_to "Details", performance_set_path(cm) %><br>
+      <%= link_to "Details", community_night_path(cm) %><br>
   <% end %>
 
 
