@@ -11,6 +11,28 @@
     </div>
   <% end %>
 
+  <div class="field">
+    <%= f.label :community_night_id %>
+    <%= f.collection_select :community_night_id, @community_nights, :id, :name, { prompt: true } %>
+  </div>
+
+  <div class="field">
+    <%= f.label :instrument, "Instrument" %>
+    <%= f.text_field :instrument %>
+  </div>
+  <script>$(document).on('ready', function() { attachAC("#community_night_instrument_instrument", true); });</script>
+
+  <div class="field">
+    <%= f.label :limit, "Limit (optional)" %>
+    <%= f.text_field :limit, size: 5 %>
+  </div>
+
+  <%# THIS FIELD IS NAMED BACKWARDS  %>
+  <div class="field">
+    <%= f.label :available_to_opt_in, "Don't allow RSVPs on this instrument" %>
+    <%= f.check_box :available_to_opt_in %>
+  </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>

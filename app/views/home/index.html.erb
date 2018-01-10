@@ -1,7 +1,7 @@
 
 <% if user_signed_in? %>
   <h2>Active Sets</h2><br>
-  <% PerformanceSet.now_or_future.each do |ps| %>
+  <% PerformanceSet.now_or_future.order(start_date: :desc).each do |ps| %>
     <div class="setBlock">
       <h3><%= link_to ps.extended_name, roster_performance_set_path(ps) %></h3>
       <%= link_to "Roster", roster_performance_set_path(ps) %><br>
@@ -42,9 +42,16 @@
   <%= link_to 'Performance Set Rehearsal Dates', performance_set_dates_path %>
 
   <br><br>
-  <b>Community Nights <sup style='color: red'>BETA</sup></b>
+  <b>Community Nights</b>
   <br><br>
-  <%= link_to 'View Community Night Rosters', community_nights_path %>
+  <%= link_to 'Add New Community Night', new_community_night_path %><br>
+  <%= link_to 'View All Community Nights', community_nights_path %><br><br>
+  <% CommunityNight.now_or_future.order(start: :desc).each do |cm| %>
+      <b><%= cm.name %></b>: (<%= cm.start.strftime('%b %e %Y') %>)
+      <%= link_to "Roster", roster_community_night_path(cm) %>
+      <%= link_to "Details", performance_set_path(cm) %><br>
+  <% end %>
+
 
   <% if current_user.global_admin? %>
     <br><br>

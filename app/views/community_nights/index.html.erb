@@ -1,12 +1,13 @@
+<div class='pageHeader'><h2>Community Nights</h2> &emsp; <%= link_to 'Add New Community Night', new_community_night_path, class: 'button' %></div>
+
 <p id="notice"><%= notice %></p>
 
-<div class='pageHeader'><h2>Community Nights</h2></div>
-
-<br>
 <% @community_nights.each do |community_night| %>
-  <b><%= link_to community_night.name, community_night %></b> –
-  <%= community_night.start.strftime('%b %e %l:%M%P') %>
-
-  <%= link_to 'View Roster', roster_community_night_url(community_night.id) %><br>
+  <b><%= community_night.name %></b> –
+  <%= community_night.start.strftime('%b %e %Y') %>
+  &emsp; – &emsp;
+  <%= link_to 'View Roster', roster_community_night_url(community_night.id) %>&emsp; – &emsp;
+  <%= link_to 'View Details', community_night %>&emsp; – &emsp;
+  <%= link_to 'Edit Details', edit_community_night_url(community_night) %><br>
 <% end %>
 <br>

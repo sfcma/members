@@ -1,11 +1,12 @@
 class CommunityNightsController < ApplicationController
   before_action :set_community_night, only: [:show, :edit, :update, :destroy, :roster, :check_instrument_limit]
   before_action :authenticate_user!, except: [:check_instrument_limit]
+  include Instruments
 
   # GET /community_nights
   # GET /community_nights.json
   def index
-    @community_nights = CommunityNight.all
+    @community_nights = CommunityNight.all.order(start: :desc)
   end
 
   # GET /community_nights/1
@@ -15,18 +16,20 @@ class CommunityNightsController < ApplicationController
 
   # GET /community_nights/new
   def new
+    @opt_in_messages = OptInMessage.all
     @community_night = CommunityNight.new
   end
 
   # GET /community_nights/1/edit
   def edit
+    @opt_in_messages = OptInMessage.all
   end
 
   # POST /community_nights
   # POST /community_nights.json
   def create
     @community_night = CommunityNight.new(community_night_params)
-
+    @opt_in_messages = OptInMessage.all
     respond_to do |format|
       if @community_night.save
         format.html { redirect_to @community_night, notice: 'Community night was successfully created.' }
@@ -41,6 +44,7 @@ class CommunityNightsController < ApplicationController
   # PATCH/PUT /community_nights/1
   # PATCH/PUT /community_nights/1.json
   def update
+    @opt_in_messages = OptInMessage.all
     respond_to do |format|
       if @community_night.update(community_night_params)
         format.html { redirect_to @community_night, notice: 'Community night was successfully updated.' }
@@ -102,6 +106,21 @@ class CommunityNightsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def community_night_params
-      params.require(:community_night).permit(:start, :end, :type, :name, :description)
+      params.require(:community_night).permit(
+        :start,
+        :end,
+        :type,
+        :name,
+        :description,
+        community_night_instruments_attributes: [
+          :id,
+          :community_night_id,
+          :instrument,
+          :limit,
+          :available_to_opt_in
+        ]
+        )
     end
+
+
 end

@@ -11,11 +11,6 @@
 </p>
 
 <p>
-  <strong>Type:</strong>
-  <%= @community_night.type %>
-</p>
-
-<p>
   <strong>Name:</strong>
   <%= @community_night.name %>
 </p>
@@ -23,6 +18,21 @@
 <p>
   <strong>Description:</strong>
   <%= @community_night.description %>
+</p>
+
+<p>
+  <strong>Instruments:</strong>
+  <div class="field memberInfoBlock">
+    <% @community_night.community_night_instruments.each do |cni| %>
+
+        <%= link_to cni.instrument, edit_community_night_instrument_path(cni), { target: "_new" } %> ·
+        <%= cni.limit.present? ? "Limit #{cni.limit}  · " : "" %>
+        <%= cni.available_to_opt_in ? "Opt-In Unavailable" : "Opt-In Available" %> ·
+        <br />
+    <% end %>
+    <br />
+    <i><%= link_to "Add new community night instrument", new_community_night_instrument_path, { target: "_new" } %></i>
+  </div>
 </p>
 
 <%= link_to 'Edit', edit_community_night_path(@community_night) %> |

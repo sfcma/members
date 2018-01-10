@@ -28,11 +28,13 @@ class CommunityNightInstrumentsController < ApplicationController
 
   # GET /community_night_instruments/new
   def new
+    @community_nights = CommunityNight.all
     @community_night_instrument = CommunityNightInstrument.new
   end
 
   # GET /community_night_instruments/1/edit
   def edit
+    @community_nights = CommunityNight.all
   end
 
   # POST /community_night_instruments
@@ -83,6 +85,11 @@ class CommunityNightInstrumentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def community_night_instrument_params
-      params.fetch(:community_night_instrument, {})
+      params.require(:community_night_instrument).permit(
+        :community_night_id,
+        :instrument,
+        :limit,
+        :available_to_opt_in
+      )
     end
 end

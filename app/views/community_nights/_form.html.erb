@@ -1,7 +1,7 @@
-<%= form_for(community_night) do |f| %>
+<%= form_for(setup_community_night(community_night)) do |f| %>
   <% if community_night.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(community_night.errors.count, "error") %> prohibited this community_night from being saved:</h2>
+      <h2><%= pluralize(community_night.errors.count, "error") %> prohibited this community night from being saved:</h2>
 
       <ul>
       <% community_night.errors.full_messages.each do |message| %>
@@ -11,30 +11,64 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :start %>
-    <%= f.datetime_select :start %>
+  <h3 class="formHeader">Community Night Dates</h3>
+  <div class="field memberInfoBlock">
+    <%= f.label :start, "<b>Start Date and Time</b><br><i>Format: YYYY-MM-DD hh:mm pm/am</i>".html_safe %>
+    <%= f.text_field :start %>
+    <br><br>
+    <%= f.label :end, "<b>End Date and Time</b><br><i>Format: YYYY-MM-DD hh:mm pm/am</i>".html_safe %>
+    <%= f.text_field :end %>
   </div>
 
-  <div class="field">
-    <%= f.label :end %>
-    <%= f.datetime_select :end %>
-  </div>
-
-  <div class="field">
-    <%= f.label :type %>
-    <%= f.text_field :type %>
-  </div>
-
-  <div class="field">
-    <%= f.label :name %>
+  <h3 class="formHeader">Name and Description</h3>
+  <div class="field memberInfoBlock">
+    <%= f.label :name, "<b>Name</b><br><i>Should include the set of instruments plus a short label.<br>Examples: 'String Community Night - Schubert and Beethoven' or 'Flute Choir Community Night - Music of Zack Smith'</i>".html_safe  %>
     <%= f.text_field :name %>
+    <br><br>
+    <%= f.label :description, "<b>Description</b><br><i>This should include <ul><li>Location<li>Date/Time (again)<li>Description<li>List of repertoire<li>Link to repertoire (if needed)<li>Special instructions<li>Standard instructions for donation and bringing a stand. </ul></i>".html_safe %>
+    <%= f.text_area :description, cols: 50, rows: 5 %>
   </div>
 
-  <div class="field">
-    <%= f.label :description %>
-    <%= f.text_field :description %>
-  </div>
+  <h3 class="formHeader">Instruments</h3>
+  <% if @community_night.new_record? %>
+    <% psin = 0 %>
+    <%= f.fields_for :community_night_instruments do |psi_f| %>
+
+      <div class="field memberInfoBlock">
+        <div class="field inlineField" style='padding-right: 15px; border-right: 1px solid black;'>
+          <%= psi_f.label :instrument, "Instrument Name" %>
+          <%= psi_f.text_field :instrument %>
+        </div>
+        <script>$(document).on('ready', function() { attachAC("#community_night_community_night_instruments_attributes_<%=psin%>_instrument", true); });</script>
+
+        <div class="field inlineField" style='padding-right: 15px; border-right: 1px solid black;'>
+          <%= psi_f.label :limit, "Limit (0 for unlimited)" %>
+          <%= psi_f.text_field :limit, size: 5 %>
+        </div>
+
+        <%# THIS FIELD IS NAMED BACKWARDS %>
+        <div class="field inlineField" style='padding-right: 15px; border-right: 1px solid black;'>
+          <%= psi_f.label :available_to_opt_in, "Don't allow opt-ins on this instrument" %>
+          <%= psi_f.check_box :available_to_opt_in %>
+        </div>
+      </div>
+      <% psin += 1 %>
+    <% end %>
+  <% else %>
+    <div class="field memberInfoBlock">
+      <% if @community_night.community_night_instruments.present? %>
+        <i>Click on an instrument to edit or delete it.</i><br />
+        <% @community_night.community_night_instruments.each do |psi| %>
+          <br />
+          <%= link_to psi.instrument, edit_community_night_instrument_path(psi), { target: "_new" } %> ·
+          <%= psi.limit.present? ? "Limit #{psi.limit} · " : "" %>
+          <%= psi.available_to_opt_in ? "RSVP Unavailable" : "RSVP Available" %> ·
+        <% end %>
+        <br /><br />
+      <% end %>
+      <i><%= link_to "Add new community night instrument", new_community_night_instrument_path, { target: "_new" } %></i>
+    </div>
+  <% end %>
 
   <div class="actions">
     <%= f.submit %>
