@@ -112,7 +112,7 @@ instruments = ['Flute', 'Clarinet', 'Oboe', 'Bassoon', 'Cello', 'Violin', 'Viola
     instrument: instruments.sample,
   )
 
-  perfIds = [0..9]
+  perfIds = *(0..8)
   x = rand(5)
   x.times do
     perfId = perfIds.sample
