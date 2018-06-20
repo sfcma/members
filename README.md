@@ -43,12 +43,13 @@ Here is a basic overview of the data model:
 3. `bundle install`
 3. Run `heroku git:remote -a limitless-sierra-92168` to set up correct remote repo
 3. Output from `git remote -v` should look like this:
-  heroku	https://git.heroku.com/limitless-sierra-92168.git (fetch)
-  heroku	https://git.heroku.com/limitless-sierra-92168.git (push)
-  origin	https://github.com/sfcma/members.git (fetch)
-  origin	https://github.com/sfcma/members.git (push)
+
+    heroku	https://git.heroku.com/limitless-sierra-92168.git (fetch)
+    heroku	https://git.heroku.com/limitless-sierra-92168.git (push)
+    origin	https://github.com/sfcma/members.git (fetch)
+    origin	https://github.com/sfcma/members.git (push)
+    
 3. `ruby db:setup`
-3. `ruby db:seed`
 3. `rails s` to start server
 3. Visit `http://locahost:3000`
 
