@@ -230,6 +230,12 @@ class MembersController < ApplicationController
       return
     else
       member = Member.find_by('lower(email_1) = lower(?) OR lower(email_2) = lower(?)', member_email_address.strip, member_email_address.strip)
+      if !member
+        respond_to do |format|
+          format.json { render json: false, status: :ok }
+        end
+        return
+      end
     end
 
     member_set = MemberSet.find_by('member_id = ? and performance_set_id = ?', member.id, performance_set_id)
