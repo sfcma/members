@@ -88,10 +88,10 @@ class AbsencesController < ApplicationController
         end
       else
         if current_user
-          Bugsnag.notify("Absence creation error (logged in)")
+          # Bugsnag.notify("Absence creation error (logged in)")
           format.html { render :new }
         else
-          Bugsnag.notify("Absence creation error")
+          # Bugsnag.notify("Absence creation error")
           format.html { render :new, layout: 'anonymous' }
         end
         format.json { render json: @absence.errors, status: :unprocessable_entity }
