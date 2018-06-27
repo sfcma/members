@@ -21,6 +21,7 @@ class Member < ApplicationRecord
   validates_associated :member_instruments, message: -> (_obj, _data) { 'uh oh' }
   validates_date :initial_date, allow_blank: true
   validates_date :waiver_signed, allow_blank: true
+  validates :email_1, uniqueness: { message: "You're already registered in our system!<br><br>Please contact membership@sfcivicmusic.org for assistance." }
 
   scope :joined_last_six_months, -> { where("created_at > ?", 6.months.ago.strftime('%F')) }
 
