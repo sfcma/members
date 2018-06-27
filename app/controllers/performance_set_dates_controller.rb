@@ -39,6 +39,7 @@ class PerformanceSetDatesController < ApplicationController
   # POST /performance_set_dates
   # POST /performance_set_dates.json
   def create
+    @performance_sets = PerformanceSet.all
     @performance_set_date = PerformanceSetDate.new(performance_set_date_params)
 
     respond_to do |format|
