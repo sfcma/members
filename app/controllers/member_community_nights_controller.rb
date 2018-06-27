@@ -44,13 +44,13 @@ class MemberCommunityNightsController < ApplicationController
     @member_community_night = MemberCommunityNight.new(mcnparams)
     if !member
       respond_to do |format|
-        Bugsnag.notify("Unable to find and opt-in member - email not found")
+        #Bugsnag.notify("Unable to find and opt-in member - email not found")
         format.html { redirect_to new_member_community_night_url, notice: "We were unable to find a member with that email address.<br><br>If you have not played with us before, please fill out <b><a href='#{signup_members_path}?return_community_night=true'>this form</a></b>.<br><br>Please enter the email address you gave us, or contact membership@sfcivicsymphony.org for help." }
       end
     else
       if MemberCommunityNight.where(community_night_id: mcnparams[:community_night_id], member_id: mcnparams[:member_id]).present?
         respond_to do |format|
-          Bugsnag.notify("Unable to find and opt-in member - already opted in")
+          #Bugsnag.notify("Unable to find and opt-in member - already opted in")
           format.html { redirect_to new_member_community_night_url, notice: 'You have already opted in (or been added) for this set!' }
         end
       else
