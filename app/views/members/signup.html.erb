@@ -4,11 +4,9 @@
 <%= form_for(@member, url: create_from_signup_members_path) do |f| %>
   <% if @member.errors.any? %>
     <div id="error_explanation">
-      <h2>This attempt to join could not be saved:</h2>
-
       <ul>
-      <% @member.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+      <% @member.errors.messages.values.each do |message| %>
+        <li style="list-style-type: none;"><%= raw message[0] %></li>
       <% end %>
       </ul>
     </div>
