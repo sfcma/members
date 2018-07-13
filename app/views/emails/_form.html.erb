@@ -138,7 +138,7 @@
 
   <%= f.hidden_field :user_id, value: current_user.id %>
 
-  <% if (current_user.id == 1 && Rails.env == "production") || (current_user.id == 2 && Rails.env == "development") %>
+  <% if ((current_user.id == 14 || current_user.id == 1) && Rails.env == "production") || (current_user.id == 2 && Rails.env == "development") %>
     <br><h3 class="formHeader">OPTIONAL: (3.5) Sending on behalf of someone?</h3>
     <div class="field memberInfoBlock">
       <div class="field">
