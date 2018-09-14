@@ -146,7 +146,7 @@ class SurveyQuestions
   # You can use this to add spacing to the top of any question, but please preview the report before
   # printing if you change this.
   QUESTION_REPORT_SPACINGS[SURVEY_TYPE_CONCERTMASTER] = Proc.new do
-    { '7': "100px" }
+    { '6': "100px" }
   end
 
   # CONDUCTOR SURVEY, FOR DISTRIBUTION TO BOARD
@@ -521,8 +521,8 @@ def generate_canvas_for_question(graph_source_data, questions, survey_type)
     end
     out << "</div>"
     spacings = SurveyQuestions.const_get('QUESTION_REPORT_SPACINGS')[survey_type].call
-    if spacings.key?("#{i}")
-      out << "<div style='height: #{spacings[i]};'></div>"
+    if spacings.has_key?(i.to_s.to_sym)
+      out << "<div style='height: #{spacings[i.to_s.to_sym]}; width: 80%'></div>"
     end
   end
   out.join("\n")
