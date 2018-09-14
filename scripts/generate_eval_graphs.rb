@@ -289,7 +289,7 @@ def build_graph_source_data(data, questions, details)
       enum_percent[i] = details[@free_text_count]
       @free_text_count += 1
       free_text[i][0] = questions[i][0]
-      free_text[i][1] = data[i] ? data[i].join("<br>") : nil
+      free_text[i][1] = data[i] ? data[i].shuffle.join("<br>") : nil
     elsif questions[i][1] == 4
       # total is explicit from those who answered this question, not total responders to survey as a whole
       total =  data[i].inject(:+)
