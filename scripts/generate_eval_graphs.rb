@@ -1,9 +1,190 @@
 require 'csv'
 require 'json'
+require 'date'
 
-# types of surveys
-SURVEY_TYPE_CONDUCTOR = 0
-SURVEY_TYPE_CONCERTMASTER = 1
+# ###################################################################
+#
+# HOW TO USE THIS SCRIPT:
+#
+
+# PART ONE
+
+# 1. Download the CSV output from the Google Form
+#
+# 2. Determine which type of report you are generating. Typically this means 
+#    determining which position (conductor, concertmaster) and what is the 
+#    audience (the Board or the subject)
+#
+# 3. Check the questions in the survey against the questions in this script 
+#    for that type. Update the questions in this script to match, if necessary. 
+#    Look for "SET QUESTIONS HERE"
+#
+#    Make sure that if you are running a survey type that eliminates some responses,
+#    such as the Conductor survey for distribution to the Conductor, you need
+#    to remove extraneous data from the CSV file, or you will get an error.
+#
+# 4. Record the SURVEY TYPE number for the type of report you are generating. 
+#    You'll need this later.
+
+# PART TWO
+
+# 5. Review the survey for any free-text questions of question type 3. Question 
+#    type 3 will generate a bar graph based on tallied category totals. 
+#
+# 6. Review the free-text responses. For each question of type 3, summarize and 
+#    tally responses by category. 
+
+# PART THREE
+
+# 7. Run the survey using the following command, filling in the variables as 
+#    indicated below
+#
+# ruby -r "generate_eval_graphs.rb" -e "parse_csv [[<A>, <B>]], <C>, <D>, <E>"
+#
+# <A>: This is the filename of the file exported from Google Forms.  
+#
+# <B>: This is the tallied, grouped counts for each category of response, that  
+#      you compiled in Part Two. It must be formatted as a Ruby object, so: 
+#      { 'Category': Count, 'Category': Count }
+#
+#      For example, for a question "What additional feedback do you have for this conductor?"
+#      you might categorize responses in this way:  { 'Positive': 10, 'Negative': 2 }
+#
+#      Each category name MUST be unique. Empty space category names can be 
+#      used as spacers.
+#
+#      Include one set of responses (inside curly braces) for each question 
+#      of Type 3. When there are multiple questions of that type, order the 
+#      responses as they are **IN THE OUTPUT**. They should be separated by a comma, 
+#      and within the same square brackets as the filename.
+#
+# <C>: The numeric survey type, as written down in step 3
+#
+# <D>: The name of the ensemble being surveyed
+#
+# <E>: The title of the survey results report. This is often the title of the survey itself.
+#
+#   Sample command:
+#
+#   ruby -r "generate_eval_graphs.rb" -e "parse_csv [['Civic Conductor Evaluation: 2020-21 Season.csv', \
+#   {'Community': 1, 'Repertoire': 8, 'Improve Skill': 5, 'Conductor': 3, 'Performance': 1}, \
+#   {'Positive': 10, 'Negative': 3, '': 0, 'Knowledgeable': 3, 'Energy': 5, ' ': 0, 'Community': 2}]], \
+#   0, 'Civic', 'Civic 2020-21 Survey Results'"
+#
+# 8. This command will generate a file in the same folder called "out.html". Open this 
+#    in any web browser to view the results. It is recommended to print as a pdf file
+#    to distribute -- BEST RESULTS USING CHROME.
+#
+
+# ----- END "HOW TO USE THIS SCRIPT" TUTORIAL
+
+# ###################################################################
+#
+# SET QUESTIONS HERE
+#
+
+# Question types:
+# 1 is 1-5 scale ("Strongly Agree/Agree/Not Sure/Disagree/Strongly Disagree")
+# 2 is the "how much" scale ("A lot/A little bit/Not at all/Not sure")
+# 3 is free-text 
+# 4 is Yes/Somewhat/No/Not Sure
+
+class SurveyQuestions
+  QUESTION_SOURCES = {}
+  QUESTION_ORDERS = {}
+  QUESTION_REPORT_SPACINGS = {}
+
+  # CONDUCTOR SURVEY, FOR DISTRIBUTION TO CONDUCTOR
+  # SURVEY TYPE 0
+
+  SURVEY_TYPE_CONDUCTOR = 0
+  QUESTION_SOURCES[SURVEY_TYPE_CONDUCTOR] = Proc.new do |group_name|
+    [
+      ['The Conductor makes me feel welcome in the orchestra, without regard to my musical skill level', 1],
+      ['The feedback and guidance the Conductor provides is constructive and appropriate relative to my skill level', 1],
+      ["Music selection is appropriate for the group's skill level and number of rehearsals", 1],
+      ['Full-orchestra rehearsals are well-organized and my time is used effectively', 1],
+      ['The Conductor is musically prepared', 1],
+      ['I enjoy performing in the concerts', 1],
+      ["My musical skills have improved by being a part of #{group_name}", 1],
+      ["Why do you play with #{group_name}?", 3],
+      ["How much has the Conductor supported the reasons you play with #{group_name}?", 2],
+      ['Please include any additional feedback on the Conductor that is not covered by the questions above.', 3]
+    ]
+  end
+  QUESTION_ORDERS[SURVEY_TYPE_CONDUCTOR] = Proc.new do
+    [0,1,2,3,4,5,6,8,7,9]
+  end
+  # This method is used to add space at the end of page 1, bumping the next question to the top of page 2
+  # You can use this to add spacing to the top of any question, but please preview the report before
+  # printing if you change this.
+  QUESTION_REPORT_SPACINGS[SURVEY_TYPE_CONDUCTOR] = Proc.new do
+    { '7': "100px" }
+  end
+  
+  # CONCERTMASTER SURVEY, FOR DISTRIBUTION TO CONCERTMASTER
+  # SURVEY TYPE 1
+
+  SURVEY_TYPE_CONCERTMASTER = 1
+  QUESTION_SOURCES[SURVEY_TYPE_CONCERTMASTER] = Proc.new do |group_name|
+    [
+      ['The concertmaster makes me feel welcome in the orchestra, without regard to my musical skill level.', 1],
+      ['The feedback and guidance provided by the concertmaster is constructive and appropriate for my skill level.', 1],
+      ["Sectional rehearsals are well-organized and my time is used effectively.", 1],
+      ['The concertmaster is musically prepared.', 1],
+      ['The guidance of the concertmaster helps my musical skills improve.', 1],
+      ["What do you feel are the responsibilities of the concertmaster?", 3],
+      ["Do you feel the concertmaster is meeting those responsibilities?", 4],
+      ["How much has the concertmaster supported the reasons you play with #{group_name}?", 2],
+      ['Please include any additional feedback you would like to share with the concertmaster and Board that is not covered by the questions above.', 3]
+    ]
+  end
+  QUESTION_ORDERS[SURVEY_TYPE_CONCERTMASTER] = Proc.new do
+    [0,1,2,3,4,6,7,5,8]
+  end
+  # This method is used to add space at the end of page 1, bumping the next question to the top of page 2
+  # You can use this to add spacing to the top of any question, but please preview the report before
+  # printing if you change this.
+  QUESTION_REPORT_SPACINGS[SURVEY_TYPE_CONCERTMASTER] = Proc.new do
+    { '7': "100px" }
+  end
+
+  # CONDUCTOR SURVEY, FOR DISTRIBUTION TO BOARD
+  # SURVEY TYPE 2
+
+  SURVEY_TYPE_CONDUCTOR_BOARD = 2
+  QUESTION_SOURCES[SURVEY_TYPE_CONDUCTOR_BOARD] = Proc.new do |group_name|
+    [
+      ['The Conductor makes me feel welcome in the orchestra, without regard to my musical skill level', 1],
+      ['The feedback and guidance the Conductor provides is constructive and appropriate relative to my skill level', 1],
+      ["Music selection is appropriate for the group's skill level and number of rehearsals", 1],
+      ['Full-orchestra rehearsals are well-organized and my time is used effectively', 1],
+      ['The Conductor is musically prepared', 1],
+      ['I enjoy performing in the concerts', 1],
+      ["My musical skills have improved by being a part of #{group_name}", 1],
+      ["Why do you play with #{group_name}?", 3],
+      ["How much has the Conductor supported the reasons you play with #{group_name}?", 2],
+      ['Please include any additional feedback you would like to share with the Conductor and Board that is not covered by the questions above.', 3],
+      ['Please include any additional feedback you would like to share with the Board that is not covered by the questions above.', 3]
+    ]
+  end
+  QUESTION_ORDERS[SURVEY_TYPE_CONDUCTOR_BOARD] = Proc.new do
+    [0,1,2,3,4,5,6,8,7,9,10]
+  end
+  # This method is used to add space at the end of page 1, bumping the next question to the top of page 2
+  # You can use this to add spacing to the top of any question, but please preview the report before
+  # printing if you change this.
+  QUESTION_REPORT_SPACINGS[SURVEY_TYPE_CONDUCTOR_BOARD] = Proc.new do
+    { '7': "100px" }
+  end
+end
+
+# ###################################################################
+#
+# CODE STARTS HERE
+#
+
+# Utility methods
 
 def agree_string_to_num(str)
   case str
@@ -39,79 +220,85 @@ def how_much_string_to_num(str)
   end
 end
 
-# questions
+@yes_no_somewhat_labels = ["Yes", "Somewhat", "No", "Not Sure / Doesn't Matter"]
 
-
-def build_questions_array_conductor(group_name)
-  questions = []
-  # 7 is free-text
-  # 9 is free-text
-  # 8 is how-much string
-  response_ar = Array.new(10) { |i| if (i == 7 || i == 9) then []; elsif i == 8 then Array.new(4) { 0 }; else Array.new(6) { 0 }; end }
-
-  # question types:
-  # 1 is 1-5 scale
-  # 2 is the "how much" scale
-  # 3 is free-text corresponding to "why_details" hash passed in
-  # 4 is free-text corresponding to "feedback_details" hash passed in
-  conductor_questions = [
-    ['The Conductor makes me feel welcome in the orchestra, without regard to my musical skill level', 1],
-    ['The feedback and guidance the Conductor provides is constructive and appropriate relative to my skill level', 1],
-    ["Music selection is appropriate for the group's skill level and number of rehearsals", 1],
-    ['Full-orchestra rehearsals are well-organized and my time is used effectively', 1],
-    ['The Conductor is musically prepared', 1],
-    ['I enjoy performing in the concerts', 1],
-    ["My musical skills have improved by being a part of #{group_name}", 1],
-    ["Why do you play with #{group_name}?", 3],
-    ["How much has the Conductor supported the reasons you play with #{group_name}?", 2],
-    ['Please include any additional feedback on the Conductor that is not covered by the questions above.', 4],
-  ]
-
-  return [conductor_questions, response_ar]
+def yes_no_somewhat_string_to_num(str)
+  case str
+  when 'Yes'
+    return 3
+  when 'Somewhat'
+    return 2
+  when 'No'
+    return 1
+  when "Not Sure / Doesn't Matter"
+    return 0
+  else
+    return 0
+  end
 end
 
-def build_graph_source_data(data, survey_type, questions, first_details, second_details)
-  if (survey_type == SURVEY_TYPE_CONDUCTOR)
-    avg_per_q = Array.new(10)
-    free_text = Array.new(10) { |i| [] }
-    fav_unfav_percent = Array.new(10) { |i| [] }
-    enum_percent = Array.new(10) { |i| Hash.new() }
-    data.each_with_index do |response, i|
-      puts questions[i][1]
-      if questions[i][1] == 0
+@free_text_count = 0
 
-        free_text[i] = data[i]
-      elsif questions[i][1] == 1
-        # don't include the "don't care" when computing averages
-        response_count_for_avg = data[i].inject(:+) - data[i][0]
-        # total is explicit from those who answered this question, not total responders to survey as a whole
-        total = data[i][1] + (data[i][2] * 2) + (data[i][3] * 3) + (data[i][4] * 4) + (data[i][5] * 5)
-        avg_per_q[i] = total.to_f / response_count_for_avg.to_f
 
-        response_count_for_fav_unfav= data[i].inject(:+)
-        # favorte: "agree" and "strongly agree"
-        fav_unfav_percent[i][0] = (data[i][4] + data[i][5]).to_f / response_count_for_fav_unfav.to_f
-        # unfavorable: "disagree" and "strongly disagree"
-        fav_unfav_percent[i][1] = (data[i][1] + data[i][2]).to_f / response_count_for_fav_unfav.to_f
-        # note that fav + unfav != 100, because "don't care" are included in neither count
-      elsif questions[i][1] == 2
-        # total is explicit from those who answered this question, not total responders to survey as a whole
-        total =  data[i].inject(:+)
-        @how_much_labels.each_with_index do |label, j|
-          enum_percent[i][label] = data[i][j].to_f / total.to_f
-        end
-      elsif questions[i][1] == 3
-        enum_percent[i] = first_details
-        free_text[i][0] = questions[i][0]
-        free_text[i][1] = data[i] ? data[i].join("<br>") : nil
-      elsif questions[i][1] == 4
-        enum_percent[i] = second_details
-        free_text[i][0] = questions[i][0]
-        free_text[i][1] = data[i] ? data[i].join("<br>") : nil
+def build_questions_array(group_name, survey_type)
+  questions = SurveyQuestions.const_get('QUESTION_SOURCES')[survey_type].call(group_name)
+
+  response_ar = Array.new(questions.length) { |i|
+    q_type = questions[i][1]
+    case q_type
+    when 1
+      Array.new(6) { 0 }
+    when 2, 4
+      Array.new(4) { 0 }
+    when 3
+      []
+    end
+  }
+
+  return [questions, response_ar]
+end
+
+def build_graph_source_data(data, questions, details)
+  avg_per_q = Array.new(questions.length)
+  free_text = Array.new(questions.length) { |i| [] }
+  fav_unfav_percent = Array.new(questions.length) { |i| [] }
+  enum_percent = Array.new(questions.length) { |i| Hash.new() }
+  data.each_with_index do |response, i|
+    if questions[i][1] == 0
+      free_text[i] = data[i]
+    elsif questions[i][1] == 1
+      # don't include the "don't care" when computing averages
+      response_count_for_avg = data[i].inject(:+) - data[i][0]
+      # total is explicit from those who answered this question, not total responders to survey as a whole
+      total = data[i][1] + (data[i][2] * 2) + (data[i][3] * 3) + (data[i][4] * 4) + (data[i][5] * 5)
+      avg_per_q[i] = total.to_f / response_count_for_avg.to_f
+
+      response_count_for_fav_unfav= data[i].inject(:+)
+      # favorite: "agree" and "strongly agree"
+      fav_unfav_percent[i][0] = (data[i][4] + data[i][5]).to_f / response_count_for_fav_unfav.to_f
+      # unfavorable: "disagree" and "strongly disagree"
+      fav_unfav_percent[i][1] = (data[i][1] + data[i][2]).to_f / response_count_for_fav_unfav.to_f
+      # note that fav + unfav != 100, because "don't care" are included in neither count
+    elsif questions[i][1] == 2
+      # total is explicit from those who answered this question, not total responders to survey as a whole
+      total =  data[i].inject(:+)
+      @how_much_labels.each_with_index do |label, j|
+        enum_percent[i][label] = data[i][j].to_f / total.to_f
+      end
+    elsif questions[i][1] == 3
+      enum_percent[i] = details[@free_text_count]
+      @free_text_count += 1
+      free_text[i][0] = questions[i][0]
+      free_text[i][1] = data[i] ? data[i].join("<br>") : nil
+    elsif questions[i][1] == 4
+      # total is explicit from those who answered this question, not total responders to survey as a whole
+      total =  data[i].inject(:+)
+      @yes_no_somewhat_labels.each_with_index do |label, j|
+        enum_percent[i][label] = data[i][j].to_f / total.to_f
       end
     end
-    [avg_per_q, fav_unfav_percent, enum_percent, free_text]
   end
+  [avg_per_q, fav_unfav_percent, enum_percent, free_text]
 end
 
 
@@ -123,51 +310,75 @@ def parse_csv(input_data, survey_type, group_name, survey_title)
   input_data.each_with_index do |filename_and_details, i|
     file_contents = File.open(filename_and_details[0], 'rb').read
     raw_csv_data = CSV.parse(file_contents)
-    first_details = filename_and_details[1]
-    second_details = filename_and_details[2]
+    details = filename_and_details.drop(1)
+    first_column_is_timestamp = false
+    first_row_is_header = false
 
-    if survey_type == SURVEY_TYPE_CONDUCTOR
-      info = build_questions_array_conductor(group_name)
-    end
+    info = build_questions_array(group_name, survey_type)
 
     response_ar.push(info[1])
     questions.push(info[0])
-    raw_csv_data.each_with_index do |response, x|
-      response.each_with_index do |q, j|
-        if questions[i][j][1] == 1
-          q_num = agree_string_to_num(q)
-          response_ar[i][j][q_num] += 1
-        elsif questions[i][j][1] == 2
-          q_num = how_much_string_to_num(q)
-          response_ar[i][j][q_num] += 1
-        elsif questions[i][j][1] == 3 || questions[i][j][1] == 4
-          response_ar[i][j].push(q)
+
+    # Handle timestamps and column headers
+    if raw_csv_data[0][0].downcase == "timestamp"
+      first_column_is_timestamp = true
+      first_row_is_header = true
+    elsif raw_csv_data[0][0].downcase == questions[0][0][0].downcase
+      first_row_is_header = true
+    else
+      begin
+        Date.parse(raw_csv_data[0][0])
+        first_column_is_timestamp = true
+      rescue ArgumentError
+        # first column not timestamp
+      end
+    end
+
+    raw_csv_data.each_with_index do |survey_row, row_num|
+      survey_row.each_with_index do |indiv_response, j|
+        next if first_column_is_timestamp && j == 0
+        next if first_row_is_header && row_num == 0
+        
+        question_num = first_column_is_timestamp ? j - 1 : j
+        if questions[i][question_num][1] == 1
+          numeric_response = agree_string_to_num(indiv_response)
+          response_ar[i][question_num][numeric_response] += 1
+        elsif questions[i][question_num][1] == 2
+          numeric_response = how_much_string_to_num(indiv_response)
+          response_ar[i][question_num][numeric_response] += 1
+        elsif questions[i][question_num][1] == 4
+          numeric_response = yes_no_somewhat_string_to_num(indiv_response)
+          response_ar[i][question_num][numeric_response] += 1
+        elsif questions[i][question_num][1] == 3
+          response_ar[i][question_num].push(indiv_response)
         end
       end
     end
 
-    @n = raw_csv_data.length
-    if survey_type == SURVEY_TYPE_CONDUCTOR
-      response_ar[i][7], response_ar[i][8] = response_ar[i][8], response_ar[i][7]
-      questions[i][7], questions[i][8] = questions[i][8], questions[i][7]
-    end
+    @n = raw_csv_data.length - (first_column_is_timestamp ? 1 : 0)
 
-    graph_source_data.push(build_graph_source_data(response_ar[i], survey_type, questions[i], first_details, second_details))
+    # Sort responses by the order used in the reporting
+    order = SurveyQuestions.const_get('QUESTION_ORDERS')[survey_type].call
+
+    response_ar[i] = response_ar[i].values_at(*order)
+    questions[i] = questions[i].values_at(*order)
+
+    graph_source_data.push(build_graph_source_data(response_ar[i], questions[i], details))
   end
-  File.write('out.html', html_output(graph_source_data[0], questions[0]))
-  puts "DONE"
+  File.write('out.html', html_output(graph_source_data[0], questions[0], survey_type))
+  puts "DONE. Parsed #{@n} responses."
 end
 
 def generate_graphs(graph_source_data, questions)
   graphs = []
   graph_source_data[0].each_with_index do |_, i|
-    puts " -- #{i} #{questions[i][1]}"
+    puts "Generated Graph for Question ##{i} of type #{questions[i][1]}"
     if questions[i][1] == 1
       graphs << "var ctg#{i} = document.getElementById('ctg#{i}');
   var myChart#{i} = new Chart(ctg#{i}, {
     type: 'bar',
     data: {
-      labels: ['2016-17'],
+      labels: ['Avg.'],
       datasets: [{
         data: [#{graph_source_data[0][i]}],
         borderWidth: 1
@@ -234,60 +445,91 @@ def generate_graphs(graph_source_data, questions)
             },
             autoSkip: false } }] } }
     });"
-    elsif questions[i][1] == 3 || questions[i][1] == 4
-      graphs << "var ctg#{i}p = document.getElementById('ctg#{i}p');
+  elsif questions[i][1] == 4
+    graphs << "var ctg#{i}p = document.getElementById('ctg#{i}p');
     var myChart#{i}p = new Chart(ctg#{i}p, {
       type: 'bar',
       data: {
-        labels: #{graph_source_data[2][i].keys.map(&:to_s)},
+        labels: #{@yes_no_somewhat_labels},
         datasets: [{
-          data: #{graph_source_data[2][i].values},
+          data: #{graph_source_data[2][i].values.reverse},
           borderWidth: 1
         }]
       },
       options: { scales: {
-
-        yAxes: [{ ticks: { display: false, min: 0, max: #{graph_source_data[2][i].values.max}, stepSize: 1 } }],
+        yAxes: [{
+          gridLines: { display: true },
+          ticks: {
+            max: 1,
+            callback: function(value, index, values) {
+                        return Math.round(value * 100) + '%';
+                      }
+          }
+        }],
         xAxes: [{
+          gridLines: { display: false },
           ticks: {
             callback: function(value, index, values) {
-              if (value.indexOf(' ') > -1) {
-                return value.split(' ');
+              if (value === \"Not Sure / Doesn't Matter\") {
+                return [\"Not Sure / \",\"Doesn't Matter\"];
               } else { return value; }
             },
             maxRotation: 0,
             minRotation: 0,
             autoSkip: false } }] } }
     });"
+    elsif questions[i][1] == 3
+      graphs << "var ctg#{i}p = document.getElementById('ctg#{i}p');
+      var myChart#{i}p = new Chart(ctg#{i}p, {
+        type: 'bar',
+        data: {
+          labels: #{graph_source_data[2][i].keys.map(&:to_s)},
+          datasets: [{
+            data: #{graph_source_data[2][i].values},
+            borderWidth: 1
+          }]
+        },
+        options: { scales: {
+
+          yAxes: [{ ticks: { display: false, min: 0, max: #{graph_source_data[2][i].values.max}, stepSize: 1 } }],
+          xAxes: [{
+            ticks: {
+              callback: function(value, index, values) {
+                if (value.indexOf(' ') > -1) {
+                  return value.split(' ');
+                } else { return value; }
+              },
+              maxRotation: 0,
+              minRotation: 0,
+              autoSkip: false } }] } }
+      });"
     end
   end
   graphs.join("\n")
 end
 
-def generate_canvas_for_question(graph_source_data, questions)
+def generate_canvas_for_question(graph_source_data, questions, survey_type)
   out = []
-  #questions[7], questions[8] = questions[8], questions[7]
-  puts questions.inspect
   questions.each_with_index do |q, i|
     out << "<div class='div#{q[1]}' style='border: 1px solid #eee; flex-direction: column; padding: 5px;'><h3>#{q[0]}</h3><br />"
     if q[1] == 1
       out << "<canvas id='ctg#{i}' width='100px' height='150px'></canvas>  <canvas id='ctg#{i}p' width='200px' height='150px'></canvas>"
-    elsif q[1] == 2
+    elsif q[1] == 2 || q[1] == 4
       out << "<canvas id='ctg#{i}p' width='400px' height='150px'></canvas>"
-    elsif q[1] == 3 || q[1] == 4
+    elsif q[1] == 3
       out << "<canvas id='ctg#{i}p' width='800px' height='150px'></canvas>"
     end
     out << "</div>"
-    if i == 7
-      out << "<div style='height: 100px;'></div>"
+    spacings = SurveyQuestions.const_get('QUESTION_REPORT_SPACINGS')[survey_type].call
+    if spacings.key?("#{i}")
+      out << "<div style='height: #{spacings[i]};'></div>"
     end
   end
-  #questions[7], questions[8] = questions[8], questions[7]
   out.join("\n")
 end
 
 
-def html_output(graph_source_data, questions)
+def html_output(graph_source_data, questions, survey_type)
   return <<END
   <html>
   <head>
@@ -299,8 +541,8 @@ def html_output(graph_source_data, questions)
     justify-content:flex-start;
     align-items:stretch;
   }
-  .flexbox-container div { width: 45%; }
-  .flexbox-container div.div3, .flexbox-container div.div4 { width: 100%; }
+  .flexbox-container div, .flexbox-container div.div4 { width: 45%; }
+  .flexbox-container div.div3 { width: 100%; }
   canvas { display: inline-block !important; }
   * { font-family: Helvetica; }
   h3 {
@@ -324,7 +566,7 @@ def html_output(graph_source_data, questions)
   <body>
   <h1>#{@survey_title} <span>#{@n} Responses</span></h1>
   <div class='flexbox-container'>
-    #{generate_canvas_for_question(graph_source_data, questions)}
+    #{generate_canvas_for_question(graph_source_data, questions, survey_type)}
   </div>
   <script>
   Chart.defaults.global.responsive = false;
