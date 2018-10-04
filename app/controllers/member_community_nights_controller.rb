@@ -45,7 +45,7 @@ class MemberCommunityNightsController < ApplicationController
     if !member
       respond_to do |format|
         #Bugsnag.notify("Unable to find and opt-in member - email not found")
-        format.html { redirect_to new_member_community_night_url, notice: "We were unable to find a member with that email address.<br><br>If you have not played with us before, please fill out <b><a href='#{signup_members_path}?return_community_night=true'>this form</a></b>.<br><br>Please enter the email address you gave us, or contact membership@sfcivicsymphony.org for help." }
+        format.html { redirect_to new_member_community_night_url, notice: "We were unable to find a member with that email address.<br><br>If you have not played with us before, please fill out <b><a href='#{signup_members_path}?return_community_night=true'>this form</a></b>.<br><br>Please enter the email address you gave us, or contact membership@sfcivicmusic.org for help." }
       end
     else
       if MemberCommunityNight.where(community_night_id: mcnparams[:community_night_id], member_id: mcnparams[:member_id]).present?
@@ -60,12 +60,12 @@ class MemberCommunityNightsController < ApplicationController
           # THIS IS NAMED BACKWARDS
           if psi.available_to_opt_in
             respond_to do |format|
-              format.html { redirect_to new_member_community_night_url, notice: "You are unable to opt in on this instrument. Contact membership@sfcivicsymphony.org for assistance." }
+              format.html { redirect_to new_member_community_night_url, notice: "You are unable to opt in on this instrument. Contact membership@sfcivicmusic.org for assistance." }
             end
             return
           elsif psi_limit > 0 && MemberCommunityNight.get_count(mcnparams[:community_night_id], [instrument]).count >= (psi_limit)
             respond_to do |format|
-              format.html { redirect_to new_member_community_night_url, notice: "Sorry, this section is full for #{CommunityNight.find_by_id(mcnparams[:community_night_id]).extended_name}! <br><br>Please contact membership@sfcivicsymphony.org for assistance." }
+              format.html { redirect_to new_member_community_night_url, notice: "Sorry, this section is full for #{CommunityNight.find_by_id(mcnparams[:community_night_id]).extended_name}! <br><br>Please contact membership@sfcivicmusic.org for assistance." }
             end
             return
           # elsif psi_limit > 0 && MemberCommunityNight.get_count(mcnparams[:community_night_id], [instrument]).count >= psi_limit
