@@ -25,7 +25,7 @@ class MemberSetsController < ApplicationController
     if !member
       respond_to do |format|
         # Bugsnag.notify("Unable to find and opt-in member - email not found")
-        format.html { redirect_to new_member_set_url, notice: "We were unable to find a member with that email address.<br><br>Please enter the email address you gave us, or contact membership@sfcivicsymphony.org for help.<br><br>If you have not played with us before, please fill out <b><a href='#{signup_members_path}'>this form</a></b>." }
+        format.html { redirect_to new_member_set_url, notice: "We were unable to find a member with that email address.<br><br>Please enter the email address you gave us, or contact membership@sfcivicmusic.org for help.<br><br>If you have not played with us before, please fill out <b><a href='#{signup_members_path}'>this form</a></b>." }
       end
     else
       @member_set.set_status = :interested
@@ -43,12 +43,12 @@ class MemberSetsController < ApplicationController
           # THIS IS NAMED BACKWARDS
           if psi.available_to_opt_in
             respond_to do |format|
-              format.html { redirect_to new_member_set_url, notice: OptInMessage.find_by_id(psi.opt_in_message_id) && OptInMessage.find_by_id(psi.opt_in_message_id).message || "You are unable to opt in on this instrument. Contact your section leader or membership@sfcivicsymphony.org for assistance." }
+              format.html { redirect_to new_member_set_url, notice: OptInMessage.find_by_id(psi.opt_in_message_id) && OptInMessage.find_by_id(psi.opt_in_message_id).message || "You are unable to opt in on this instrument. Contact your section leader or membership@sfcivicmusic.org for assistance." }
             end
             return
           elsif psi_limit > 0 && MemberSet.filtered_by_criteria(msparams[:performance_set_id], 4, [instrument]).count >= (psi_limit + psi.standby_limit)
             respond_to do |format|
-              format.html { redirect_to new_member_set_url, notice: OptInMessage.find_by_id(psi.opt_in_message_id) && OptInMessage.find_by_id(psi.opt_in_message_id).message || "Sorry, this section is full for #{PerformanceSet.find_by_id(msparams[:performance_set_id]).extended_name}! <br><br>Please contact your section leader or membership@sfcivicsymphony.org for assistance." }
+              format.html { redirect_to new_member_set_url, notice: OptInMessage.find_by_id(psi.opt_in_message_id) && OptInMessage.find_by_id(psi.opt_in_message_id).message || "Sorry, this section is full for #{PerformanceSet.find_by_id(msparams[:performance_set_id]).extended_name}! <br><br>Please contact your section leader or membership@sfcivicmusic.org for assistance." }
             end
             return
           elsif psi_limit > 0 && MemberSet.filtered_by_criteria(msparams[:performance_set_id], 4, [instrument]).count >= psi_limit

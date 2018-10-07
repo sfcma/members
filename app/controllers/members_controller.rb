@@ -198,11 +198,11 @@ class MembersController < ApplicationController
           return_url = signup_complete_members_url
           return_msg = 'Thank you for signing up for membership in the San Francisco Civic Music Association!<br><br>A representative from our Membership Committee will be in touch with you in the next few days to discuss our current openings and help find the best fit for you.'.html_safe
         end
-        MemberMailer.member_signup_email(@member, community_night_referral == 'true', 'dan@sfcivicsymphony.org').deliver_now
+        MemberMailer.member_signup_email(@member, community_night_referral == 'true', 'membership@sfcivicmusic.org').deliver_now
         MemberMailer.member_signup_email(@member, community_night_referral == 'true', 'helentsang@tsangarchitects.com').deliver_now
         format.html { redirect_to(return_url, notice: return_msg) }
       else
-        format.html { render(:signup, layout: 'anonymous', notice: 'Unfortunately, we were unable to save your record. Please try again or contact membership@sfcivicsymphony.org.') }
+        format.html { render(:signup, layout: 'anonymous', notice: 'Unfortunately, we were unable to save your record. Please try again or contact membership@sfcivicmusic.org.') }
       end
     end
   end
