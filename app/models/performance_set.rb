@@ -2,7 +2,7 @@ class PerformanceSet < ApplicationRecord
   audited associated_with: :ensemble
   acts_as_paranoid
   has_many :member_sets
-  has_many :performance_set_dates
+  has_many :performance_set_dates, inverse_of: :performance_set
   has_many :performance_set_instruments
 
   accepts_nested_attributes_for :performance_set_dates,
