@@ -1,8 +1,8 @@
 # encoding: UTF-8
 
-require "csv"
-require "json"
-require "date"
+require 'csv'
+require 'json'
+require 'date'
 
 # ###################################################################
 #
@@ -114,12 +114,11 @@ class SurveyQuestions
       ["I would recommend playing in #{group_name} to my musician friends (separately from other SFCMA ensembles)", 1],
       ["#{group_name} is a valuable addition to the set of ensembles supported by the SFCMA", 1],
       ["How much has the Conductor supported the reasons you play with #{group_name}?", 2],
-      ["What changes, if any, would you make to future sets of #{group_name}?", 3],
-      ["Please include any additional feedback you would like to share with the Conductor and Board that is not covered by the questions above.", 3],
+      ["Please include any additional feedback you would like to share with the Conductor and Board that is not covered by the questions above.", 3]
     ]
   end
   QUESTION_ORDERS[SURVEY_TYPE_CONDUCTOR] = Proc.new do
-    [0,1,2,3,4,5,6,8,7,9,10,11,12,13]
+    [0,1,2,3,4,5,6,7,8,9,10,11,12]
   end
   # This method is used to add space at the end of page 1, bumping the next question to the top of page 2
   # You can use this to add spacing to the top of any question, but please preview the report before
@@ -142,11 +141,11 @@ class SurveyQuestions
       ["What do you feel are the responsibilities of the concertmaster?", 3],
       ["Do you feel the concertmaster is meeting those responsibilities?", 4],
       ["How much has the concertmaster supported the reasons you play with #{group_name}?", 2],
-      ['Please include any additional feedback you would like to share with the concertmaster and Board that is not covered by the questions above.', 3]
+      ['Please include any additional feedback on the concertmaster that is not covered by the questions above.', 3]
     ]
   end
   QUESTION_ORDERS[SURVEY_TYPE_CONCERTMASTER] = Proc.new do
-    [0,1,2,3,4,6,7,5,8]
+    [0,1,2,3,4,5,6,7,8]
   end
   # This method is used to add space at the end of page 1, bumping the next question to the top of page 2
   # You can use this to add spacing to the top of any question, but please preview the report before
@@ -168,14 +167,18 @@ class SurveyQuestions
       ['The Conductor is musically prepared', 1],
       ['I enjoy performing in the concerts', 1],
       ["My musical skills have improved by being a part of #{group_name}", 1],
-      ["Why do you play with #{group_name}?", 3],
+      ["I felt adequately prepared for the #{group_name} Concert", 1],
+      ["I would be interested in returning to play with #{group_name} in the future", 1],
+      ["I would recommend playing in #{group_name} to my musician friends (separately from other SFCMA ensembles)", 1],
+      ["#{group_name} is a valuable addition to the set of ensembles supported by the SFCMA", 1],
       ["How much has the Conductor supported the reasons you play with #{group_name}?", 2],
-      ['Please include any additional feedback you would like to share with the Conductor and Board that is not covered by the questions above.', 3],
-      ['Please include any additional feedback you would like to share with the Board that is not covered by the questions above.', 3]
+      ["What changes, if any, would you make to future sets of #{group_name}?", 3],
+      ["Please include any additional feedback you would like to share with the Conductor and Board that is not covered by the questions above.", 3],
+      ["Please include any additional feedback you would like to share with the Board that is not covered by the questions above.", 3]
     ]
   end
   QUESTION_ORDERS[SURVEY_TYPE_CONDUCTOR_BOARD] = Proc.new do
-    [0,1,2,3,4,5,6,8,7,9,10]
+    [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
   end
   # This method is used to add space at the end of page 1, bumping the next question to the top of page 2
   # You can use this to add spacing to the top of any question, but please preview the report before

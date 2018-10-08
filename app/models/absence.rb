@@ -12,6 +12,6 @@ class Absence < ApplicationRecord
   ]
 
   validate do |absence|
-    errors[:base] << "<h3>We could not find a member for that email address. Please enter the email address you gave us, or contact membership@sfcivicsymphony.org for help.</h3>".html_safe if member.blank?
+    errors[:base] << "<h3>We could not find a member for that email address. Please enter the email address you gave us, or contact membership@sfcivicmusic.org for help.</h3>".html_safe if member.blank?
   end
 end
