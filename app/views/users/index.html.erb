@@ -1,15 +1,25 @@
-<div class='pageHeader'><h2>Membership System Users</h2> &emsp; &emsp; <%= link_to 'Add New User', new_user_path, class: 'button'  %></div>
+<div class='pageHeader'><h2>Membership System Users</h2> &emsp; &emsp; <%= link_to 'Add New User', new_user_registration_path, class: 'button'  %></div>
 
 <br><br>
-<% @users.each do |user| %>
-  <b><%= user.name %></b>
-    <% if user == current_user %>
-    <%# link_to "Edit", edit_password_path(current_user) %>
-  <% end %><br>
-  <%= user.email %><br>
-  <%= user.phone %><br>
-  <b>Ensembles:</b> <%= user.ensembles.map(&:ensemble).map(&:name).join(",") %><br>
-  <b>Instruments:</b> <%= user.instruments.map(&:instrument).join(",") %><br>
-  <b>Global Admin:</b> <%= !!user.global_admin %><br><br>
-  <hr><br><br>
+<% @users.all.order('name').each do |user| %>
+  <div class='setBlock'>
+    <h3 style='margin-bottom: 3px;'><%= user.name %></h3>
+    <%= user.email %>
+    <% if user.ensembles.length > 1 %>
+      <br><b>Ensembles:</b> <%= user.ensembles.map(&:ensemble).map(&:name).join(",") %>
+    <% else %>
+      <br><b>No Ensembles</b>
+    <% end %>
+    <% if user.instruments.length > 1 %>
+      <br><b>Instruments:</b> <%= user.instruments.map(&:instrument).join(",") %>
+    <% else %>
+      <br><b>No Instruments</b>
+    <% end %>
+    <% if user.global_admin? %>
+      <br><b>Global Admin</b>
+    <% end %>
+    <% if !user.is_active %>
+      <br><b>Inactive User</b>
+    <% end %>
+  </div>
 <% end %>

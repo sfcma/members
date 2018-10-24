@@ -35,8 +35,7 @@ Rails.application.routes.draw do
   devise_for :users,
     :controllers => {
       :registrations => 'registrations'
-    },
-    :path_names => { :sign_up => "register" }
+    }
   resources :set_member_instruments
   resources :performance_sets do
     member do

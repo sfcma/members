@@ -1,36 +1,44 @@
 <h2>Sign up</h2>
 
-<% return "" if !current_user %>
+<% redirect_to root_path unless current_user && current_user.global_admin? %>
 
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
   <%= devise_error_messages! %>
 
   <div class="field">
-    <%= f.label :email %><br />
+    <%= f.label :email %>
     <%= f.email_field :email, autofocus: true %>
   </div>
 
   <div class="field">
-    <%= f.label :password %>
-    <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= f.password_field :password, autocomplete: "off" %>
+    <%= f.label :name, "Full Name" %>
+    <%= f.text_field :name %>
   </div>
 
   <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "off" %>
+    <%= f.label :phone, "Phone Number (optional)" %>
+    <%= f.text_field :phone %>
+  </div>
+  <br>
+
+  <div class="field">
+    <%= f.label :global_admin do %>
+      <%= f.check_box :global_admin %>
+      <b>Global Admin</b><br><br>
+      <b class='warning'><u>WARNING:</u> ANY USER SET AS 'GLOBAL ADMIN' WILL HAVE COMPLETE USER MANAGEMENT ABILITY AND WILL BE ABLE TO DISABLE YOUR OWN ACCOUNT. USE THIS PERMISSION CAREFULLY!</b>
+    <% end %>
   </div>
 
-  <div class='field'>
-    <%= captcha_tag %>
-    <%= text_field_tag :captcha %>
+  <br>
+  <div class="field">
+    <%= f.label :is_active do %>
+      <%= f.check_box :is_active %>
+      <b>User Active</b><br><br>
+      <b class='warning'><u>WARNING:</u> ANY USER WHO IS NOT ACTIVE WILL NOT BE ABLE TO LOG INTO THE MEMBERSHIP SYSTEM</b>
+    <% end %>
   </div>
 
   <div class="actions">
     <%= f.submit "Sign up" %>
   </div>
 <% end %>
-
-<%= render "devise/shared/links" %>

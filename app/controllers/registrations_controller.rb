@@ -2,18 +2,26 @@ class RegistrationsController < Devise::RegistrationsController
   skip_before_filter :require_no_authentication
   before_filter :resource_name
   before_filter :configure_account_update_params, only: [:update]
+  require 'securerandom'
 
   def resource_name
     :user
   end
 
   def new  
+    redirect_to root_path unless current_user && current_user.global_admin?
     @user = User.new
   end
 
   def create
-    @user = User.new(params[:user])
+    acp = account_creation_params
     # another stuff here
+    pwx = SecureRandom.urlsafe_base64
+    acp['password'] = pwx
+    acp['password_confirmation'] = pwx
+
+    u = User.create!(acp)
+    u.send_reset_password_instructions
   end
 
   protected
@@ -32,6 +40,14 @@ class RegistrationsController < Devise::RegistrationsController
 
   private
   
+  def account_creation_params
+    if current_user.global_admin?
+      params.require(:user).permit(:phone, :name, :email, :password, :password_confirmation, :current_password, :is_active, :global_admin)
+    else
+      params.require(:user).permit(:phone, :name, :email, :password, :password_confirmation, :current_password)
+    end
+  end
+
   def account_update_params
     if current_user.global_admin?
       params.require(:user).permit(:phone, :name, :email, :password, :password_confirmation, :current_password, :is_active, :global_admin)
