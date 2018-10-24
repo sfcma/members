@@ -32,7 +32,11 @@ Rails.application.routes.draw do
   end
   resources :member_notes
   resources :action_logs
-  devise_for :users
+  devise_for :users,
+    :controllers => {
+      :registrations => 'registrations'
+    },
+    :path_names => { :sign_up => "register" }
   resources :set_member_instruments
   resources :performance_sets do
     member do

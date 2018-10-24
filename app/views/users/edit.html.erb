@@ -1,0 +1,6 @@
+<div class='pageHeader'><i><%= link_to '< Back to All Users', users_path %></i><br><br><h2>Editing <%= @user.name %></h2></div>
+
+<%= render 'form', user: @user %>
+
+<%= link_to 'Show', @user %> |
+<%= link_to 'Back', users_path %>

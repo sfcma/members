@@ -213,7 +213,7 @@ a {
   color: blue;
 
   &:hover {
-    color: green;
+    color: darkgreen;
     text-decoration: underline;
   }
 }
@@ -679,5 +679,13 @@ div {
 }
 
 label {
+  display: block;
+}
+
+.warning {
+  color: #004085;
+  background-color: #cce5ff;
+  border-color: #b8daff;
+  width: 400px;
   display: block;
 }
