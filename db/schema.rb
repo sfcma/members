@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180110195730) do
+ActiveRecord::Schema.define(version: 20181024003131) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -354,6 +354,17 @@ ActiveRecord::Schema.define(version: 20180110195730) do
     t.index ["user_id"], name: "index_user_ensembles_on_user_id"
   end
 
+  create_table "user_instrument_ensemble_permissions", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "user_instrument_id"
+    t.integer  "user_ensemble_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.index ["user_ensemble_id"], name: "index_user_inst_ens_perms_on_user_ensemble_id"
+    t.index ["user_id"], name: "index_user_instrument_ensemble_permissions_on_user_id"
+    t.index ["user_instrument_id"], name: "index_user_inst_ens_perms_on_user_instrument_id"
+  end
+
   create_table "user_instruments", force: :cascade do |t|
     t.integer  "user_id",    null: false
     t.string   "instrument", null: false
@@ -362,6 +373,14 @@ ActiveRecord::Schema.define(version: 20180110195730) do
     t.datetime "updated_at", null: false
     t.index ["instrument"], name: "index_user_instruments_on_instrument"
     t.index ["user_id"], name: "index_user_instruments_on_user_id"
+  end
+
+  create_table "user_permissions", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_permissions_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -395,6 +414,7 @@ ActiveRecord::Schema.define(version: 20180110195730) do
     t.boolean  "global_admin",                             default: false
     t.string   "name"
     t.string   "phone"
+    t.boolean  "is_active"
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["expired_at"], name: "index_users_on_expired_at"
