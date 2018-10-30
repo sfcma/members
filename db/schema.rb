@@ -358,6 +358,7 @@ ActiveRecord::Schema.define(version: 20181024003131) do
     t.integer  "user_id"
     t.integer  "user_instrument_id"
     t.integer  "user_ensemble_id"
+    t.string   "permission_name"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.index ["user_ensemble_id"], name: "index_user_inst_ens_perms_on_user_ensemble_id"

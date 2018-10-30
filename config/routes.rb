@@ -35,7 +35,8 @@ Rails.application.routes.draw do
   devise_for :users,
     :controllers => {
       :registrations => 'registrations'
-    }
+    },
+    :path_prefix => 'my'
   resources :set_member_instruments
   resources :performance_sets do
     member do
@@ -61,7 +62,11 @@ Rails.application.routes.draw do
     end
   end
   resources :performance_pieces
-  resources :users
+  resources :users do
+    member do
+      post :send_password_recovery_instructions
+    end
+  end
   resources :performance_set_instruments
 
   resources :attachments, only: [:destroy]

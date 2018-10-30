@@ -2,8 +2,15 @@
 
 <br><br>
 <% @users.all.order('name').each do |user| %>
-  <div class='setBlock'>
-    <h3 style='margin-bottom: 3px;'><%= user.name %></h3>
+  <div class='setBlock' style='min-width: 150px; max-width: 150px; <%= !user.is_active ? "background: #ffcccc;" : "" %>'>
+    <h3 style='margin-bottom: 5px;'><%= link_to user.name, user %></h3>
+    <% if !user.is_active %>
+      <b style='color: red;'>ACCOUNT DISABLED</b><br>
+    <% end %>
+    <% if user.id == current_user.id %>
+      <b style='color: green;'>This is you!</b><br>
+    <% end %>
+    <%= link_to 'Edit User', edit_user_path(id: user.id) %><br>
     <%= user.email %>
     <% if user.ensembles.length > 1 %>
       <br><b>Ensembles:</b> <%= user.ensembles.map(&:ensemble).map(&:name).join(",") %>
@@ -17,9 +24,6 @@
     <% end %>
     <% if user.global_admin? %>
       <br><b>Global Admin</b>
-    <% end %>
-    <% if !user.is_active %>
-      <br><b>Inactive User</b>
     <% end %>
   </div>
 <% end %>

@@ -53,7 +53,7 @@
   <% end %>
 
 
-  <% if current_user.global_admin? %>
+  <% if Permissions.special_global_admin(current_user) %>
     <br><br>
     <b>Users</b>
     <br><br>

@@ -424,6 +424,21 @@ var loadStuff = function() {
     }
   });
 
+  // on User#Show
+  $('#sendResetEmailLink').on('click', function() {
+    var user_id = document.getElementsByName('userId')[0].value;
+    $.post(user_id + '/send_password_recovery_instructions', { user_id: user_id }).then(function(response) {
+      console.log(response);
+      if (response.code == 200) {
+        $('#sent_reset_email').html("<b style='color: green;'>Successfully sent reset email</b>");
+      } else {
+        $('#sent_reset_email').html("<b style='color: red;'>Failed to send reset email</b>");
+      }
+    }, function(response) {
+      $('#sent_reset_email').html("<b style='color: red;'>Failed to send reset email</b>");
+    });
+  });
+
   $('#emailMemberInstrumentSelector').chosen({
     width: "300px"
   });

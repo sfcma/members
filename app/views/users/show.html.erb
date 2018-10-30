@@ -1,4 +1,29 @@
-<p id="notice"><%= notice %></p>
 
-<%# link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+<div class='pageHeader'><i><%= link_to '< Back to All Users', users_path %></i><br><br><h2><%= @user.name %></h2> &emsp; &emsp; &emsp; <%= link_to 'Edit User', edit_user_path(@user), class: 'button' %></div>
+
+
+<% if !@user.is_active? %>
+  <br><h2>USER IS DISABLED AND CANNOT LOG IN.</h2>
+<% end %>
+
+<ul>
+  <li>
+    <b>Name:</b> <%= @user.name %>
+  </li>
+  <li>
+    <b>Email:</b> <%= @user.email %>
+  </li>
+  <li>
+    <b>Phone Number:</b> <%= @user.phone %>
+  </li>
+  <li>
+    <b>Global Admin:</b> <%= @user.global_admin? %>
+  </li>
+  <li>
+    <b>Is Active:</b> <%= @user.is_active? %>
+  </li>
+</ul>
+
+<%= link_to "Send Password Reset Email", '#', { id: "sendResetEmailLink" } %>
+<input type='hidden' value='<%= @user.id %>' name='userId'></input>
+<div id='sent_reset_email'></div>

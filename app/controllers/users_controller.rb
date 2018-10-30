@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :require_global_admin
+  before_action :require_special_admin
 
 
   def index
@@ -18,19 +18,34 @@ class UsersController < ApplicationController
     end
   end
 
+  def show
+    @user = User.find(params[:id])
+  end
+
   def edit
+    @user = User.find(params[:id])
   end
 
   def update
-    respond_to do |format|
-      if @user_permission.update(user_params)
-        format.html { redirect_to @user_permission, notice: 'User permission was successfully updated.' }
-        format.json { render :show, status: :ok, location: @user_permission }
-      else
-        format.html { render :edit }
-        format.json { render json: @user_permission.errors, status: :unprocessable_entity }
-      end
+    @user = User.find(params[:id])
+    if @user.update(user_params)
+      redirect_to user_path(params[:id])
+    else
+      render 'edit'
     end
+  end
+
+  def send_password_recovery_instructions
+    User.find(params[:id]).send_reset_password_instructions
+  end
+
+
+  private
+
+  def user_params
+    params.require(:user).permit(
+      :name, :email, :phone, :global_admin, :is_active
+    )
   end
 
 end

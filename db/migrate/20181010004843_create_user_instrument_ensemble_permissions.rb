@@ -4,6 +4,7 @@ class CreateUserInstrumentEnsemblePermissions < ActiveRecord::Migration[5.0]
       t.references :user, foreign_key: true
       t.references :user_instrument, foreign_key: true, index: { name: 'index_user_inst_ens_perms_on_user_instrument_id' }
       t.references :user_ensemble, foreign_key: true, index: { name: 'index_user_inst_ens_perms_on_user_ensemble_id' }
+      t.string :permission_name
 
       t.timestamps
     end
