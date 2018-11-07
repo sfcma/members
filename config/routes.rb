@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'users/:id/edit' => 'users#edit'
+  get 'users/:id/edit' => 'users#edit', :defaults => { :format => 'html' }
 
   resources :community_night_instruments
   resources :emails do
