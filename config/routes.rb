@@ -65,6 +65,7 @@ Rails.application.routes.draw do
   resources :users do
     member do
       post :send_password_recovery_instructions
+      get :edit
     end
   end
   resources :performance_set_instruments

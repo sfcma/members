@@ -23,11 +23,7 @@ class UsersController < ApplicationController
   end
 
   def edit
-    respond_to do |format|
-      format.html do
-        @user = User.find(params[:id])
-      end
-    end
+    @user = User.find(params[:id])
   end
 
   def update
