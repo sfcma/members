@@ -7,6 +7,9 @@ Rails.application.routes.draw do
       get :check_instrument_limit
     end
   end
+
+  get 'users/:id/edit' => 'users#edit'
+
   resources :community_night_instruments
   resources :emails do
     member do
@@ -65,7 +68,6 @@ Rails.application.routes.draw do
   resources :users do
     member do
       post :send_password_recovery_instructions
-      get :edit
     end
   end
   resources :performance_set_instruments
