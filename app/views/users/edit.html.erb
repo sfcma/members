@@ -1,0 +1,49 @@
+<div class='pageHeader'><h2>Editing <%= @user.name %></h2></div>
+
+<br>
+<%= form_for(@user) do |f| %>
+  <%= devise_error_messages! %>
+
+  <div class="field">
+    <%= f.label :email %>
+    <%= f.email_field :email, autofocus: true %>
+  </div>
+  <br>
+
+  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name, "Name" %> 
+    <%= f.text_field :name, autocomplete: "off" %>
+  </div><br>
+
+  <div class="field">
+    <%= f.label :phone, "Phone Number" %>
+    <%= f.text_field :phone, autocomplete: "off" %>
+  </div><br>
+
+  <div class="field">
+    <%= f.label :global_admin do %> 
+      <%= f.check_box :global_admin %> 
+      <b>Global Admin</b><br><br>
+      <b class='warning'><u>WARNING:</u> ANY USER SET AS 'GLOBAL ADMIN' WILL HAVE COMPLETE USER MANAGEMENT ABILITY AND WILL BE ABLE TO DISABLE YOUR OWN ACCOUNT. USE THIS PERMISSION CAREFULLY!</b>
+    <% end %>
+  </div>
+
+  <br>
+  <div class="field">
+    <%= f.label :is_active do %>
+      <%= f.check_box :is_active %>
+      <b>User Active</b><br><br>
+      <b class='warning'><u>WARNING:</u> ANY USER WHO IS NOT ACTIVE WILL NOT BE ABLE TO LOG INTO THE MEMBERSHIP SYSTEM</b>
+    <% end %>
+  </div>
+  <br>
+
+
+  <div class="actions">
+    <%= f.submit "Update" %>
+  </div>
+<% end %>

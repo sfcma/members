@@ -23,10 +23,6 @@ class UsersController < ApplicationController
   end
 
   def edit
-    puts lookup_context.find_template("#{controller_path}/#{action_name}").identifier
-    #puts lookup_context.find_template("#{controller_path}/:id/#{action_name}").identifier
-    puts lookup_context.find_template("members/edit").identifier
-
     @user = User.find(params[:id])
   end
 
