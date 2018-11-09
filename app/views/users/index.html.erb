@@ -1,29 +1,17 @@
 <div class='pageHeader'><h2>Membership System Users</h2> &emsp; &emsp; <%= link_to 'Add New User', new_user_registration_path, class: 'button'  %></div>
 
 <br><br>
-<% @users.all.order('name').each do |user| %>
-  <div class='setBlock' style='min-width: 150px; max-width: 150px; <%= !user.is_active ? "background: #ffcccc;" : "" %>'>
-    <h3 style='margin-bottom: 5px;'><%= link_to user.name, user %></h3>
-    <% if !user.is_active %>
-      <b style='color: red;'>ACCOUNT DISABLED</b><br>
-    <% end %>
-    <% if user.id == current_user.id %>
-      <b style='color: green;'>This is you!</b><br>
-    <% end %>
-    <%= link_to 'Edit User', edit_user_path(id: user.id) %><br>
-    <%= user.email %>
-    <% if user.ensembles.length > 1 %>
-      <br><b>Ensembles:</b> <%= user.ensembles.map(&:ensemble).map(&:name).join(",") %>
-    <% else %>
-      <br><b>No Ensembles</b>
-    <% end %>
-    <% if user.instruments.length > 1 %>
-      <br><b>Instruments:</b> <%= user.instruments.map(&:instrument).join(",") %>
-    <% else %>
-      <br><b>No Instruments</b>
-    <% end %>
-    <% if user.global_admin? %>
-      <br><b>Global Admin</b>
-    <% end %>
-  </div>
+<h3>Global Admins</h3>
+<% @users.where(global_admin: true, is_active: true).order('name').each do |user| %>
+  <%= render 'user', user: user %>
+<% end %>
+<br><br>
+<h3>Active Users</h3>
+<% @users.where(global_admin: false, is_active: true).order('name').each do |user| %>
+  <%= render 'user', user: user %>
+<% end %>
+<br><br>
+<h3>Disabled Accounts</h3>
+<% @users.where(is_active: [nil, false]).order('name').each do |user| %>
+  <%= render 'user', user: user %>
 <% end %>

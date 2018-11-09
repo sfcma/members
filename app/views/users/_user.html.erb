@@ -1,0 +1,23 @@
+<div class='setBlock' style='min-width: 150px; max-width: 150px; <%= !user.is_active ? "background: #ffcccc;" : user.global_admin ? "background: #ccffcc;" : "" %>'>
+  <h3 style='margin-bottom: 5px;'><%= link_to user.name, user %></h3>
+  <% if !user.is_active %>
+    <b style='color: red;'>ACCOUNT DISABLED</b><br>
+  <% end %>
+  <% if user.id == current_user.id %>
+    <b style='color: green;'>This is you!</b><br>
+  <% end %>
+  <%= link_to 'Edit User', edit_user_path(id: user.id) %><br>
+  <%= user.email %>
+  <% unless user.global_admin? || !user.is_active? %>
+    <% if user.ensembles.length > 0 %>
+      <br><b>Ensembles:</b> <%= user.ensembles.map(&:ensemble).map(&:name).join(",") %>
+    <% else %>
+      <br><b>No Ensembles</b>
+    <% end %>
+    <% if user.instruments.length > 0 %>
+      <br><b>Instruments:</b> <%= user.instruments.map(&:instrument).join(",") %>
+    <% else %>
+      <br><b>No Instruments</b>
+    <% end %>
+  <% end %>
+</div>
