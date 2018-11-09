@@ -20,8 +20,18 @@ class RegistrationsController < Devise::RegistrationsController
     acp['password'] = pwx
     acp['password_confirmation'] = pwx
 
-    u = User.create!(acp)
-    u.send_reset_password_instructions
+    respond_to do |format|
+      u = User.new(acp)
+      if u.save
+        u.send_reset_password_instructions
+        format.html { redirect_to u, notice: "User was successfully created. Email to reset password successfully sent.".html_safe }
+        format.json { render :show, status: :created, location: i }
+      else
+        errs = u.errors.full_messages.each { |message| "<li>#{ message }</li>" }.join('')
+        format.html { redirect_to users_path, notice: "User failed to be created: #{errs}".html_safe }
+        format.json { render json: u.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   protected

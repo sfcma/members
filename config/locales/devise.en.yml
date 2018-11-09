@@ -20,7 +20,7 @@ en:
       confirmation_instructions:
         subject: "Confirmation instructions"
       reset_password_instructions:
-        subject: "Civic Music Membership System – Reset password instructions"
+        subject: "SFCMA Membership System – Reset password instructions"
       unlock_instructions:
         subject: "Unlock instructions"
       password_change:
