@@ -10,12 +10,12 @@
   <%= user.email %>
   <% unless user.global_admin? || !user.is_active? %>
     <% if user.ensembles.length > 0 %>
-      <br><b>Ensembles:</b> <%= user.ensembles.map(&:ensemble).map(&:name).join(",") %>
+      <br><b>Ensembles:</b> <%= user.ensembles.map(&:ensemble).map(&:name).join(", ") %>
     <% else %>
       <br><b>No Ensembles</b>
     <% end %>
     <% if user.instruments.length > 0 %>
-      <br><b>Instruments:</b> <%= user.instruments.map(&:instrument).join(",") %>
+      <br><b>Instruments:</b> <%= user.instruments.map(&:instrument).join(", ") %>
     <% else %>
       <br><b>No Instruments</b>
     <% end %>
