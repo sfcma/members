@@ -51,5 +51,5 @@ Here is a basic overview of the data model:
     
 3. `ruby db:setup`
 3. `rails s` to start server
-3. Visit `http://locahost:3000`
+3. Visit `http://localhost:3000`
 
