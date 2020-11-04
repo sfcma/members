@@ -59,7 +59,7 @@ gem 'devise'
 gem 'devise_security_extension', git: 'https://github.com/phatworx/devise_security_extension.git'
 gem 'easy_captcha'
 gem 'rails_email_validator'
-gem "rails-observers", github: 'rails/rails-observers'
+gem 'rails-observers'
 gem "bugsnag"
 gem "sucker_punch"
 gem "paperclip"
