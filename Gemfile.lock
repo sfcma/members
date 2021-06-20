@@ -1,11 +1,4 @@
 GIT
-  remote: git://github.com/rails/rails-observers.git
-  revision: fb6b95509c3f1a50c973280ddc2b56648e33623f
-  specs:
-    rails-observers (0.2.0)
-      activemodel (>= 4.2)
-
-GIT
   remote: https://github.com/phatworx/devise_security_extension.git
   revision: b2ee978af7d49f0fb0e7271c6ac074dfb4d39353
   specs:
@@ -166,6 +159,8 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.0.4)
       loofah (~> 2.2, >= 2.2.2)
+    rails-observers (0.1.5)
+      activemodel (>= 4.0)
     rails_email_validator (0.1.4)
       activemodel (>= 3.0.0)
     railties (5.0.7)
@@ -290,7 +285,7 @@ DEPENDENCIES
   pg
   puma (~> 3.0)
   rails (~> 5.0.0)
-  rails-observers!
+  rails-observers
   rails_email_validator
   recaptcha
   rubocop
@@ -304,5 +299,8 @@ DEPENDENCIES
   validates_timeliness (~> 4.0)
   web-console
 
+RUBY VERSION
+   ruby 2.7.0p0
+
 BUNDLED WITH
-   1.16.2
+   1.17.3

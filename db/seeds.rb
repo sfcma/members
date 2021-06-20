@@ -11,6 +11,7 @@ require 'faker'
 User.create!(
   email: 'aoeu@gmail.com',
   password: 'Password123',
+  is_active: true
 )
 
 ensemble1 = Ensemble.create!(

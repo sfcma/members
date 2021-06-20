@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-
+ruby "2.7.0"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.0'
 # Use Puma as the app server
@@ -59,7 +59,7 @@ gem 'devise'
 gem 'devise_security_extension', git: 'https://github.com/phatworx/devise_security_extension.git'
 gem 'easy_captcha'
 gem 'rails_email_validator'
-gem "rails-observers", github: 'rails/rails-observers'
+gem 'rails-observers'
 gem "bugsnag"
 gem "sucker_punch"
 gem "paperclip"
