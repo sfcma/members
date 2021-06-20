@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby "2.7.0"
+ruby '2.7.3'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.0'
 # Use Puma as the app server
@@ -39,7 +39,7 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
-  gem 'sqlite3'
+  gem 'sqlite3', '~> 1.3.6'
   gem 'faker'
   gem 'bullet'
 end
@@ -48,15 +48,15 @@ group :production do
   gem 'pg'
 end
 
-gem "paranoia", "~> 2.2.0.pre"
+gem "paranoia"
 
 gem "audited", "~> 4.3"
 
 gem "recaptcha", require: "recaptcha/rails"
 
-gem "impressionist"
+gem "impressionist", '~>1.6.1'
 gem 'devise'
-gem 'devise_security_extension', git: 'https://github.com/phatworx/devise_security_extension.git'
+gem 'devise-security'
 gem 'easy_captcha'
 gem 'rails_email_validator'
 gem 'rails-observers'
