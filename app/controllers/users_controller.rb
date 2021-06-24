@@ -44,7 +44,7 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(
-      :name, :email, :phone, :global_admin, :is_active
+      :name, :email, :phone, :global_admin, :is_active, :vaccination_manager
     )
   end
 

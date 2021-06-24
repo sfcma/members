@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210620001123) do
+ActiveRecord::Schema.define(version: 20210624001123) do
 
   create_table "absences", force: :cascade do |t|
     t.integer  "member_id"
@@ -418,6 +418,7 @@ ActiveRecord::Schema.define(version: 20210620001123) do
     t.string   "phone"
     t.string   "vaccination_status"
     t.boolean  "is_active"
+    t.boolean  "vaccination_manager"
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["expired_at"], name: "index_users_on_expired_at"

@@ -25,6 +25,13 @@
   </div><br>
 
   <div class="field">
+    <%= f.label :vaccination_manager do %>
+      <%= f.check_box :vaccination_manager %>
+      <b>Vaccination Manager</b>
+    <% end %>
+  </div><br>
+
+  <div class="field">
     <%= f.label :global_admin do %> 
       <%= f.check_box :global_admin %> 
       <b>Global Admin</b><br><br>

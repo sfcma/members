@@ -22,6 +22,9 @@
   <li>
     <b>Is Active:</b> <%= @user.is_active? %>
   </li>
+  <li>
+    <b>Vaccination Manager:</b> <%= @user.vaccination_manager? %>
+  </li>
 </ul>
 
 <%= link_to "Send Password Reset Email", '#', { id: "sendResetEmailLink" } %>

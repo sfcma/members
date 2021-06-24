@@ -6,6 +6,9 @@
   <% if user.id == current_user.id %>
     <b style='color: green;'>This is you!</b><br>
   <% end %>
+  <% if user.vaccination_manager? %>
+    <b>Vaccination Manager</b><br>
+  <% end %>
   <%= link_to 'Edit User', edit_user_path(id: user.id) %><br>
   <%= user.email %>
   <% unless user.global_admin? || !user.is_active? %>

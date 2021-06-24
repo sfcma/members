@@ -5,7 +5,7 @@ module Permissions
       (
         (
           Rails.env == 'production' && (
-            user.id == 1 || user.id == 14 || user.id == 116
+            user.id == 1 || user.id == 116
           )
         ) || (
           user.global_admin? && (
