@@ -55,6 +55,14 @@
             No Email Addresses Available
           <% end %>
         <% end %>
+        <br><br>
+  <% if can_view_vaccination_status(@member) %>
+  <div class='vaccination-status'>
+    <strong>Vaccination Status:</strong><br>
+      <input type='button' name='vaccinationStatusButton-<%= @member.id %>' id='vaccinationStatusButton' value='Show Vaccination Status'><br>
+      <span id='vaccinationStatusDetail'></span>
+      </div>
+  <% end %>
 	<% if can_view_member_personal_info(@member) %>
         <br><br>
           <strong>Emergency Contact:</strong><br>

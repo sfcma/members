@@ -280,6 +280,62 @@ var loadStuff = function() {
     window.location.href = location.protocol + '//' + window.location.hostname + (location.port ? ':'+location.port: '') + '/members?instrument=' + e.target.value;
   });
 
+  // Member#show
+  
+  // Save Vaccination status button
+  $('.memberTable').on('click', '#SaveVaccinationStatus', function(e) {
+    new_vaccination_status = $('#memberVaccinationStatusUpdateDropdown').val();
+    $.ajax({ url: member_id + '/update_vaccination_status.json', 
+             data: { 
+               member: { 
+                 vaccination_status: new_vaccination_status 
+               } 
+             }, 
+             type: 'PATCH', 
+             success: function() { 
+               $('#vaccinationStatusDetail').html("<span id='MemberVaccinationStatus'><b id='update_message' style='background: lightgreen;'>VACCINE STATUS UPDATED<br><br></b>Current Vaccination Status: " + new_vaccination_status + "</span><br><br><button id='editVaccinationStatus' name='editVaccinationStatus-" + member_id + "'>Edit Vaccination Status</button></span>");
+             }
+           });
+  });
+
+  // Cancel Edit Vaccination status update button
+  $('.memberTable').on('click', '#CancelEditVaccinationStatus', function(e) {
+    $('#vaccinationStatusDetail').html($('#vaccinationStatusDetail').html().split("Select")[0] + "<button id='editVaccinationStatus' name='editVaccinationStatus-" + member_id + "'>Edit Vaccination Status</button>");
+  });
+
+  // Edit Vaccination status button
+  $('.memberTable').on('click', '#editVaccinationStatus', function(e) {
+    $('#update_message').remove();
+    $('#vaccinationStatusDetail').html($('#vaccinationStatusDetail').html() + "Select new Vaccination Status: <select name='memberVaccinationStatusUpdateDropdown-" + member_id + "' id='memberVaccinationStatusUpdateDropdown'><option name='Not Specified'>Not Specified</option><option name='Unvaccinated'>Unvaccinated</option><option name='Vaccinated/Exempt'>Vaccinated/Exempt</option></select><br><br><button id='SaveVaccinationStatus'>Save Vaccination Status</button>&emsp;<button id='CancelEditVaccinationStatus'>Cancel Vaccination Status Change</button>");
+    $('#editVaccinationStatus').remove();
+    var vaccination_text = $('#MemberVaccinationStatus').text().split(':')[1]
+    if (vaccination_text == " Not Specified" || vaccination_text == "") {
+      $('#memberVaccinationStatusUpdateDropdown option:eq(0)').attr('selected', 'selected');
+    } else if (vaccination_text == " Unvaccinated") {
+      $('#memberVaccinationStatusUpdateDropdown option:eq(1)').attr('selected', 'selected');
+    } else {
+      $('#memberVaccinationStatusUpdateDropdown option:eq(2)').attr('selected', 'selected');
+    }   
+  });
+
+  // Show Vaccination status button
+  $('.memberTable').on('click', '#vaccinationStatusButton', function(e) {
+    member_id = e.target.getAttribute('name').split('-')[1];
+    $.get('../members/' + member_id + '/vaccination_status.json').then(function(response) {
+      if (response.vaccination_status == null || response.vaccination_status == "Not Specified") {
+        vaccination_status = "Not Specified"
+      } else if (response.vaccination_status == "Unvaccinated") {
+        vaccination_status = "Unvaccinated"
+      } else {
+        vaccination_status = "Vaccinated/Exempt"
+      }
+      $('#vaccinationStatusButton').remove();
+      $('#vaccinationStatusDetail').html("<span id='MemberVaccinationStatus'>Current Vaccination Status: " + vaccination_status + "</span><br><br><button id='editVaccinationStatus' name='editVaccinationStatus-" + member_id + "'>Edit Vaccination Status</button>");
+    });
+  });
+
+
+
   // Absence#index
   $('#setSelectorAbsence').on('change', function(e) {
     window.location.href = location.protocol + '//' + window.location.hostname + (location.port ? ':'+location.port: '') + '/absences?set=' + e.target.value;

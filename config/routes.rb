@@ -54,6 +54,8 @@ Rails.application.routes.draw do
   resources :members do
     member do
       get :send_email
+      get :vaccination_status
+      patch :update_vaccination_status
     end
     collection do
       get :signup

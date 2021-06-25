@@ -1,5 +1,5 @@
 class MembersController < ApplicationController
-  before_action :set_member, only: [:show, :edit, :update, :destroy, :send_email]
+  before_action :set_member, only: [:show, :vaccination_status, :edit, :update, :destroy, :send_email, :update_vaccination_status]
   before_action :authenticate_user!, except: [:requires_sub_name, :signup, :create_from_signup, :signup_complete]
   before_action :load_sets
   impressionist except: [:get_filtered_member_info]
@@ -73,12 +73,15 @@ class MembersController < ApplicationController
   # GET /members/1
   # GET /members/1.json
   def show
+
+
+
     @audit_string = helpers.generate_audit_array(@member)
     @audit_string += helpers.generate_audit_array(@member.member_instruments.with_deleted.all.to_a)
     @audit_string += helpers.generate_audit_array(@member.member_sets.with_deleted.all.to_a)
     @audit_string += helpers.generate_audit_array(@member.member_notes.with_deleted.all.to_a)
     @audit_string.flatten!
-    @audit_string += Impression.where(:controller_name => 'members', :impressionable_id => @member.id).map{|s| { html: User.find(s.user_id).display_name + " viewed user on " + s.created_at.in_time_zone('Pacific Time (US & Canada)').strftime('%Y-%m-%d %-I:%M %p PT'), audit_created_at: s.created_at.in_time_zone('Pacific Time (US & Canada)') } }
+    @audit_string += Impression.where(:controller_name => 'members', :impressionable_id => @member.id).map{|s| { html: format_impression_string(s), audit_created_at: s.created_at.in_time_zone('Pacific Time (US & Canada)') } }
     puts @audit_string.map { |as| as[:audit_created_at] }
     @audit_string = @audit_string.sort_by { |as| as[:audit_created_at] }.reverse
 
@@ -86,6 +89,16 @@ class MembersController < ApplicationController
       @notes = @member.member_notes
     else
       @notes = @member.member_notes.where(private_note: false)
+    end
+  end
+
+  # GET /members/1/vaccination_status
+  def vaccination_status
+    unless current_user.vaccination_manager?
+      format.json { render json: { notice: 'You do not have permissions to view vaccination statuses' }, status: :ok } and return
+    end 
+    respond_to do |format|
+      format.json { render json: { vaccination_status: @member.vaccination_status }, status: :ok }
     end
   end
 
@@ -171,6 +184,22 @@ class MembersController < ApplicationController
         format.html { redirect_to(@member, notice: 'Member was successfully updated.') }
       else
         format.html { render :edit, notice: 'OH NO' }
+      end
+    end
+  end
+
+  # PATCH /members/update_vaccination_status.json
+  def update_vaccination_status
+    unless current_user.vaccination_manager?
+      redirect_to @member, notice: 'You do not have permissions to edit vaccination statuses' and return
+    end
+    respond_to do |format|
+      if @member.update(member_params)
+        format.html { redirect_to @member, notice: 'Member was successfully updated.' }
+        format.json { render :show, status: :ok, location: @member }
+      else
+        format.html { render :edit }
+        format.json { render json: @member.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -440,6 +469,7 @@ class MembersController < ApplicationController
       :source_website,
       :source_other,
       :community_night_referral,
+      :vaccination_status,
       member_instruments_attributes: [
         :id,
         :instrument,

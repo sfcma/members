@@ -27,6 +27,10 @@ module MembersHelper
     )
   end
 
+  def can_view_vaccination_status(member)
+    current_user.vaccination_manager?
+  end
+
   def can_view_member_email(member)
     current_user.global_admin? ||
     ( current_user.instruments.map(&:instrument) & member.member_instruments.map(&:instrument) )
@@ -37,6 +41,14 @@ module MembersHelper
       if can_view_member_personal_info(member)
         member
       end
+    end
+  end
+
+  def format_impression_string(impression)
+    if impression.action_name == 'vaccination_status'
+      User.find(impression.user_id).display_name + " viewed member's vaccination status on " + impression.created_at.in_time_zone('Pacific Time (US & Canada)').strftime('%Y-%m-%d %-I:%M %p PT')
+    else
+      User.find(impression.user_id).display_name + " viewed member on " + impression.created_at.in_time_zone('Pacific Time (US & Canada)').strftime('%Y-%m-%d %-I:%M %p PT')
     end
   end
 end

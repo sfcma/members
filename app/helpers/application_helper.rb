@@ -78,12 +78,18 @@ module ApplicationHelper
     else
       audit.audited_changes.each do |field, change|
         if change.is_a?(Array)
-          if !change[0] && field != 'playing_status'
+          if !change[0] && field != 'playing_status' && (field != 'vaccination_status' || current_user.vaccination_manager)
             change_text = "as <b>#{change[1]}</b>"
+            verb = 'filled in'
+          elsif !change[0] && field == 'vaccination_status' && !current_user.vaccination_manager
+            change_text = "as (hidden)"
             verb = 'filled in'
           elsif field == 'playing_status'
             change_text = "from <b>Untriaged</b> to <b>#{change[1]}</b>"
             verb = 'changed'
+          elsif field == 'vaccination_status' && !current_user.vaccination_manager
+            change_text = "from (hidden) to (hidden)"
+            verb = "changed"
           else
             change_text = "from <b>#{change[0]}</b> to <b>#{change[1]}</b>"
             verb = 'changed'
@@ -107,7 +113,7 @@ module ApplicationHelper
           }
         else
           audit_string << {
-            html: "UNKNOWN USER destroyed <b>#{audit.auditable_type.underscore.humanize}</b> with values #{audit.audited_changes.inspect} on #{audit.created_at.in_time_zone('Pacific Time (US & Canada)').strftime('%Y-%m-%d %-I:%M %p PT')}<br>".html_safe,
+            html: "System user updated or created <b>#{audit.auditable_type.underscore.humanize}</b> with values #{audit.audited_changes.inspect} on #{audit.created_at.in_time_zone('Pacific Time (US & Canada)').strftime('%Y-%m-%d %-I:%M %p PT')}<br>".html_safe,
             audit_created_at: audit.created_at.in_time_zone('Pacific Time (US & Canada)')
           }
         end
