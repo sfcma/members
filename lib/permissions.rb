@@ -1,11 +1,6 @@
 module Permissions
 
   def self.special_global_admin(user)
-    if user
-      puts "--"
-      puts user.id
-      puts "--"
-    end
     user && 
       (
         (
