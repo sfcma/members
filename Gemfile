@@ -1,14 +1,14 @@
 source 'https://rubygems.org'
 
-ruby '2.7.7'
+ruby '4.0.4'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 8.1.3'
 # Use Puma as the app server
-gem 'puma'
+gem 'puma', '~> 8.0.0'
 # Use SCSS for stylesheets
 gem 'sass-rails'
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier'
+gem 'terser'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails'
 # See https://github.com/rails/execjs#readme for more supported runtimes
@@ -35,10 +35,9 @@ end
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
   gem 'web-console'
-  gem 'listen'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'listen'
   gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'sqlite3'
   gem 'faker'
   gem 'bullet'
@@ -48,13 +47,15 @@ group :production do
   gem 'pg'
 end
 
+gem "mutex_m"
+
 gem "paranoia"
 
 gem "audited"
 
 gem "recaptcha", require: "recaptcha/rails"
 
-gem "impressionist"
+gem "impressionist", git: "https://github.com/dan-brewster/impressionist", branch: "rails-8-update"
 gem 'devise'
 gem 'devise-security'
 gem 'easy_captcha'
@@ -65,5 +66,5 @@ gem "sucker_punch"
 gem "paperclip"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'tzinfo-data', platforms: [:windows]
 gem 'validates_timeliness'
